@@ -57,35 +57,36 @@ PARSER_END(ConfigOptsParser)
 TOKEN :
 {       
   /* information options */ 
-  <HELP:         "--help">         
-| <HTML_HELP:    "--html-help">    
-| <VERSION:      "--version">      
-| <RELEASE_DATE: "--release-date"> 
-| <COPYRIGHT:    "--copyright">    
+  <HELP:           "--help">         
+| <HTML_HELP:      "--html-help">    
+| <VERSION:        "--version">      
+| <RELEASE_DATE:   "--release-date"> 
+| <COPYRIGHT:      "--copyright">    
 
   /* global options */	
-| <ROOT_DIR:     "--root-dir">    : PATH_SEP
+| <ROOT_DIR:       "--root-dir">      : PATH_SEP
 
-| <EVALUATION:   "--evaluation">  
-| <ANNUAL:       "--annual">
-| <PERPETUAL:    "--perpetual">
+| <EVALUATION:     "--evaluation">  
+| <ANNUAL:         "--annual">
+| <PERPETUAL:      "--perpetual">
 
-| <DOMAIN:       "--domain">      : HOSTNAME_SEP
-| <HOME_DIR:     "--home-dir">    : PATH_SEP
-| <TOOLSET_DIR:  "--toolset-dir"> : PATH_SEP
+| <DOMAIN:         "--domain">        : HOSTNAME_SEP
+| <HOME_DIR:       "--home-dir">      : PATH_SEP
+| <TOOLSET_DIR:    "--toolset-dir">   : PATH_SEP
+| <TEMP_DIR:       "--temp-dir">      : PATH_SEP
 
-| <MASTER_HOST:  "--master-host"> : HOSTNAME_SEP
-| <FILE_HOST:    "--file-host">   : HOSTNAME_SEP
-| <NODE_DIR:     "--node-dir">    : PATH_SEP
+| <MASTER_HOST:    "--master-host">   : HOSTNAME_SEP
+| <FILE_HOST:      "--file-host">     : HOSTNAME_SEP
+| <NODE_DIR:       "--node-dir">      : PATH_SEP
 
-| <MASTER_PORT:  "--master-port"> : INTEGER_SEP
-| <FILE_PORT:    "--file-port">   : INTEGER_SEP
-| <PROD_DIR:     "--prod-dir">    : PATH_SEP
+| <MASTER_PORT:    "--master-port">   : INTEGER_SEP
+| <FILE_PORT:      "--file-port">     : INTEGER_SEP
+| <PROD_DIR:       "--prod-dir">      : PATH_SEP
 
-| <CLASS_PATH:   "--class-path">    : SEARCH_PATH_SEP
-| <LIBRARY_PATH: "--library-path">  : SEARCH_PATH_SEP
+| <CLASS_PATH:     "--class-path">    : SEARCH_PATH_SEP
+| <LIBRARY_PATH:   "--library-path">  : SEARCH_PATH_SEP
 
-| <LOCK:         "--lock">
+| <LOCK:           "--lock">
 
 
   /* seperators */ 
@@ -280,7 +281,7 @@ GlobalOpts()
 {
   (RootDir() | 
    Evaluation() | Annual() | Perpetual() |
-   Domain() | HomeDir() | ToolsetDir() | 
+   Domain() | HomeDir() | ToolsetDir() | TempDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
    FileHost() | FilePort() | ProdDir() | 
    ClassPath() | LibraryPath() | Lock())
@@ -375,6 +376,18 @@ ToolsetDir() :
   <TOOLSET_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setToolsetDirectory(new File(t.image));
+  }
+}
+
+void
+TempDir() :
+{
+  Token t;
+}
+{
+  <TEMP_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setTemporaryDirectory(new File(t.image));
   }
 }
 
