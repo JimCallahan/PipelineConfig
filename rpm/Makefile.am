@@ -19,6 +19,9 @@ rpm-install:
 
 
 install: all
+	mkdir -p ../../../../releases/pipeline
+	$(INSTALL_DATA) RPMS/i686/plconfig-@VERSION@-1.i686.rpm \
+          ../../../../releases/pipeline
 	$(INSTALL_DATA) RPMS/i686/plconfig-@VERSION@-1.i686.rpm \
           $(PIPELINE_SOURCE_ROOT)/plconfig
 	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.class \
