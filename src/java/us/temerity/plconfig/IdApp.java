@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.4 2004/09/02 14:11:48 jim Exp $
+// $Id: IdApp.java,v 1.5 2004/09/12 22:37:52 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -272,8 +272,35 @@ class IdApp
       
       /* get the CPU info */ 
       {
+	char[] cs = new char[4096];
+	StringBuffer buf = new StringBuffer();
+
+	FileReader in = new FileReader("/proc/cpuinfo");
+	while(true) {
+	  int cnt = in.read(cs);
+	  if(cnt == -1) 
+	    break;
+	  
+	  int wk;
+	  for(wk=0; wk<cnt; wk++) {
+	    if(cs[wk] == '\n') {
+	      String line = buf.toString();
+	      if(!line.startsWith("cpu MHz") && !line.startsWith("bogomips")) 
+		md.update(line.getBytes());
+	      buf = new StringBuffer();
+	    }
+	    else {
+	      buf.append(cs[wk]);
+	    }
+	  }
+	}
+      }
+	
+      /* get the PCI amd SCSCI info (if any exists) */ 
+      {
 	String[] files = {
-	  "/proc/cpuinfo"
+	  "/proc/pci", 
+	  "/proc/scsi/scsi"
 	};
 	  
 	byte[] buf = new byte[4096];
