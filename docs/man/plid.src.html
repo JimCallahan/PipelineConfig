@@ -17,29 +17,30 @@
   <b>plid</b> <a style="font-weight: bold;" href="#--html-help">--html-help</a><br>
   <b>plid</b> <a style="font-weight: bold;" href="#--version">--version</a><br>
   <b>plid</b> <a style="font-weight: bold;" href="#--release-date">--release-date</a><br>
-  <b>plid</b> <a style="font-weight: bold;" href="#--copyright">--copyright</a><br>
-  <span style="font-weight: bold;">plid</span> <a href="#--license"><span
- style="font-weight: bold;">--license</span></a><br>
+  <b>plid</b> <a style="font-weight: bold;" href="#--copyright">--copyright</a><span
+ style="font-weight: bold;"></span><a href="#--license"><span
+ style="font-weight: bold;"></span></a><br>
 </blockquote>
 <h3><a name="Description"></a>Description<br>
 </h3>
-<blockquote>This program is used to generate a unique hardware ID for a
-host which will run Pipeline software.&nbsp; <br>
+<blockquote>This program is used to generate a unique hardware ID for
+the hosts which will run one of the Pipeline server daemons (see the <a
+ href="plconfig.html#--master-host"><span style="font-weight: bold;">--master-host</span></a>,
+  <a href="plconfig.html#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>
+and <a href="plconfig.html#--file-host"><span
+ style="font-weight: bold;">--file-host</span></a> options to <a
+ href="plconfig.html"><span style="font-weight: bold;">plconfig</span></a>(1)).<br>
   <br>
 When <span style="font-weight: bold;">plid</span>(1) is run, it
 outputs a lines composed of the fully resolved hostname of the local
 machine and the hardware ID for that host.&nbsp; The output for each
-host at the site which will run Pipeline software should be placed in a
+of the server hosts should be placed in a
 plain text file with one hostname per line (see <a href="#--append"><span
  style="font-weight: bold;">--append</span></a>).&nbsp; The path to
 this host&nbsp; IDs file is then given as the argument to the <a
  href="plconfg.html#--host-ids"><span style="font-weight: bold;">--host-ids</span></a>
 option to <a href="plconfig.html"><span style="font-weight: bold;">plconfig</span></a>(1)
 when generating the site configuration.<br>
-  <br>
-For example a typical host IDs file might look like:<br>
-  <br>
-  <br>
   <h4><span style="font-weight: bold;"></span></h4>
 </blockquote>
 <h3> </h3>
@@ -117,11 +118,6 @@ Software, Inc</span></a>.</div>
 @COPYRIGHT@
 <br>
 </div>
-<h3><a name="License"></a>License Aggreement<br>
-</h3>
-<div style="margin-left: 40px;">
-@LICENSE@
 <br>
-</div>
 </body>
 </html>
