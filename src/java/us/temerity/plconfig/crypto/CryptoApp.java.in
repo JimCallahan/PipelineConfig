@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in,v 1.9 2004/03/23 07:40:43 jim Exp $
+// $Id: CryptoApp.java.in,v 1.10 2004/03/23 20:26:33 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -426,7 +426,8 @@ class CryptoApp
 	 "    \"" + sCompanyPublicKey + "\";\n");
     }
     catch(Exception ex) {
-      System.out.print
+      ex.printStackTrace(System.err);
+      System.err.print
 	("Unable to build the enrypted vault!"); 
       System.exit(1);     
     }
