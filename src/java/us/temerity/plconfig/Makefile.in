@@ -156,7 +156,8 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 
           TARGET = plconfig.jar
 
-         PARSERS = ConfigOptsParser
+         PARSERS = ConfigOptsParser \
+                   IdOptsParser
 
 
       JAVA_PATHS = -d ../../.. -classpath "../../..:$(srcdir)/../../.."

@@ -2,7 +2,8 @@
 htmldir = @datadir@/doc/plconfig-@VERSION@
 
 html_DATA = \
-  plconfig.html 
+  plconfig.html \
+  plid.html
 
 
 $(html_DATA): %.html: %.src.html copyright @LICENSE_DOC@

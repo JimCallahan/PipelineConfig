@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.13 2004/07/21 07:02:15 jim Exp $
+// $Id: ConfigApp.java,v 1.14 2004/08/23 20:09:14 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -190,39 +190,85 @@ class ConfigApp
 
   
   /**
-   * Set the site domain name.
+   * Read the contents of the host IDs file. 
    */
   public void 
-  setDomainName
+  readHostIDs
   (
-   String name
+   File file
   ) 
     throws IllegalConfigException
   {
-    if(pProfile.get("IPAddrs") != null) 
-      throw new IllegalConfigException
-	("The --ip-addrs and --domain options are mutually exclusive!");
-	
-    pProfile.put("DomainName", name);
-  }
-  
-  /**
-   * Set the site IP addresses.
-   */
-  public void 
-  setIPAddrs
-  (
-   HashSet addrs
-  ) 
-    throws IllegalConfigException
-  {
-    if(pProfile.get("DomainName") != null) 
-      throw new IllegalConfigException
-	("The --ip-addrs and --domain options are mutually exclusive!");
-	
-    pProfile.put("IPAddrs", addrs);
-  }
+    try {
+      TreeMap<String,BigInteger> hostIDs = new TreeMap<String,BigInteger>();
 
+      FileReader reader = new FileReader(file);
+      boolean done = false;
+      int line = 1;
+      while(true) {
+	/* read a line */ 
+	StringBuffer buf = new StringBuffer();
+	while(true) {
+	  int next = reader.read();
+	  if(next == -1) {
+	    done = true;
+	    break;
+	  }
+	  
+	  char c = (char) next;
+	  if(c == '\n') 
+	    break;
+	  
+	  buf.append(c);
+	}
+	
+	if(done) 
+	  break;
+
+	String host      = null;
+	BigInteger cksum = null;
+	
+	String[] fields = buf.toString().split(" ");
+	int wk, cnt;
+	for(wk=0, cnt=0; wk<fields.length; wk++) {
+	  if(fields[wk].length() > 0) {
+	    if(cnt == 0) {
+	      host = fields[wk];
+	    }
+	    else if(cnt == 1) {
+	      cksum = new BigInteger(fields[wk]);
+	    }
+	    
+	    cnt++;
+	  }
+	}
+	
+	if((host != null) && (cksum != null)) {
+	  hostIDs.put(host, cksum);
+	}
+	else {
+	  throw new IllegalConfigException
+	    ("Syntax Error: on line [" + line + "] of Host IDs file (" + file + ")!");
+	}
+	
+	line++;
+      }
+      
+      if(hostIDs.isEmpty()) 
+	throw new IllegalConfigException
+	  ("The Host IDs file (" + file + ") did not specify any hosts!");
+
+      pProfile.put("HostIDs", hostIDs);       
+    }
+    catch(NumberFormatException ex) {
+      throw new IllegalConfigException("Illegal Host IDs file (" + file + ")!" + 
+				       "\n" + getFullMessage(ex));
+    }
+    catch(IOException ex) {
+      throw new IllegalConfigException("Illegal Host IDs file (" + file + ")!" + 
+				       "\n" + getFullMessage(ex));
+    }
+  }
 
   /**
    * Set the root user home directory.
@@ -589,91 +635,11 @@ class ConfigApp
     if((pProfile.get("LicenseStart") == null) || (pProfile.get("LicenseEnd") == null)) 
       throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
-    /* site specification */ 
-    {
-      TreeSet<String> domains = new TreeSet<String>();
-      HashSet<InetAddress> ips = new HashSet<InetAddress>();
-
-      Enumeration nets = NetworkInterface.getNetworkInterfaces();  
-      while(nets.hasMoreElements()) {
-	NetworkInterface net = (NetworkInterface) nets.nextElement();
-	Enumeration addrs = net.getInetAddresses();
-	while(addrs.hasMoreElements()) {
-	  InetAddress addr = (InetAddress) addrs.nextElement();
-	  String ip = addr.getHostAddress();
-	  if(!ip.equals("127.0.0.1")) {
-	    ips.add(addr);
-
-	    String host = addr.getCanonicalHostName();
-	    int idx = host.indexOf('.');
-	    domains.add(host.substring(idx+1));
-	  }
-	}
-      }
-
-      if(pProfile.get("DomainName") != null) {
-	String domain = (String) pProfile.get("DomainName");
-
-	boolean match = false;
-	for(String d : domains) {
-	  if(d.equals(domain)) {
-	    match = true;
-	    break;
-	  }
-	}	
-
-	if(!match) 
-	  throw new IllegalConfigException
-	    ("The machine running plconfig(1) is not a member of the domain (" + domain + 
-	     ") specified by the --domain option!");      
-      }
-      else if(pProfile.get("IPAddrs") != null) {
-	HashSet addrs = (HashSet) pProfile.get("IPAddrs");
-	
-	boolean match = false;
-	for(Object obj : addrs) {
-	  InetAddress addr = (InetAddress) obj;
-	  if(ips.contains(addr)) {
-	    match = true;
-	    break;
-	  }
-	}	
-
-	if(!match) 
-	  throw new IllegalConfigException
-	    ("The machine running plconfig(1) did not have any of the IP addresses " + 
-	     "specified by the --ip-addrs option!");
-      }
-      else {
-	switch(domains.size()) {
-	case 0:
-	  throw new IllegalConfigException
-	    ("The site not specified and could not be automatically determined!\n" + 
-	     "You must use either the --domain or --ip-addrs option to specify the site.");
-	  
-	case 1:
-	  for(String domain : domains) 
-	    pProfile.put("DomainName", domain);
-	  break;
-	  
-	default:
-	  {
-	    StringBuffer buf = new StringBuffer(); 
-	    buf.append("The site domain name was not specified and several domains where " +
-		       "detected:\n\n");
-	    
-	    for(String domain : domains) 
-	      buf.append("  " + domain + "\n");
-	    
-	    buf.append("\nYou must explicitly specify one of these domains with the " + 
-		       "--domain option or use the --ip-addrs option to specify the site.\n");
-	    
-	    throw new IllegalConfigException(buf.toString());
-	  }	  
-	}
-      }
-    }
-
+    /* host IDs */ 
+    if(pProfile.get("HostIDs") == null) 
+      throw new IllegalConfigException
+	("No hosts where specified using the --host-ids option!"); 
+      
     /* system information */ 
     {
       pProfile.put("JavaVendor",       System.getProperty("java.vm.vendor"));
@@ -975,14 +941,7 @@ class ConfigApp
 	TreeMap<String,Object> table = new TreeMap<String,Object>();
 	table.put("LicenseStart", pProfile.get("LicenseStart"));
 	table.put("LicenseEnd",   pProfile.get("LicenseEnd"));
-
-	Object domain = pProfile.get("DomainName");
-	if(domain != null) 
-	  table.put("DomainName", domain);
-
-	Object addrs = pProfile.get("IPAddrs");
-	if(addrs != null) 
-	  table.put("IPAddrs", addrs);
+	table.put("HostIDs",      pProfile.get("HostIDs"));
 
 	ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
@@ -1034,18 +993,23 @@ class ConfigApp
 	buf.append("Pipeline Configuration:\n");
 	for(String title : pProfile.keySet()) {
 	  buf.append("  " + title + " = ");
-	  if(title.equals("IPAddrs")) {
+	  if(title.equals("HostIDs")) {
 	    buf.append("\n");
 
-	    TreeSet<String> names = new TreeSet<String>();
-	    HashSet addrs = (HashSet) pProfile.get("IPAddrs");
-	    for(Object obj : addrs) {
-	      InetAddress addr = (InetAddress) obj;
-	      names.add(addr.getHostAddress());
-	    }
+	    TreeMap<String,BigInteger> hostIDs = 
+	      (TreeMap<String,BigInteger>) pProfile.get("HostIDs");
+	    for(String host : hostIDs.keySet()) {
+	      BigInteger cksum = hostIDs.get(host);
 
-	    for(String name : names)
-	      buf.append("    " + name + "\n");
+	      buf.append("    " + host + " ");
+	      
+	      int wk;
+	      for(wk=0; wk<(29 - host.length()); wk++) 
+		buf.append(" ");
+	      
+	      buf.append(cksum);
+	      buf.append("\n");    
+	    }
 	  }
 	  else {
 	    buf.append(pProfile.get(title) + "\n");
@@ -1159,7 +1123,7 @@ class ConfigApp
        "  plconfig --license\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--domain=...][--ip-addrs]\n" +
+       "  [--host-ids]\n" +
        "  [--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
        "  [--file-host=...][--file-port=...][--prod-dir=...]\n" +

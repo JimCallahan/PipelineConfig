@@ -2,4 +2,5 @@
 instbindir = @bindir@
 
 instbin_SCRIPTS = \
-  plconfig
+  plconfig \
+  plid

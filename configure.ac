@@ -9,7 +9,7 @@ AC_CONFIG_SRCDIR([AUTHORS])
 AC_CONFIG_AUX_DIR(config)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(PipelineConfig, 1.6.0)
+AM_INIT_AUTOMAKE(PipelineConfig, 1.7.0)
 
 AC_MSG_RESULT([ ])
 
@@ -501,6 +501,7 @@ AC_CONFIG_FILES([
 
   src/java/scripts/Makefile
   src/java/scripts/plconfig
+  src/java/scripts/plid
 
   rpm/Makefile
   rpm/plconfig.spec

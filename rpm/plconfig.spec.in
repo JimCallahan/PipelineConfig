@@ -16,9 +16,11 @@ profile and license key for their site.
 %files
 %defattr(555,root,root)
 /usr/bin/plconfig
+/usr/bin/plid
 
 %defattr(444,root,root)
 /usr/share/doc/plconfig-@VERSION@/plconfig.html
+/usr/share/doc/plconfig-@VERSION@/plid.html
 /usr/share/plconfig-@VERSION@/plconfig.jar
 
 
