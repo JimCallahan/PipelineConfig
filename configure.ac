@@ -9,7 +9,7 @@ AC_CONFIG_SRCDIR([AUTHORS])
 AC_CONFIG_AUX_DIR(config)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(PipelineConfig, 1.3.2)
+AM_INIT_AUTOMAKE(PipelineConfig, 1.3.3)
 
 AC_MSG_RESULT([ ])
 
@@ -474,7 +474,6 @@ AC_CONFIG_FILES([
   docs/Makefile 
   docs/javadoc/Makefile
   docs/man/Makefile
-  docs/man/plconfig.html
 
   src/Makefile
   src/java/Makefile
