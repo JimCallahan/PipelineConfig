@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in,v 1.8 2004/03/23 02:13:24 jim Exp $
+// $Id: CryptoApp.java.in,v 1.9 2004/03/23 07:40:43 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -112,7 +112,7 @@ class CryptoApp
    * Construct the <CODE>PackageInfo</CODE> generator application with the given 
    * command-line arguments.
    * 
-   * @param args [<B>in</B>]
+   * @param args 
    *   The command-line arguments.
    */ 
   public

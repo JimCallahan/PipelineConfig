@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.9 2004/03/23 02:12:40 jim Exp $
+// $Id: ConfigApp.java,v 1.10 2004/03/23 07:40:43 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -50,7 +50,7 @@ class ConfigApp
   /**
    * Construct the application with the given command-line arguments.
    * 
-   * @param args [<B>in</B>]
+   * @param args 
    *   The command-line arguments.
    */ 
   public
@@ -1097,7 +1097,7 @@ class ConfigApp
    * Concatentate all of the command-line arguments into a single <CODE>String</CODE>
    * suitable for parsing by the command-line parser of the application.
    * 
-   * @param args [<B>in</B>]
+   * @param args 
    *   The command-line arguments.
    */ 
   public void
@@ -1142,7 +1142,7 @@ class ConfigApp
   /** 
    * Generate a string containing both the exception message and stack trace. 
    * 
-   * @param ex [<B>in</B>]
+   * @param ex 
    *   The thrown exception.   
    */ 
   private String 
