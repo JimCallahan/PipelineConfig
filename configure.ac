@@ -474,6 +474,7 @@ AC_CONFIG_FILES([
   docs/Makefile 
   docs/javadoc/Makefile
   docs/man/Makefile
+  docs/man/plconfig.html
 
   src/Makefile
   src/java/Makefile
