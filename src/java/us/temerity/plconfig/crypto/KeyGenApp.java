@@ -1,4 +1,4 @@
-// $Id: KeyGenApp.java,v 1.1 2004/03/17 21:50:31 jim Exp $
+// $Id: KeyGenApp.java,v 1.2 2004/03/18 18:00:53 jim Exp $
 
 import java.io.*;
 import java.security.*;
@@ -90,8 +90,8 @@ class KeyGenApp
       pair = pairGen.generateKeyPair();
     }
     
-    writeKey("TemerityPublic",  pair.getPublic().getEncoded(),  true);
-    writeKey("TemerityPrivate", pair.getPrivate().getEncoded(), true);
+    writeKey("CompanyPublic",  pair.getPublic().getEncoded(),  true);
+    writeKey("CompanyPrivate", pair.getPrivate().getEncoded(), false);
   }
 
 
@@ -132,7 +132,7 @@ class KeyGenApp
 
     {
       String field = 
-	("  private static final int[] s" + title + "Key = {" + 
+	("  private static final int[] sBytes = {" + 
 	 hexString + "\n" +
 	 "  };\n");
 
@@ -150,7 +150,7 @@ class KeyGenApp
 	 "public\n" +
 	 "class " + title + "Key\n" + 
 	 "{\n" + 
-	 "  public static final int[] sKey = {" + 
+	 "  public static final int[] sBytes = {" +    
 	 hexString + "\n" +
 	 "  };\n" +
 	 "}\n");
