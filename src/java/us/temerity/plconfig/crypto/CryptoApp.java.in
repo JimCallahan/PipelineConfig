@@ -1,7 +1,8 @@
-// $Id: CryptoApp.java.in,v 1.2 2004/03/18 23:55:02 jim Exp $
+// $Id: CryptoApp.java.in,v 1.3 2004/03/22 01:44:33 jim Exp $
 
 import java.io.*;
 import java.util.*;
+import java.math.*;
 import java.security.*;
 import java.security.spec.*;
 import java.security.interfaces.*;
@@ -66,6 +67,13 @@ import com.sun.crypto.provider.SunJCE;
  *     (<I>target-file</I>).
  *   </DIV> <P> 
  * 
+ *   --build-vault <I>source-file1</I> [<I>source-file2</I> ...] <I>vault-file</I><BR> 
+ *   <DIV style="margin-left: 40px;">
+ *     Encrypts and archives one or more input files (<I>source-file</I>) to build a
+ *     monolithic output file (<I>vault-file</I>).  Finally, the information needed to decrypt
+ *     the vault is printed to standard out encoded as Java source code field definitions.
+ *   </DIV> <P> 
+ * 
  *   --decrypt <I>source-file</I> <I>target-file</I> <BR> 
  *   <DIV style="margin-left: 40px;">
  *     Decrypts the encrypted (<I>source-file</I>) using the companies private key and the 
@@ -114,13 +122,15 @@ class CryptoApp
   )
   {
     switch(args.length) {
+    case 1: 
+      usage();
+      break;
+
     case 2:
       if(args[1].equals("--params")) 
 	pParamsOpt = true;
       else if(args[1].equals("--param-names")) 
 	pParamNamesOpt = true;
-      else if(args[1].equals("--private-field")) 
-	pPrivateFieldOpt = true;
       else 
 	usage();
       break;
@@ -145,12 +155,29 @@ class CryptoApp
 	pCryptSource = new File(args[2]);
 	pCryptTarget = new File(args[3]);
       }
+      else if(args[1].equals("--build-vault")) {
+	pBuildVaultOpt = true;
+	pVaultSources = new ArrayList<File>();
+	int wk;
+	for(wk=2; wk<(args.length-1); wk++)
+	  pVaultSources.add(new File(args[wk]));
+	pVaultTarget = new File(args[args.length-1]);
+      }
       else 
 	usage();
       break;
 
     default:
-      usage();
+      if(args[1].equals("--build-vault")) {
+	pBuildVaultOpt = true;
+	pVaultSources = new ArrayList<File>();
+	int wk;
+	for(wk=2; wk<(args.length-1); wk++)
+	  pVaultSources.add(new File(args[wk]));
+	pVaultTarget = new File(args[args.length-1]);
+      }
+      else 
+	usage();
     }
       
     {
@@ -177,9 +204,9 @@ class CryptoApp
        "  --params\n" + 
        "  --param-names\n" + 
        "  --lookup parameter-name\n" + 
+       "  --build-vault source-file1 [source-file2 ...] target-file\n" +
        "  --encrypt source-file target-file\n" + 
-       "  --decrypt source-file target-file\n" + 
-       "  --private-field\n");
+       "  --decrypt source-file target-file\n");
     
     System.exit(1);
   }
@@ -211,11 +238,11 @@ class CryptoApp
       for(String name : pParams.keySet()) 
 	System.out.print(name + "\n");
     }
-    else if(pPrivateFieldOpt) {
-      printKeyField();
-    }
     else if(pLookupOpt) {
       System.out.print(pParams.get(pLookupArg) + "\n");
+    }
+    else if(pBuildVaultOpt) {
+      buildVault();
     }
     else if(pEncryptOpt) {
       encrypt();
@@ -298,13 +325,9 @@ class CryptoApp
       /* retrieve the company's private key */ 
       PrivateKey privateKey = null;
       {
-	byte bytes[] = new byte[sBytes.length];
-	int wk;
-	for(wk=0; wk<bytes.length; wk++) 
-	  bytes[wk] = Integer.valueOf(sBytes[wk] - 128).byteValue();
-	
+	BigInteger big = new BigInteger(sCompanyPrivateKey);
 	KeyFactory factory = KeyFactory.getInstance("DH");
-	PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(bytes);
+	PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(big.toByteArray());
 	privateKey = factory.generatePrivate(spec);
       }
       
@@ -333,6 +356,28 @@ class CryptoApp
   }
 
   /**
+   * Convert a an array of bytes into packed hexidecimal string.
+   */
+  private String
+  encodeBytes
+  (
+   byte[] bytes
+  ) 
+  {
+    StringBuffer buf = new StringBuffer();
+
+    int wk;
+    for(wk=0; wk<bytes.length; wk++) {
+      String hex = Integer.toHexString(Byte.valueOf(bytes[wk]).intValue() + 128);
+      if(hex.length() == 1) 
+	buf.append("0");
+      buf.append(hex.toUpperCase());
+    }
+
+    return buf.toString();
+  }
+
+  /**
    * Convert a packed hexidecimal string into an array of bytes.
    */
   private byte[]
@@ -356,53 +401,97 @@ class CryptoApp
     return bytes;
   }
 
-  
+
   /**
-   * Print the company private key as a Java field definition.
+   * Encrypts and archives one or more input files to build a monolithic output file.
    */
   private void 
-  printKeyField() 
+  buildVault()
   {
-    StringBuffer buf = new StringBuffer();
+    try {
+      byte buf[] = new byte[65536];
+	
+      {
+	Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+	cipher.init(Cipher.ENCRYPT_MODE, pKey);
+	CipherOutputStream out =  
+	  new CipherOutputStream(new FileOutputStream(pVaultTarget), cipher);
+	
+	for(File source : pVaultSources) {
+	  
+	  ByteArrayOutputStream bout = new ByteArrayOutputStream();
+	  {
+	    FileInputStream in = new FileInputStream(source);
+	    
+	    while(true) {
+	      int num = in.read(buf);
+	      if(num == -1) 
+		break;
+	      bout.write(buf, 0, num);
+	    }
+	    
+	    in.close();
+	  }
 
-    buf.append("  private static final int[] sBytes = {");
+	  String path = source.getPath();
+	  assert(path.endsWith(".class"));
+	  String cname = 
+	    ("us.temerity.pipeline." + path.substring(0, path.length()-6).replace('/', '.'));
 
-    int wk;
-    for(wk=0; wk<sBytes.length; wk++) {
-      if((wk % 8) == 0) 
-	buf.append("\n    ");
+	  out.write(String.format("%09d", cname.length()).getBytes());
+	  out.write(cname.getBytes());
+	  
+	  byte bytes[] = bout.toByteArray();
+	  out.write(String.format("%09d", bytes.length).getBytes());
+	  out.write(bytes);
+	}
+	
+	out.close();
+      }
 
-      buf.append("0x");
-      String hex = Integer.toHexString(sBytes[wk]);
-      if(hex.length() == 1) 
-	buf.append("0");
-      buf.append(hex);
-      
-      if(wk < (sBytes.length-1)) 
-	buf.append(", ");
+      byte checksum[] = null;
+      {
+	FileInputStream in = new FileInputStream(pVaultTarget);
+	MessageDigest digest = MessageDigest.getInstance("MD5");
+
+	while(true) {
+	  int num = in.read(buf);
+	  if(num == -1) 
+	    break;
+	  digest.update(buf, 0, num);
+	}
+
+	checksum = digest.digest();
+      }
+
+      System.out.print
+	("  private static final String sCheckSum = \n" + 
+	 "    \"" + (new BigInteger(checksum)) + "\";\n" +
+	 "\n" +
+	 "  private static final String sData = \n" + 
+	 "    \"" + sCompanyPublicKey + "\";\n");
     }
-
-    buf.append( "\n" +
-		"  };\n");
-    
-    System.out.print(buf.toString());
+    catch(Exception ex) {
+      System.out.print
+	("Unable to build the enrypted vault!"); 
+      System.exit(1);     
+    }
   }
-
 
   /**
    * Encrypt a file using the companies private key and the customers public key contained 
    * in the customer profile.
    */
   private void 
-  encrypt() 
+  encrypt()
   {
     try {
       FileInputStream in = new FileInputStream(pCryptSource);
 
-      Cipher decipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-      decipher.init(Cipher.ENCRYPT_MODE, pKey);
+      Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+      cipher.init(Cipher.ENCRYPT_MODE, pKey);
       CipherOutputStream out =  
-	new CipherOutputStream(new FileOutputStream(pCryptTarget), decipher);
+	new CipherOutputStream(new FileOutputStream(pCryptTarget), cipher);
 
       byte buf[] = new byte[1024];
       while(true) {
@@ -418,7 +507,7 @@ class CryptoApp
     catch(Exception ex) {
       System.out.print
 	("Unable to encrypt the source file (" + pCryptSource + ") to generate the " +
-	 "target file (" + pCryptTarget + "!"); 
+	 "target file (" + pCryptTarget + ")!"); 
       System.exit(1);     
     }
   }
@@ -431,10 +520,10 @@ class CryptoApp
   decrypt() 
   {
     try {
-      Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-      cipher.init(Cipher.DECRYPT_MODE, pKey);
+      Cipher decipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+      decipher.init(Cipher.DECRYPT_MODE, pKey);
       CipherInputStream in =  
-	new CipherInputStream(new FileInputStream(pCryptSource), cipher);
+	new CipherInputStream(new FileInputStream(pCryptSource), decipher);
 
       FileOutputStream out = new FileOutputStream(pCryptTarget);
 
@@ -452,7 +541,7 @@ class CryptoApp
     catch(Exception ex) {
       System.out.print
 	("Unable to encrypt the source file (" + pCryptSource + ") to generate the " +
-	 "target file (" + pCryptTarget + "!"); 
+	 "target file (" + pCryptTarget + ")!"); 
       System.exit(1);     
     }
   }
@@ -463,7 +552,7 @@ class CryptoApp
   /*   S T A T I C   I N T E R N A L S                                                      */
   /*----------------------------------------------------------------------------------------*/
 
-  @COMPANY_PRIVATE_KEY_FIELD@
+  @COMPANY_KEY_FIELDS@
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -486,11 +575,6 @@ class CryptoApp
   private boolean  pParamNamesOpt;
 
   /**
-   * Whether the --private-field option was given.
-   */
-  private boolean  pPrivateFieldOpt;
-
-  /**
    * Whether the --lookup option was given.
    */
   private boolean  pLookupOpt;
@@ -499,6 +583,23 @@ class CryptoApp
    * The name of the site configuration parameter to lookup.
    */
   private String  pLookupArg;
+
+
+  /**
+   * Whether the --build-vault option was given.
+   */
+  private boolean  pBuildVaultOpt;
+
+  /**
+   * The input files for the vault.
+   */
+  private ArrayList<File> pVaultSources;
+
+  /**
+   * The vault output file.
+   */
+  private File  pVaultTarget;
+
 
   /**
    * Whether the --encrypt option was given.
