@@ -63,7 +63,6 @@ TOKEN :
 | <VERSION:        	 "--version">      		    
 | <RELEASE_DATE:   	 "--release-date"> 		    
 | <COPYRIGHT:      	 "--copyright">    		    
-| <LICENSE:      	 "--license">    		    
 			 						    
   /* global options */				    
 | <APPEND:       	 "--append">      : PATH_SEP    
@@ -137,7 +136,7 @@ void
 InformationOpts() :
 {}
 {
-  (Help() | HtmlHelp() | Version() | ReleaseDate() | Copyright() | License())
+  (Help() | HtmlHelp() | Version() | ReleaseDate() | Copyright())
   {
     System.exit(0);
   }
@@ -190,16 +189,6 @@ Copyright() :
   <COPYRIGHT> WS() 
   { 
     pApp.copyright(); 
-  }
-}
-
-void
-License() :
-{}
-{
-  <LICENSE> WS() 
-  { 
-    pApp.license(); 
   }
 }
 

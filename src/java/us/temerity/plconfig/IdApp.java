@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.1 2004/08/23 20:09:14 jim Exp $
+// $Id: IdApp.java,v 1.2 2004/08/27 22:18:57 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -160,10 +160,13 @@ class IdApp
 	  int wk, cnt;
 	  for(wk=0, cnt=0; wk<fields.length; wk++) {
 	    if(fields[wk].length() > 0) {
-	      if(cnt == 3) 
+	      if((cnt == 3) && (!fields[wk].equals("00:00:00:00:00:00"))) {
 		addr = fields[wk];
-	      else if((cnt == 5) && (fields[wk].equals("eth0")) && (addr != null))
+	      }
+	      else if((cnt == 5) && (fields[wk].equals("eth0")) && (addr != null)) {
 		md.update(addr.getBytes());
+		break;
+	      }
 
 	      cnt++;
 	    }
@@ -176,9 +179,9 @@ class IdApp
       /* get the CPU, PCI amd SCSCI info */ 
       {
 	String[] files = {
-	  "/proc/cpuinfo", 
-	  "/proc/pci", 
-	  "/proc/scsi/scsi"
+	  "/proc/cpuinfo"
+	  /*	  "/proc/pci", 
+		  "/proc/scsi/scsi" */ 
 	};
 	  
 	byte[] buf = new byte[4096];
@@ -279,7 +282,6 @@ class IdApp
        "  plid --version\n" + 
        "  plid --release-date\n" + 
        "  plid --copyright\n" + 
-       "  plid --license\n" + 
        "\n" + 
        "OPTIONS:\n" +
        "  [--append]\n" +
@@ -387,15 +389,6 @@ class IdApp
   copyright()
   {
     System.out.print(PackageInfo.sCopyright + "\n");
-  }
-    
-  /**
-   * The implementation of the <CODE>--license</CODE> command-line option.
-   */ 
-  public void
-  license()
-  {
-    System.out.print(PackageInfo.sLicense + "\n");
   }
     
 
