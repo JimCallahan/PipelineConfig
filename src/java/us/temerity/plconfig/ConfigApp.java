@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.14 2004/08/23 20:09:14 jim Exp $
+// $Id: ConfigApp.java,v 1.15 2004/08/27 22:18:20 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -66,6 +66,9 @@ class ConfigApp
     {
       pProfile.put("PlConfigVersion", PackageInfo.sVersion);
 
+      pProfile.put("PipelineUser",  "pipeline");
+      pProfile.put("PipelineGroup", "pipeline");
+
       pProfile.put("ToolsetDirectory", new File("/base/toolset"));
       pProfile.put("TemporaryDirectory", new File("/usr/tmp"));
       
@@ -91,6 +94,20 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
   /*   A C C E S S                                                                         */
   /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Set the pipeline user name. 
+   */ 
+  public void 
+  setPipelineUser
+  (
+   String user
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("PipelineUser", user);
+  }
+
 
   /**
    * Get the root installation directory.
@@ -569,11 +586,56 @@ class ConfigApp
   validate()
     throws ParseException, IllegalConfigException, SocketException
   {
-    /* make sure we are "pipeline" */ 
+    /* make sure we are the pipeline user/group */ 
+    String pluser  = null;
+    String plgroup = null;
     {
-      if(!System.getProperty("user.name").equals("pipeline")) 
+      pluser = (String) pProfile.get("PipelineUser");
+      if((pluser == null) || (pluser.length() == 0)) 
 	throw new IllegalConfigException
-	  ("The plconfig(1) tool must be run by the \"pipeline\" user!");
+	  ("The pipeline user was illegal!");
+
+      if(!System.getProperty("user.name").equals(pluser)) 
+	throw new IllegalConfigException
+	  ("The plconfig(1) tool must be run by the (" + pluser + ") user!");
+
+      try {
+	String args[] = new String[1];
+	args[0] = "groups";
+
+	Process proc = Runtime.getRuntime().exec(args);
+	
+	InputStream in = proc.getInputStream();
+	byte buf[] = new byte[1024];
+	int num = in.read(buf, 0, buf.length);
+	in.close();
+	  
+	if(num == -1) 
+	  throw new IOException();
+	
+	String line = new String(buf);
+	String fields[] = line.split("[ \t\n]");
+	int wk;
+	for(wk=0; wk<fields.length; wk++) {
+	  if(fields[wk].length() > 0) {
+	    plgroup = fields[wk];
+	    pProfile.put("PipelineGroup", plgroup);
+	    break;
+	  }
+	}
+	
+	if(plgroup == null) 
+	  throw new IOException();
+
+	int exitCode = proc.waitFor();
+	if(exitCode != 0)
+	  throw new IOException();
+      }
+      catch(Exception ex) {
+	throw new IllegalConfigException
+	  ("Unable to determine the current group!");
+      }
+      assert(plgroup != null);
 
       String kind[] = { "User", "Group" };
       int wk;
@@ -601,7 +663,7 @@ class ConfigApp
 	}
 	catch(Exception ex) {
 	  throw new IllegalConfigException
-	    ("Unable to determine the \"pipeline\" " + kind[wk].toLowerCase() + " ID!");
+	    ("Unable to determine the current " + kind[wk].toLowerCase() + " ID!");
 	}
       }
     }
@@ -617,7 +679,8 @@ class ConfigApp
 	if(config.isDirectory()) {
 	  if(!config.canWrite()) 
 	    throw new ParseException
-	      ("The (" + config + ") directory is not writable by the \"pipeline\" user!");
+	      ("The (" + config + ") directory is not writable by the " + 
+	       "(" + pluser + ") user and (" + plgroup  + ") group!");
 	}
 	else {
 	  throw new IllegalConfigException
@@ -658,7 +721,7 @@ class ConfigApp
     if(pProfile.get("HomeDirectory") == null) {
       String home = System.getProperty("user.home"); 
       if(home != null) {
-	if(home.endsWith("pipeline"))
+	if(home.endsWith(pluser))
 	  pProfile.put("HomeDirectory", home.substring(0, home.length() - 9));
       }
       else {
@@ -1120,7 +1183,6 @@ class ConfigApp
        "  plconfig --version\n" + 
        "  plconfig --release-date\n" + 
        "  plconfig --copyright\n" + 
-       "  plconfig --license\n" + 
        "\n" + 
        "OPTIONS:\n" +
        "  [--host-ids]\n" +
@@ -1234,15 +1296,6 @@ class ConfigApp
   copyright()
   {
     System.out.print(PackageInfo.sCopyright + "\n");
-  }
-    
-  /**
-   * The implementation of the <CODE>--license</CODE> command-line option.
-   */ 
-  public void
-  license()
-  {
-    System.out.print(PackageInfo.sLicense + "\n");
   }
     
 
