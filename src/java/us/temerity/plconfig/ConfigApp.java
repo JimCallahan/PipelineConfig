@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.20 2005/03/11 01:39:08 jim Exp $
+// $Id: ConfigApp.java,v 1.21 2005/03/11 06:09:58 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -193,7 +193,7 @@ class ConfigApp
       pProfile.put("LicenseEnd" , new Date(end));
       pProfile.put("LicenseEndStamp" , new Long(end));
 
-      pProfile.put("LicenseType", "Annual License");
+      pProfile.put("LicenseType", "Annual");
     }
     catch(IOException ex) {
       throw new IllegalConfigException(ex.getMessage());
@@ -215,7 +215,7 @@ class ConfigApp
       pProfile.put("LicenseEnd" , new Date(Long.MAX_VALUE));
       pProfile.put("LicenseEndStamp" , Long.MAX_VALUE);
 
-      pProfile.put("LicenseType", "Perpetual License");
+      pProfile.put("LicenseType", "Perpetual");
     }
     catch(IOException ex) {
       throw new IllegalConfigException(ex.getMessage());
@@ -695,7 +695,7 @@ class ConfigApp
     }
 
     /* license period */ 
-    if((pProfile.get("LicenseStart") == null) || (pProfile.get("LicenseEnd") == null)) 
+    if(pProfile.get("LicenseType") == null)
       throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
     /* host IDs */
@@ -997,32 +997,8 @@ class ConfigApp
     }
     
     /* write the customers private key as: temerity-software.key */ 
-    {
-      /* convert the critical profile information into raw bytes */ 
-      byte raw[] = null;
-      {
-	TreeMap<String,Object> table = new TreeMap<String,Object>();
-	table.put("LicenseStart", pProfile.get("LicenseStart"));
-	table.put("LicenseEnd",   pProfile.get("LicenseEnd"));
-	table.put("HostIDs",      pProfile.get("HostIDs"));
-
-	ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-	ObjectOutputStream out = new ObjectOutputStream(bout);
-	out.writeObject(table);
-	out.flush();
-	out.close();
-
-	raw = bout.toByteArray();
-      }
-
-      /* encrypt the profile string */ 
-      Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-      cipher.init(Cipher.ENCRYPT_MODE, key);
-
-      writeEncodedData(new File(cdir, "temerity-software.key"), 
-		       pair.getPrivate().getEncoded(), cipher.doFinal(raw));
-    }
+    writeEncodedData(new File(cdir, "temerity-software.key"), 
+		     pair.getPrivate().getEncoded(), null);
 
     /* write the customer profile as: customer-profile */ 
     {
@@ -1131,11 +1107,14 @@ class ConfigApp
       keyText = buf.toString();
     }
 
-    String profileText = encodeBytes(profile);
+    String profileText = null;
+    if(profile != null)
+      profileText = encodeBytes(profile);
 
     FileWriter out = new FileWriter(file);
     out.write(keyText);
-    out.write(profileText);
+    if(profileText != null) 
+      out.write(profileText);
     out.flush();
     out.close();
   }
