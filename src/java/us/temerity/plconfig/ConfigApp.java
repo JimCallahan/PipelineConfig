@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.3 2004/03/18 18:00:21 jim Exp $
+// $Id: ConfigApp.java,v 1.4 2004/03/18 23:54:08 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -18,7 +18,7 @@ import com.sun.crypto.provider.SunJCE;
 /*------------------------------------------------------------------------------------------*/
 
 /**
- * 
+ * The top-level class for the <B>plconfig</B>(1) program.
  */ 
 public
 class ConfigApp
@@ -47,7 +47,7 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
   
   /**
-   * Construct the <B>plconfig</B>(1) application with the given command-line arguments.
+   * Construct the application with the given command-line arguments.
    * 
    * @param args [<B>in</B>]
    *   The command-line arguments.
@@ -153,6 +153,57 @@ class ConfigApp
     pProfile.put("RootInstallDirectory", canon);
   }
 
+
+  /** 
+   * Set the duration of an evaluation license.
+   */
+  public void 
+  setEvaluationLicense()
+    throws IllegalConfigException
+  {
+    try {
+      long now = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(now));
+      pProfile.put("LicenseEnd" ,  new Date(now + 2592000000L));
+    }
+    catch(IOException ex) {
+      throw new IllegalConfigException(ex.getMessage());
+    }
+  }
+
+  /** 
+   * Set the duration of an annual license.
+   */
+  public void 
+  setAnnualLicense()
+    throws IllegalConfigException
+  {
+    try {
+      long now = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(now));
+      pProfile.put("LicenseEnd" ,  new Date(now + 30758400000L)); 
+    }
+    catch(IOException ex) {
+      throw new IllegalConfigException(ex.getMessage());
+    }
+  }
+
+  /** 
+   * Set the duration of an perpetual license.
+   */
+  public void 
+  setPerpetualLicense()
+    throws IllegalConfigException
+  {
+    try {
+      long now = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(now));
+      pProfile.put("LicenseEnd" ,  new Date(Long.MAX_VALUE)); 
+    }
+    catch(IOException ex) {
+      throw new IllegalConfigException(ex.getMessage());
+    }
+  }
 
   
   /**
@@ -324,7 +375,6 @@ class ConfigApp
       handleParseException(ex);
     }
     catch(Exception ex) {
-      //ex.printStackTrace(System.out);
       System.out.print("ERROR: " + ex.getMessage() + "\n");
     }
 
@@ -349,6 +399,9 @@ class ConfigApp
     /* root installation directory */ 
     if(getRootDirectory() == null) 
       throw new ParseException("The --root-dir option is required!");
+
+    if((getParameter("LicenseStart") == null) || (getParameter("LicenseEnd") == null)) 
+      throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
     /* site domain name */ 
     if(getParameter("DomainName") == null) {
@@ -493,20 +546,45 @@ class ConfigApp
       pair = pairGen.generateKeyPair();
     }
 
+    /* use the company public key and the customers private key to create a DES key */ 
+    SecretKey key = null;
+    {
+      KeyAgreement keyAgree = KeyAgreement.getInstance("DH");
+      keyAgree.init(pair.getPrivate());
+      keyAgree.doPhase(publicKey, true);
+      key = keyAgree.generateSecret("DES");
+    }
+    
     /* write the customers private key as: pipeline-license.key */ 
-    writeLicense(pair.getPrivate().getEncoded());
+    {
+      /* convert the critical profile information into raw bytes */ 
+      byte raw[] = null;
+      {
+	TreeMap<String,Object> table = new TreeMap<String,Object>();
+	table.put("LicenseStart", pProfile.get("LicenseStart"));
+	table.put("LicenseEnd",   pProfile.get("LicenseEnd"));
+	table.put("DomainName",   pProfile.get("DomainName"));
+
+	ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+	ObjectOutputStream out = new ObjectOutputStream(bout);
+	out.writeObject(table);
+	out.flush();
+	out.close();
+
+	raw = bout.toByteArray();
+      }
+
+      /* encrypt the profile string */ 
+      Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+      cipher.init(Cipher.ENCRYPT_MODE, key);
+
+      writeEncodedData(new File(getRootDirectory(), "pipeline-license.key"), 
+		       pair.getPrivate().getEncoded(), cipher.doFinal(raw));
+    }
 
     /* write the customer profile as: pipeline.profile */ 
     {
-      /* use the company public key and the customers private key to create a DES key */ 
-      SecretKey key = null;
-      {
-	KeyAgreement keyAgree = KeyAgreement.getInstance("DH");
-	keyAgree.init(pair.getPrivate());
-	keyAgree.doPhase(publicKey, true);
-	key = keyAgree.generateSecret("DES");
-      }
-
       /* convert the profile table into raw bytes */ 
       byte raw[] = null;
       {
@@ -525,7 +603,8 @@ class ConfigApp
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
       /* write the customer public key and encrypted profile to: pipeline.profile */ 
-      writeProfile(pair.getPublic().getEncoded(), cipher.doFinal(raw));
+      writeEncodedData(new File(getRootDirectory(), "pipeline.profile"), 
+		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
     /* print the configuration parameters */ 
@@ -536,55 +615,18 @@ class ConfigApp
   }
 
   /**
-   * Write the customers private key as: pipeline-license.key 
+   * Write the given key and encrypted profile information as encoded text file.
    */
   private void 
-  writeLicense
+  writeEncodedData
   ( 
-   byte[] key
-  ) 
-    throws IOException
-  {
-    File file = new File(getRootDirectory(), "pipeline-license.key");
-    if(file.exists() && !file.canWrite()) 
-      throw new IOException
-	("Unable to write (" + file + ") because it has been locked!");
-
-    String text = null;
-    {
-      StringBuffer buf = new StringBuffer();
-
-      String encoded = encodeBytes(key);
-
-      String str = Integer.valueOf(encoded.length()).toString();
-      int wk;
-      for(wk=str.length(); wk<4; wk++) 
-	buf.append("0");
-      buf.append(str);
-      
-      buf.append(encoded);
-
-      text = buf.toString();
-    }
-    
-    FileWriter out = new FileWriter(file);
-    out.write(text, 0, text.length());
-    out.flush();
-    out.close();
-  }
-
-  /**
-   * Write the customer profile as: pipeline.profile 
-   */
-  private void 
-  writeProfile
-  ( 
+   File file, 
    byte[] key, 
    byte[] profile
   ) 
     throws IOException
   {
-    File file = new File(getRootDirectory(), "pipeline.profile");
+
     if(file.exists() && !file.canWrite()) 
       throw new IOException
 	("Unable to write (" + file + ") because it has been locked!");

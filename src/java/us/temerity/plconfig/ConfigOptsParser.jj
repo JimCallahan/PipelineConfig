@@ -66,6 +66,10 @@ TOKEN :
   /* global options */	
 | <ROOT_DIR:     "--root-dir">    : PATH_SEP
 
+| <EVALUATION:   "--evaluation">  
+| <ANNUAL:       "--annual">
+| <PERPETUAL:    "--perpetual">
+
 | <DOMAIN:       "--domain">      : HOSTNAME_SEP
 | <HOME_DIR:     "--home-dir">    : PATH_SEP
 | <TOOLSET_DIR:  "--toolset-dir"> : PATH_SEP
@@ -272,6 +276,7 @@ GlobalOpts()
 {}
 {
   (RootDir() | 
+   Evaluation() | Annual() | Perpetual() |
    Domain() | HomeDir() | ToolsetDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
    FileHost() | FilePort() | ProdDir() | 
@@ -302,6 +307,46 @@ RootDir()
   <ROOT_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setRootDirectory(new File(t.image));
+  }
+}
+
+
+void
+Evaluation() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <EVALUATION> 
+  { 
+    pApp.setEvaluationLicense();
+  }
+}
+
+void
+Annual() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <ANNUAL> 
+  { 
+    pApp.setAnnualLicense();
+  }
+}
+
+void
+Perpetual() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <PERPETUAL> 
+  { 
+    pApp.setPerpetualLicense();
   }
 }
 
