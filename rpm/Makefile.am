@@ -35,9 +35,9 @@ install: all
 	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.class \
           $(PIPELINE_SOURCE_ROOT)/plconfig
 
-clean:
+clean: 
 	rm -rf BUILD RPMS SPECS
 	rm -f header plconfig-@VERSION@-i686-rpm.bin
-
+	DESTDIR=`pwd`/BUILD $(MAKE) -C .. clean
 
 
