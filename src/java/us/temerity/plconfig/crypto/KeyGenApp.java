@@ -1,4 +1,4 @@
-// $Id: KeyGenApp.java,v 1.3 2004/03/22 01:43:35 jim Exp $
+// $Id: KeyGenApp.java,v 1.4 2004/03/22 23:38:52 jim Exp $
 
 import java.io.*;
 import java.math.*;
@@ -79,7 +79,7 @@ class KeyGenApp
     KeyPair pair = null;
     {
       AlgorithmParameterGenerator paramGen = AlgorithmParameterGenerator.getInstance("DH");
-      paramGen.init(512);
+      paramGen.init(1024);
       
       AlgorithmParameters params = paramGen.generateParameters();
       DHParameterSpec paramSpec = 

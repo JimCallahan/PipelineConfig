@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.7 2004/03/22 01:42:18 jim Exp $
+// $Id: ConfigApp.java,v 1.8 2004/03/22 23:38:52 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -916,7 +916,7 @@ class ConfigApp
   }
 
   /**
-   * Convert a an array of bytes into packed hexidecimal string.
+   * Convert a an array of bytes into a String containing numeric digits.
    */
   private String
   encodeBytes
@@ -924,17 +924,8 @@ class ConfigApp
    byte[] bytes
   ) 
   {
-    StringBuffer buf = new StringBuffer();
-
-    int wk;
-    for(wk=0; wk<bytes.length; wk++) {
-      String hex = Integer.toHexString(Byte.valueOf(bytes[wk]).intValue() + 128);
-      if(hex.length() == 1) 
-	buf.append("0");
-      buf.append(hex.toUpperCase());
-    }
-
-    return buf.toString();
+    BigInteger big = new BigInteger(bytes);
+    return big.toString();
   }
 
 

@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in,v 1.6 2004/03/22 03:54:41 jim Exp $
+// $Id: CryptoApp.java.in,v 1.7 2004/03/22 23:38:52 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -356,7 +356,7 @@ class CryptoApp
   }
 
   /**
-   * Convert a an array of bytes into packed hexidecimal string.
+   * Convert a an array of bytes into a String containing numeric digits.
    */
   private String
   encodeBytes
@@ -364,21 +364,12 @@ class CryptoApp
    byte[] bytes
   ) 
   {
-    StringBuffer buf = new StringBuffer();
-
-    int wk;
-    for(wk=0; wk<bytes.length; wk++) {
-      String hex = Integer.toHexString(Byte.valueOf(bytes[wk]).intValue() + 128);
-      if(hex.length() == 1) 
-	buf.append("0");
-      buf.append(hex.toUpperCase());
-    }
-
-    return buf.toString();
+    BigInteger big = new BigInteger(bytes);
+    return big.toString();
   }
 
   /**
-   * Convert a packed hexidecimal string into an array of bytes.
+   * Convert a String containing numeric digits into an array of bytes.
    */
   private byte[]
   decodeBytes
@@ -386,19 +377,8 @@ class CryptoApp
    String text
   ) 
   {
-    if((text.length() % 2) != 0) 
-      throw new IllegalArgumentException("Encoded text length was not a mulitple of two!");
-
-    char cs[]    = text.toCharArray();
-    byte bytes[] = new byte[cs.length / 2];
-   
-    int wk;
-    for(wk=0; wk<bytes.length; wk++) {
-      int v = Integer.valueOf(new String(cs, wk*2, 2), 16) - 128;
-      bytes[wk] = Integer.valueOf(v).byteValue();
-    }
-
-    return bytes;
+    BigInteger big = new BigInteger(text);
+    return big.toByteArray();
   }
 
 
