@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.8 2004/03/22 23:38:52 jim Exp $
+// $Id: ConfigApp.java,v 1.9 2004/03/23 02:12:40 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -463,10 +463,32 @@ class ConfigApp
       }
     }
 
-    /* root installation directory */ 
-    if(getRootDirectory() == null) 
-      throw new ParseException("The --root-dir option is required!");
+    /* root installation directory and "config" subdir */ 
+    {
+      File root = getRootDirectory();
+      if(root == null) 
+	throw new ParseException("The --root-dir option is required!");
+    
+      File config = new File(root, "config");
+      if(config.exists()) {
+	if(config.isDirectory()) {
+	  if(!config.canWrite()) 
+	    throw new ParseException
+	      ("The (" + config + ") directory is not writable by the \"pipeline\" user!");
+	}
+	else {
+	  throw new IllegalConfigException
+	    ("The path (" + config + ") is not a directory!");
+	}
+      }
+      else {
+	if(!config.mkdir())
+	  throw new IllegalConfigException
+	    ("Unable to create the (" + config + ") directory!");
+      }
+    }
 
+    /* license period */ 
     if((getParameter("LicenseStart") == null) || (getParameter("LicenseEnd") == null)) 
       throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
@@ -787,7 +809,7 @@ class ConfigApp
       key = keyAgree.generateSecret("DES");
     }
     
-    /* write the customers private key as: pipeline-license.key */ 
+    /* write the customers private key as: pipeline.key */ 
     {
       /* convert the critical profile information into raw bytes */ 
       byte raw[] = null;
@@ -811,7 +833,7 @@ class ConfigApp
       Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
-      writeEncodedData(new File(getRootDirectory(), "pipeline-license.key"), 
+      writeEncodedData(new File(getRootDirectory(), "config/pipeline.key"), 
 		       pair.getPrivate().getEncoded(), cipher.doFinal(raw));
     }
 
@@ -835,7 +857,7 @@ class ConfigApp
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
       /* write the customer public key and encrypted profile to: pipeline.profile */ 
-      writeEncodedData(new File(getRootDirectory(), "pipeline.profile"), 
+      writeEncodedData(new File(getRootDirectory(), "config/pipeline.profile"), 
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
@@ -853,7 +875,7 @@ class ConfigApp
 
       System.out.print(config);
 
-      File file = new File(getRootDirectory(), "pipeline.config");
+      File file = new File(getRootDirectory(), "config/pipeline.config");
       if(file.exists() && !file.canWrite()) 
 	throw new IOException
 	  ("Unable to write (" + file + ") because it has been locked!");

@@ -90,19 +90,17 @@ writes (or overwrites) the following three files under the root
 installation directory (see <a href="#-root-dir"><span
  style="font-weight: bold;">--root-dir</span></a>):<br>
   <span style="font-style: italic;"><br>
-  <a name="pipeline-license.key"></a>root-install-directory</span>/pipeline-license.key<br>
+  <a name="pipeline.key"></a>root-install-directory</span>/config/pipeline.key<br>
   <div style="margin-left: 40px;"><br>
 This file contains the license key for Pipeline for your site.&nbsp;
-This file
-is created with file access permissions which make it readable only by
-the (pipeline) user. This file should be zealously protected as it
+This file should be zealously protected as it
 represents confidential information covered by the <span
  style="font-weight: bold;">Pipeline License Agreement</span>. Once
 Pipeline is installed, this file will be required in order to run the
 programs which make up the Pipeline.<br>
   </div>
   <br>
-  <span style="font-style: italic;"><a name="pipeline.profile"></a>root-install-directory</span>/pipeline.profile<br>
+  <span style="font-style: italic;"><a name="pipeline.profile"></a>root-install-directory</span>/config/pipeline.profile<br>
   <br>
   <div style="margin-left: 40px;">This file contains the site specific
 configuration profile data which will be used build the custom Pipeline
@@ -112,7 +110,7 @@ this file will need to be pasted into the <span
  style="font-weight: bold;">Pipeline License Application Form</span>. <br>
   <br>
   </div>
-  <span style="font-style: italic;"><a name="pipeline.config"></a>root-install-directory</span>/pipeline.config<br>
+  <span style="font-style: italic;"><a name="pipeline.config"></a>root-install-directory</span>/config/pipeline.config<br>
   <br>
   <div style="margin-left: 40px;">This is a plain text file similar to
 the configuration parameters printed by<span style="font-weight: bold;">
@@ -489,7 +487,7 @@ standard <span style="font-weight: bold;">JRE</span> locations.<br>
 </div>
 <span style="font-weight: bold;"><a name="--lock"></a>--lock</span><br>
 <div style="margin-left: 40px;"><br>
-Makes the generated configuration files (pipeline-license.key,
+Makes the generated configuration files (pipeline.key,
 pipeline.profile and pipeline.config) read-only, to protect them from
 being overwritten by a later execution of plconfig(1).&nbsp; It is
 strongly advised that plconfig(1) be run with this option once a final
@@ -508,7 +506,7 @@ Software</span><br>
 </div>
 <h3><a name="Files"></a>Files</h3>
 <div style="margin-left: 40px; font-weight: bold;"><a
- href="#pipeline-license.key">pipeline-license.key</a><br>
+ href="#pipeline.key">pipeline.key</a><br>
 <a href="#pipeline.profile">pipeline.profile</a><br>
 <a href="#pipeline.config">pipeline.config</a><br>
 </div>
