@@ -1,8 +1,9 @@
-// $Id: CryptoApp.java.in,v 1.10 2004/03/23 20:26:33 jim Exp $
+// $Id: CryptoApp.java.in,v 1.11 2004/04/01 23:06:24 jim Exp $
 
 import java.io.*;
 import java.util.*;
 import java.math.*;
+import java.net.*;
 import java.security.*;
 import java.security.spec.*;
 import java.security.interfaces.*;
@@ -231,15 +232,45 @@ class CryptoApp
     }
 
     if(pParamsOpt) {
-      for(String name : pParams.keySet()) 
-	System.out.print(name + " = " + pParams.get(name) + "\n");
+      for(String title : pParams.keySet()) {
+	System.out.print(title + " = ");
+	if(title.equals("IPAddrs")) {
+	  System.out.print("\n");
+
+	  TreeSet<String> names = new TreeSet<String>();
+	  HashSet addrs = (HashSet) pParams.get("IPAddrs");
+	  for(Object obj : addrs) {
+	    InetAddress addr = (InetAddress) obj;
+	    names.add(addr.getHostAddress());
+	  }
+	  
+	  for(String name : names)
+	    System.out.print("  " + name + "\n");
+	}
+	else {
+	  System.out.print(pParams.get(title) + "\n");
+	}
+      }
     }
     else if(pParamNamesOpt) {
-      for(String name : pParams.keySet()) 
-	System.out.print(name + "\n");
+      for(String title : pParams.keySet()) 
+	System.out.print(title + "\n");
     }
     else if(pLookupOpt) {
-      System.out.print(pParams.get(pLookupArg) + "\n");
+      if(pLookupArg.equals("IPAddrs")) {
+	  TreeSet<String> names = new TreeSet<String>();
+	  HashSet addrs = (HashSet) pParams.get("IPAddrs");
+	  for(Object obj : addrs) {
+	    InetAddress addr = (InetAddress) obj;
+	    names.add(addr.getHostAddress());
+	  }
+	  
+	  for(String name : names)
+	    System.out.print(name + "\n");
+      }
+      else {
+	System.out.print(pParams.get(pLookupArg) + "\n");
+      }
     }
     else if(pBuildVaultOpt) {
       buildVault();
