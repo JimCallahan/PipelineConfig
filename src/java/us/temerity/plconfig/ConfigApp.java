@@ -1,8 +1,9 @@
-// $Id: ConfigApp.java,v 1.6 2004/03/20 18:45:11 jim Exp $
+// $Id: ConfigApp.java,v 1.7 2004/03/22 01:42:18 jim Exp $
 
 package us.temerity.plconfig;
 
 import java.io.*;
+import java.math.*;
 import java.net.*;
 import java.util.*;
 import java.security.*;
@@ -762,13 +763,9 @@ class ConfigApp
     /* retrieve the company's public key */ 
     PublicKey publicKey = null;
     {
-      byte bytes[] = new byte[CompanyPublicKey.sBytes.length];
-      int wk;
-      for(wk=0; wk<bytes.length; wk++) 
-	bytes[wk] = Integer.valueOf(CompanyPublicKey.sBytes[wk] - 128).byteValue();
-
+      BigInteger big = new BigInteger(Enigma.sData);
       KeyFactory factory = KeyFactory.getInstance("DH");
-      X509EncodedKeySpec spec = new X509EncodedKeySpec(bytes);
+      X509EncodedKeySpec spec = new X509EncodedKeySpec(big.toByteArray());
       publicKey = factory.generatePublic(spec);
     }
 

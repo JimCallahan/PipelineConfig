@@ -156,9 +156,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 
       JAVA_PATHS = -d . -classpath .
 
-         TARGETS = ../CompanyPublicKey.java \
-                   CompanyPublicKey.field \
-                   CompanyPrivateKey.field
+         TARGETS = ../Enigma.java CompanyKeyFields
 
 
 #--------------------------------------------------------------------------------------------#
@@ -168,9 +166,9 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 all: Makefile CryptoApp.class
 
 
-CryptoApp.java: CryptoApp.java.in CompanyPrivateKey.field
-	awk -- '/@COMPANY_PRIVATE_KEY_FIELD@/ { system("cat CompanyPrivateKey.field") } \
-               !/@COMPANY_PRIVATE_KEY_FIELD@/ { print }' $< > $@
+CryptoApp.java: CryptoApp.java.in $(TARGETS)
+	awk -- '/@COMPANY_KEY_FIELDS@/ { system("cat CompanyKeyFields") } \
+               !/@COMPANY_KEY_FIELDS@/ { print }' $< > $@
 	rm -f $(top_builddir)/docs/javadoc/docs-all
 
 $(TARGETS): KeyGenApp.class
