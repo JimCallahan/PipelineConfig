@@ -215,7 +215,9 @@ InformationOpts() :
 {}
 {
   (Help() | HtmlHelp() | Version() | ReleaseDate() | Copyright())
-  {}
+  {
+    System.exit(0);
+  }
 }
 
 void
