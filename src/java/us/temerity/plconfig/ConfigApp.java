@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.5 2004/03/20 05:45:01 jim Exp $
+// $Id: ConfigApp.java,v 1.6 2004/03/20 18:45:11 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -64,6 +64,7 @@ class ConfigApp
     pProfile = new TreeMap<String,Object>();
     {
       pProfile.put("ToolsetDirectory", new File("/base/toolset"));
+      pProfile.put("TemporaryDirectory", new File("/usr/tmp"));
       
       pProfile.put("MasterHostname", "localhost");
       pProfile.put("MasterPort",     53135);
@@ -242,6 +243,18 @@ class ConfigApp
     pProfile.put("ToolsetDirectory", dir);
   }
 
+  /**
+   * Set the root temporary directory.
+   */
+  public void 
+  setTemporaryDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("TemporaryDirectory", dir);
+  }
+
 
 
   /**
@@ -413,9 +426,41 @@ class ConfigApp
     throws ParseException, IllegalConfigException, SocketException
   {
     /* make sure we are "pipeline" */ 
-    if(!System.getProperty("user.name").equals("pipeline")) 
-      throw new IllegalConfigException
-	("The plconfig(1) tool must be run by the \"pipeline\" user!");
+    {
+      if(!System.getProperty("user.name").equals("pipeline")) 
+	throw new IllegalConfigException
+	  ("The plconfig(1) tool must be run by the \"pipeline\" user!");
+
+      String kind[] = { "User", "Group" };
+      int wk;
+      for(wk=0; wk<kind.length; wk++) {
+	try {
+	  String args[] = new String[2];
+	  args[0] = "id";
+	  args[1] = ("--" + kind[wk].toLowerCase());
+	  
+	  Process proc = Runtime.getRuntime().exec(args);
+	  
+	  InputStream in = proc.getInputStream();
+	  byte buf[] = new byte[1024];
+	  int num = in.read(buf, 0, buf.length);
+	  in.close();
+	  
+	  if(num == -1) 
+	    throw new IOException();
+
+	  pProfile.put("Pipeline" + kind[wk] + "ID", new Integer(new String(buf, 0, num-1)));
+	  
+	  int exitCode = proc.waitFor();
+	  if(exitCode != 0)
+	    throw new IOException();
+	}
+	catch(Exception ex) {
+	  throw new IllegalConfigException
+	    ("Unable to determine the \"pipeline\" " + kind[wk].toLowerCase() + " ID!");
+	}
+      }
+    }
 
     /* root installation directory */ 
     if(getRootDirectory() == null) 
@@ -502,6 +547,14 @@ class ConfigApp
       if(!dir.isAbsolute()) 
 	throw new IllegalConfigException
 	  ("The root toolset directory (" + dir + ") was not absolute!");
+    }
+      
+    /* temporary directory */ 
+    {
+      File dir = (File) pProfile.get("TemporaryDirectory");
+      if(!dir.isAbsolute()) 
+	throw new IllegalConfigException
+	  ("The temporary directory (" + dir + ") was not absolute!");
     }
       
     /* node directory */ 
@@ -913,7 +966,7 @@ class ConfigApp
        "  plconfig --copyright\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--domain=...][--home-dir=...][--toolset-dir=...]\n" + 
+       "  [--domain=...][--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
        "  [--file-host=...][--file-port=...][--prod-dir=...]\n" +
        "  [--class-path][--library-path]\n" +
