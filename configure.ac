@@ -484,6 +484,7 @@ AC_CONFIG_FILES([
   src/java/us/temerity/plconfig/tests/Makefile
   src/java/us/temerity/plconfig/tests/TestInfo.java
   src/java/us/temerity/plconfig/crypto/Makefile
+  src/java/us/temerity/plconfig/crypto/CryptoApp.java.in
 
   src/java/scripts/Makefile
   src/java/scripts/plconfig

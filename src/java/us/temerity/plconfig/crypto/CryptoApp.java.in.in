@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in,v 1.11 2004/04/01 23:06:24 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.1 2004/04/01 23:51:13 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -42,6 +42,11 @@ import com.sun.crypto.provider.SunJCE;
  * <H4>Options</H4>
  * 
  * <DIV style="margin-left: 40px;">
+ *   --version <BR> 
+ *   <DIV style="margin-left: 40px;">
+ *     Prints the version of <B>plconfig</B>(1) and exits.
+ *   </DIV> <P> 
+ * 
  *   --params <BR> 
  *   <DIV style="margin-left: 40px;">
  *     Prints all of the site configuration parameters contained in (<I>customer-profile</I>) 
@@ -124,7 +129,10 @@ class CryptoApp
   {
     switch(args.length) {
     case 1: 
-      usage();
+      if(args[0].equals("--version")) 
+	pVersionOpt = true;
+      else
+	usage();
       break;
 
     case 2:
@@ -181,7 +189,7 @@ class CryptoApp
 	usage();
     }
       
-    {
+    if(!pVersionOpt) {
       File file = new File(args[0]);
       if(!file.isFile()) {
 	System.out.print("The customer profile input file (" + file + ") does not exist!");
@@ -200,6 +208,8 @@ class CryptoApp
     System.out.print
       ("USAGE:\n" + 
        "  java [java-options] CryptoApp customer-profile [options]\n" + 
+       "\n" + 
+       "  java [java-options] CryptoApp --version\n" + 
        "\n" + 
        "OPTIONS:\n" +
        "  --params\n" + 
@@ -223,6 +233,11 @@ class CryptoApp
   public void
   run()
   {
+    if(pVersionOpt) {
+      System.out.print("@VERSION@");
+      System.exit(0);
+    }
+
     try {
       read();
     }
@@ -549,6 +564,11 @@ class CryptoApp
    * The input encrypted customer profile file.
    */ 
   private File  pProfileFile;
+
+  /**
+   * Whether the --version option was given.
+   */
+  private boolean  pVersionOpt;
 
   /**
    * Whether the --params option was given.

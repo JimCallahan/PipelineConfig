@@ -183,11 +183,14 @@ $(TARGETS): KeyGenApp.class
 
 clean: 
 	rm -f $(TARGETS)
-	rm -f CryptoApp.java
+	rm -f CryptoApp.java CryptoApp.java.in
 	rm -f *.class
 
 
 #--------------------------------------------------------------------------------------------#
+
+CryptoApp.java.in: $(srcdir)/CryptoApp.java.in.in  $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
