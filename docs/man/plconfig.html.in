@@ -14,11 +14,11 @@
  style="font-style: italic;">options</span></a>]<br>
   <br>
   <span style="font-weight: bold;">plconfig</span> <a
- href="--graphical"><span style="font-weight: bold;">--graphical</span></a><br>
+ href="#--graphical"><span style="font-weight: bold;">--graphical</span></a><br>
   <i> </i><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--help">--help</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--html-help">--html-help</a><br>
-  <b>plconfig</b> <a style="font-weight: bold;" href="#--version_">--version</a><br>
+  <b>plconfig</b> <a style="font-weight: bold;" href="#--version">--version</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--release-date">--release-date</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--copyright">--copyright</a><br>
   <span style="font-weight: bold;">plconfig</span> <a href="#--license"><span
@@ -70,7 +70,7 @@ Once the steps described above, its a relatively simple matter to
 generate the Pipeline configuration and license key.&nbsp; <br>
   <br>
 If run in graphical mode, <span style="font-weight: bold;">plconfig</span>(1)
-only requires the <a href="--graphical"><span
+only requires the <a href="#--graphical"><span
  style="font-weight: bold;">--graphical</span></a> option and will
 display a set of dialogs which will walk you through the configuration
 process.<br>
@@ -88,15 +88,15 @@ configuration parameters will be printed by <span
 Regardless of whether <span style="font-weight: bold;">plconfig</span>(1)
 is run in graphical or command-line mode, it
 writes (or overwrites) the following three files under the root
-installation directory (see <a href="#-root-dir"><span
+installation directory (see <a href="#--root-dir"><span
  style="font-weight: bold;">--root-dir</span></a>):<br>
   <span style="font-style: italic;"><br>
   <a name="pipeline.key"></a>root-install-directory</span>/config/pipeline.key<br>
   <div style="margin-left: 40px;"><br>
 This file contains the license key for Pipeline for your site.&nbsp;
 This file should be zealously protected as it
-represents confidential information covered by the <a
- href="#License_Agreement"><span style="font-weight: bold;">Pipeline
+represents confidential information covered by the <a href="#License"><span
+ style="font-weight: bold;">Pipeline
 Configuration Tool License Agreement</span></a>.
 Once
 Pipeline is installed, this file will be required in order to run the
@@ -125,7 +125,7 @@ you chose when generating the other two files.<br>
   </div>
 Once you've decided on a configuration, you should run <span
  style="font-weight: bold;">plconfig</span>(1) one last time adding the
-  <a href="--lock"><span style="font-weight: bold;">--lock</span></a>
+  <a href="#--lock"><span style="font-weight: bold;">--lock</span></a>
 option the rest of your option choices. This option make the above
 three file read-only to prevent any accidental destruction at a later
 date by running <span style="font-weight: bold;">plconfig</span>(1)
@@ -216,13 +216,15 @@ and then immediately exit:</blockquote>
   </blockquote>
   <b><a name="--copyright"></a>--copyright<br>
   </b><br>
-  <div style="margin-left: 40px;"> Prints copyright notice for this
+  <div style="margin-left: 40px;"> Prints <a href="#Copyright"><span
+ style="font-weight: bold;">copyright notice</span></a> for this
 software and exits.<br>
   <br>
   </div>
   <b><a name="--license"></a>--license</b><br>
   <div style="margin-left: 40px;"><b> </b><br>
-Prints license agreement for this software and exits. <br>
+Prints <a href="#License"><span style="font-weight: bold;">license
+agreement</span></a> for this software and exits. <br>
   </div>
 </blockquote>
 <blockquote>
@@ -379,8 +381,7 @@ host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline master server </span>plmaster<span
  style="font-weight: normal;">(1) daemon.&nbsp; This
 daemon should run on a host which can access the root node directory
-(see </span><a style="font-weight: bold;"
- href="file:///home/jim/code2/src/plconfig/docs/man/--node-dir">--node-dir</a><span
+(see </span><a style="font-weight: bold;" href="#--node-dir">--node-dir</a><span
  style="font-weight: normal;">)
 on a local file system.&nbsp; The master server daemon is responsible
 for managing all Pipeline node operations including dispatching
@@ -388,8 +389,7 @@ jobs.&nbsp; For optimal performance, the host which runs this daemon
 should be dedicated and have a fast network connection to the host
 running the Pipeline file management </span>plfilemgr<span
  style="font-weight: normal;">(1)
-daemon (see </span><a style="font-weight: bold;"
- href="file:///home/jim/code2/src/plconfig/docs/man/--file-host">--file-host</a><span
+daemon (see </span><a style="font-weight: bold;" href="#--file-host">--file-host</a><span
  style="font-weight: normal;">).&nbsp; <br>
 <br>
 </span><span style="font-weight: normal;">If not specified, the master
@@ -412,9 +412,8 @@ nodes and node related information are stored.&nbsp; This directory
 should
 reside on a local file system on the host which will run the Pipeline
 master server <span style="font-weight: bold;">plmaster</span>(1)
-daemon (see <a
- href="file:///home/jim/code2/src/plconfig/docs/man/--master-host"><span
- style="font-weight: bold;">--master-host</span></a>).&nbsp; <br>
+daemon (see <a href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;
+<br>
 </h4>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the node directory will default to (/usr/share/pipeline).</h4>
@@ -433,9 +432,8 @@ notification daemon <span style="font-weight: bold;">plnotify</span>(1)</span>
 the
 network file server where production data files will reside on your
 site for optimal
-performance (see <a
- href="file:///home/jim/code2/src/plconfig/docs/man/plconfig.html#--prod-dir"><span
- style="font-weight: bold;">--prod-dir</span></a>). <br>
+performance (see <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>).
+<br>
 <br>
 <span style="font-weight: normal;"></span><span
  style="font-weight: normal;">If not specified, the file host will
@@ -484,8 +482,8 @@ the directory as (dir). For
 optimal performance this directory should reside on the
 same host which runs the file management daemon <span
  style="font-weight: bold;">plfilemgr</span>(1) (see <a
- href="file:///home/jim/code2/src/plconfig/docs/man/plconfig.html#--file-host"><span
- style="font-weight: bold;">--file-host</span></a>). <br>
+ href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>).
+<br>
 </h4>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the production directory will default to (/base/prod).</h4>
@@ -520,8 +518,7 @@ support packages.<br>
 An additional set of (:) seperated directories (<span
  style="font-style: italic;">path</span>) to search for the native
 shared object libraries for the Java
-prerequisites described in the <a
- href="file:///home/jim/code2/src/plconfig/docs/man/plconfig.html#System_Prerequisites"><span
+prerequisites described in the <a href="#System_Prerequisites"><span
  style="font-weight: bold;">System Prerequisites</span></a><span
  style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>section.&nbsp;
 This path (<span style="font-style: italic;">path</span>) is appended
@@ -537,8 +534,6 @@ support packages.<br>
 If not specified, the value of the LD_LIBRARY_PATH environmental
 variable is searched instead for native libraries as well as the
 standard <span style="font-weight: bold;">JRE</span> locations.<br>
-<br>
-<br>
 <br>
 </div>
 <span style="font-weight: bold;"><a name="--lock"></a>--lock</span><br>
@@ -608,7 +603,8 @@ Software, Inc.</span><br style="font-weight: bold;">
 </div>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">1.
 DEFINITIONS. </span>"Temerity" means Temerity Software, Inc.&nbsp;
-"Software" means Pipeline Configuration Tool, Version @VERSION@, software
+"Software" means Pipeline Configuration Tool, Version @VERSION@,
+software
 in binary and/or source code forms, any other machine readable
 materials (including, but not limited to, libraries, source files,
 header files, and data files), any user manuals, programming guides and
