@@ -9,7 +9,7 @@ AC_CONFIG_SRCDIR([AUTHORS])
 AC_CONFIG_AUX_DIR(config)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(PipelineConfig, 2.3.2)
+AM_INIT_AUTOMAKE(PipelineConfig, 2.3.3)
 
 AC_MSG_RESULT([ ])
 
