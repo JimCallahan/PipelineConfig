@@ -1,1 +1,158 @@
+2004-04-01  Jim Callahan  <jim@salamander>
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	support for printing IPAddrs param
+
+	* src/java/us/temerity/plconfig/PackageInfo.java.in: added sLicense
+
+	* src/java/us/temerity/plconfig/ConfigApp.java, docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	added --ip-addr, --notify-control-port and --notify-monitor-port
+
+	* configure.ac: version 1.3.1
+
+2004-03-23  Jim Callahan  <jim@salamander>
+
+	* rpm/install-header.in: new license agreement
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	added better debugging messages
+
+	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/IllegalConfigException.java, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	remove [IN] parameter notation comments
+
+	* src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	now exits immediately after all information options
+
+	* configure.ac: version 1.3.0
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	replaced encodeBytes() and decodeBytes() with inline code
+
+	* src/java/us/temerity/plconfig/ConfigApp.java:
+	moved config files into the <root-dir>/config directory
+
+	* rpm/Makefile.am: now cleans source directorys as well
+
+	* docs/man/plconfig.html:
+	moved config files into the <root-dir>/config directory
+
+2004-03-22  Jim Callahan  <jim@salamander>
+
+	* docs/man/plconfig.html:
+	added unlimited strength JCE to the prerequisites
+
+	* rpm/Makefile.am: added missing clean target actions
+
+	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in, src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
+	now uses 1024-bit keys, encodes keys and encrypted data as integer strings instead of hexdecimal strings
+
+	* Makefile.am, rpm/Makefile.am: standardized make targets
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in: latest
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	reverted back to . seperators
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	chamged package paths back to more standard / delemiter instead of .
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	added --build-vault, removed --encrypt-input
+
+	* src/java/us/temerity/plconfig/crypto/Makefile.in, src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
+	now uses BigIntegers converted to final Strings to store keys
+
+	* src/java/us/temerity/plconfig/Makefile.in:
+	renamed CompanyPublicKey.java to Enigma.java to make it less obvious
+
+	* src/java/us/temerity/plconfig/ConfigApp.java:
+	now uses BigIntegers converted to final Strings to store keys
+
+	* rpm/install-header.in: comments
+
+2004-03-20  Jim Callahan  <jim@salamander>
+
+	* rpm/Makefile.am: fixed bug in clean target
+
+	* src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	added --temp-dir option
+
+	* src/java/us/temerity/plconfig/ConfigApp.java:
+	added --temp-dir option, now sets pipeline UID and GID
+
+	* docs/man/plconfig.html: added --temp-dir option
+
+	* configure.ac: version 1.2.0
+
+	* Makefile.am: fixed permissions for autoextract archive
+
+	* src/java/us/temerity/plconfig/ConfigApp.java:
+	added --library-path, now checks for Java3D and JAI jars and libraries
+
+	* docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	added --library-path
+
+	* Makefile.am, configure.ac, rpm/Makefile.am:
+	added a license checking shell script based autoinstaller for the RPM
+
+	* rpm/install-header.in: initial revision
+
+2004-03-19  Jim Callahan  <jim@salamander>
+
+	* src/java/us/temerity/plconfig/tests/Makefile.in:
+	fixed bug in subdir name
+
+	* src/java/scripts/plconfig.in, docs/man/Makefile.am, src/java/us/temerity/plconfig/Makefile.in, src/java/us/temerity/plconfig/PackageInfo.java.in:
+	standardized install location
+
+	* config/bootstrap.sh, configure.ac, Makefile.am:
+	added rpm SUBDIR and install-src target
+
+	* rpm/.cvsignore, rpm/Makefile.am, rpm/plconfig.spec.in, rpm/rpmmacros.in, rpm/rpmrc.in:
+	initial revision
+
+2004-03-18  Jim Callahan  <jim@salamander>
+
+	* docs/javadoc/.cvsignore, docs/javadoc/Makefile.in: initial revision
+
+	* src/java/us/temerity/plconfig/.cvsignore, src/java/us/temerity/plconfig/crypto/.cvsignore:
+	obsolete
+
+	* src/java/us/temerity/plconfig/Makefile.in, src/java/us/temerity/plconfig/crypto/Makefile.in, src/java/us/temerity/plconfig/tests/Makefile.in:
+	initial revision
+
+	* src/java/us/temerity/plconfig/tests/.cvsignore: obsolete
+
+	* src/java/us/temerity/plconfig/tests/TestNtpApp.java: initial revision
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	added --decrypt
+
+	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	added time stamp profile information, added time stamps and domain name as encrypted data to the pipeline-license.key file
+
+	* docs/man/plconfig.html: added time stamp profile information
+
+	* src/java/us/temerity/plconfig/TimeService.java: initial revision
+
+	* src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
+	renamed key classes
+
+	* src/java/us/temerity/plconfig/ConfigApp.java:
+	renamed key classes, removed all references to the company private key
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	intial revision
+
+	* src/java/us/temerity/plconfig/CustomerProfile.java:
+	replaced by CryptoApp.java.in
+
+	* docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj, src/java/us/temerity/plconfig/CustomerProfile.java:
+	90% functional
+
+2004-03-17  Jim Callahan  <jim@salamander>
+
+	* .cvsignore, AUTHORS, COPYING, ChangeLog, INSTALL, Makefile.am, NEWS, README, aclocal.m4, autogen.sh, config/bootstrap.sh, config/config.guess, config/config.sub, config/depcomp, config/install-sh, config/missing, config/mkinstalldirs, configure.ac, docs/.cvsignore, docs/Makefile.am, docs/javadoc/.cvsignore, docs/man/.cvsignore, docs/man/Makefile.am, docs/man/plconfig.html, src/.cvsignore, src/Makefile.am, src/java/.cvsignore, src/java/Makefile.am, src/java/scripts/.cvsignore, src/java/scripts/Makefile.am, src/java/scripts/plconfig.in, src/java/us/.cvsignore, src/java/us/Makefile.am, src/java/us/temerity/.cvsignore, src/java/us/temerity/Makefile.am, src/java/us/temerity/plconfig/.cvsignore, src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj, src/java/us/temerity/plconfig/CustomerProfile.java, src/java/us/temerity/plconfig/IllegalConfigException.java, src/java/us/temerity/plconfig/PackageInfo.java.in, src/java/us/temerity/plconfig/crypto/.cvsignore, src/java/us/temerity/plconfig/crypto/KeyGenApp.java, src/java/us/temerity/plconfig/package.html, src/java/us/temerity/plconfig/parser/ParseException.java, src/java/us/temerity/plconfig/parser/SimpleCharStream.java, src/java/us/temerity/plconfig/parser/TokenMgrError.java, src/java/us/temerity/plconfig/tests/.cvsignore, src/java/us/temerity/plconfig/tests/TestInfo.java.in:
+	initial revision
+
  
