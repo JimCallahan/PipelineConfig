@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.11 2004/04/01 23:05:38 jim Exp $
+// $Id: ConfigApp.java,v 1.12 2004/04/09 22:18:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -901,7 +901,7 @@ class ConfigApp
       key = keyAgree.generateSecret("DES");
     }
     
-    /* write the customers private key as: pipeline.key */ 
+    /* write the customers private key as: temerity-software.key */ 
     {
       /* convert the critical profile information into raw bytes */ 
       byte raw[] = null;
@@ -932,11 +932,11 @@ class ConfigApp
       Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
-      writeEncodedData(new File(getRootDirectory(), "config/pipeline.key"), 
+      writeEncodedData(new File(getRootDirectory(), "config/temerity-software.key"), 
 		       pair.getPrivate().getEncoded(), cipher.doFinal(raw));
     }
 
-    /* write the customer profile as: pipeline.profile */ 
+    /* write the customer profile as: customer-profile */ 
     {
       /* convert the profile table into raw bytes */ 
       byte raw[] = null;
@@ -955,12 +955,12 @@ class ConfigApp
       Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
-      /* write the customer public key and encrypted profile to: pipeline.profile */ 
-      writeEncodedData(new File(getRootDirectory(), "config/pipeline.profile"), 
+      /* write the customer public key and encrypted profile to: customer-profile */ 
+      writeEncodedData(new File(getRootDirectory(), "config/customer-profile"), 
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
-    /* print the configuration parameters and write them to: pipeline.config */ 
+    /* print the configuration parameters and write them to: plconfig-settings.txt */ 
     {
       String config = null;
       {
@@ -991,7 +991,7 @@ class ConfigApp
 
       System.out.print(config);
 
-      File file = new File(getRootDirectory(), "config/pipeline.config");
+      File file = new File(getRootDirectory(), "config/plconfig-settings.txt");
       if(file.exists() && !file.canWrite()) 
 	throw new IOException
 	  ("Unable to write (" + file + ") because it has been locked!");

@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in.in,v 1.1 2004/04/01 23:51:13 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.2 2004/04/09 22:18:05 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -20,7 +20,7 @@ import com.sun.crypto.provider.SunJCE;
  * A utility application which decrypts an encrypted customer profile and performs various
  * cryptographic services for the Pipeline Pipeline build process. <P> 
  * 
- * The encrypted customer profile <CODE>pipeline.profile</CODE> is generated when a customer
+ * The encrypted customer profile <CODE>customer-profile</CODE> is generated when a customer
  * runs the <B>plconfig</B>(1) program to configure Pipeline for their site.  This customer 
  * profile file is then given as the argument to the <CODE>--with-customer-profile</CODE>
  * option to the <B>configure</B>(1) script for Pipeline.  <P> 
