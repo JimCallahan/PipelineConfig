@@ -200,6 +200,11 @@ crypto-all:
 	cp --force $(srcdir)/parser/TokenMgrError.java .
 	$(JAVA_CC) $<
 
+PackageInfo.java: PackageInfo.java.src
+	@echo Adding legal notices to: $@
+	awk -- '/@JAVA_LICENSE_STRING@/ { system("cat @top_srcdir@/docs/legal/java-@LICENSE_DOC@") } \
+               !/@JAVA_LICENSE_STRING@/ { print }' $< > $@
+
 
 #--------------------------------------------------------------------------------------------#
 
@@ -240,6 +245,7 @@ clean-class:
 	rm -f java-all
 
 clean-aux:
+	rm -f PackageInfo.cc
 	rm -f ParseException.java SimpleCharStream.java Token.java TokenMgrError.java
 	rm -f PackageInfo.java
 	rm -f Enigma.java
@@ -268,7 +274,7 @@ clean-parser:
 
 #--------------------------------------------------------------------------------------------#
 
-PackageInfo.java: $(srcdir)/PackageInfo.java.in  $(top_builddir)/config.status
+PackageInfo.java.src: $(srcdir)/PackageInfo.java.src.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status

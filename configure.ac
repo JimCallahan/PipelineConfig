@@ -96,6 +96,19 @@ fi
 AC_MSG_RESULT([$PIPELINE_SOURCE_ROOT])
 
 
+dnl ------------------------------------------------------------------------------------------
+
+AC_ARG_ENABLE([rhino], 
+              [  --enable-rhino            Use Rhinofx specific license messages.])
+
+AC_SUBST(LICENSE_DOC)
+LICENSE_DOC=license
+
+if test "$enable_rhino" = "yes" 
+then 
+  LICENSE_DOC=rhino-license
+fi
+
 
 dnl ------------------------------------------------------------------------------------------
 dnl   Build Information.         
@@ -480,7 +493,7 @@ AC_CONFIG_FILES([
   src/java/us/Makefile
   src/java/us/temerity/Makefile
   src/java/us/temerity/plconfig/Makefile
-  src/java/us/temerity/plconfig/PackageInfo.java
+  src/java/us/temerity/plconfig/PackageInfo.java.src
   src/java/us/temerity/plconfig/tests/Makefile
   src/java/us/temerity/plconfig/tests/TestInfo.java
   src/java/us/temerity/plconfig/crypto/Makefile

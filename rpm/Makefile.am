@@ -10,15 +10,16 @@ plconfig-@VERSION@-i686-rpm.bin: RPMS/i686/plconfig-@VERSION@-1.i686.rpm header
 	chmod 555 $@
 
 header: RPMS/i686/plconfig-@VERSION@-1.i686.rpm \
-          headerA headerB $(top_srcdir)/docs/legal/license.txt
+          headerA headerB $(top_srcdir)/docs/legal/@LICENSE_DOC@.txt
 	rm -f $@
 	@echo "Building Install Header..."
 	@(cd RPMS/i686; \
           checksum=`md5sum plconfig-@VERSION@-1.i686.rpm`; \
           cd ../../; \
-          hlen=`wc -l $(top_srcdir)/docs/legal/license.txt | awk '{ print($$1+70) }'`; \
+          hlen=`wc -l $(top_srcdir)/docs/legal/@LICENSE_DOC@.txt \
+                | awk '{ print($$1+70) }'`; \
           cat $(srcdir)/headerA > header; \
-          cat $(top_srcdir)/docs/legal/license.txt >> header; \
+          cat $(top_srcdir)/docs/legal/@LICENSE_DOC@.txt >> header; \
           sed -e "s/@CHECKSUM@/$$checksum/g" headerB | \
           sed -e "s/@HEADER_LENGTH@/$$hlen/g" >> header)
 

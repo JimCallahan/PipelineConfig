@@ -5,12 +5,11 @@ html_DATA = \
   plconfig.html 
 
 
-
-$(html_DATA): %.html: %.html.in copyright license
+$(html_DATA): %.html: %.src.html copyright @LICENSE_DOC@
 	@echo Adding legal notices to: $@
 	@awk -- '/@COPYRIGHT@/ { system("cat copyright") } \
                !/@COPYRIGHT@/ { print }' $< | \
-        awk -- '/@LICENSE@/ { system("cat license") } \
+        awk -- '/@LICENSE@/ { system("cat @LICENSE_DOC@") } \
                !/@LICENSE@/ { print }' > $@
 
 %: ../legal/%.html
@@ -19,4 +18,5 @@ $(html_DATA): %.html: %.html.in copyright license
 
 clean:
 	rm -f $(html_DATA) 
-	rm -f copyright license
+	rm -f copyright @LICENSE_DOC@
+

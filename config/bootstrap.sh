@@ -22,5 +22,6 @@ pushd i686-pc-linux-gnu-opt
     --with-compiler=GNU \
     --prefix=/usr \
     --datadir=/usr/share \
-    --with-plsrc=$HOME/code2/src/pipeline
+    --with-plsrc=$HOME/code2/src/pipeline \
+    --enable-rhino
 popd
