@@ -82,7 +82,10 @@ TOKEN :
 | <FILE_PORT:    "--file-port">   : INTEGER_SEP
 | <PROD_DIR:     "--prod-dir">    : PATH_SEP
 
-| <CLASS_PATH:   "--class-path">  : CLASS_PATH_SEP
+| <CLASS_PATH:   "--class-path">    : SEARCH_PATH_SEP
+| <LIBRARY_PATH: "--library-path">  : SEARCH_PATH_SEP
+
+| <LOCK:         "--lock">
 
 
   /* seperators */ 
@@ -138,23 +141,23 @@ TOKEN :
 }
 
 
-/* Java class search path arguments */ 
-<CLASS_PATH_SEP> 
+/* search path arguments */ 
+<SEARCH_PATH_SEP> 
 TOKEN :
 {
-  <EQ3:                 "=">   : CLASS_PATH_STATE
-| <MISSING_CPATH_ARG: ~["="]>  : IGNORE_STATE
+  <EQ3:                 "=">   : SEARCH_PATH_STATE
+| <MISSING_SEARCH_PATH_ARG: ~["="]>  : IGNORE_STATE
 }
 
-<CLASS_PATH_STATE> 
+<SEARCH_PATH_STATE> 
 TOKEN :
 {
-  <CLASS_PATH_ARG:  <CPATH_DIR> ((":") <CPATH_DIR>)*>           : DEFAULT
-| <#CPATH_DIR:      ("/")* ("../")* <CPATH_COMP> 
-		      ("/" (".." | (<CPATH_COMP>)+)?)*>         
-| <#CPATH_COMP:     (["a"-"z","A"-"Z","0"-"9","_","-","."])*>
-| <MISSING_CPATH:   [" ","\t"]>                                 : IGNORE_STATE
-| <ILLEGAL_CPATH:   (~[" ","\t"])+>                             : IGNORE_STATE
+  <SEARCH_PATH_ARG:       <SEARCH_PATH_DIR> ((":") <SEARCH_PATH_DIR>)*>  : DEFAULT
+| <#SEARCH_PATH_DIR:      ("/")* ("../")* <SEARCH_PATH_COMP> 
+		            ("/" (".." | (<SEARCH_PATH_COMP>)+)?)*>         
+| <#SEARCH_PATH_COMP:     (["a"-"z","A"-"Z","0"-"9","_","-","."])*>
+| <MISSING_SEARCH_PATH:   [" ","\t"]>                                    : IGNORE_STATE
+| <ILLEGAL_SEARCH_PATH:   (~[" ","\t"])+>                                : IGNORE_STATE
 }
 
 
@@ -280,7 +283,7 @@ GlobalOpts()
    Domain() | HomeDir() | ToolsetDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
    FileHost() | FilePort() | ProdDir() | 
-   ClassPath())
+   ClassPath() | LibraryPath() | Lock())
   {}
 }
 
@@ -458,11 +461,35 @@ ClassPath() :
   Token t;
 }
 {
-  <CLASS_PATH> EQ() t=<CLASS_PATH_ARG>
+  <CLASS_PATH> EQ() t=<SEARCH_PATH_ARG>
   { 
     pApp.setClassPath(t.image);
   }
 }
+
+void
+LibraryPath() :
+{
+  Token t;
+}
+{
+  <LIBRARY_PATH> EQ() t=<SEARCH_PATH_ARG>
+  { 
+    pApp.setLibraryPath(t.image);
+  }
+}
+
+
+void 
+Lock() : 
+{}
+{
+  <LOCK>
+  {
+    pApp.lockOutputFiles();
+  }
+}
+
 
 
 
