@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.16 2004/09/01 12:08:01 jim Exp $
+// $Id: ConfigApp.java,v 1.17 2004/09/02 14:24:56 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -69,7 +69,6 @@ class ConfigApp
       pProfile.put("PipelineUser",  "pipeline");
       pProfile.put("PipelineGroup", "pipeline");
 
-      pProfile.put("ToolsetDirectory", new File("/base/toolset"));
       pProfile.put("TemporaryDirectory", new File("/usr/tmp"));
       
       pProfile.put("MasterHostname", "localhost");
@@ -294,18 +293,6 @@ class ConfigApp
   ) 
   {
     pProfile.put("HomeDirectory", dir);
-  }
-
-  /**
-   * Set the root toolset directory.
-   */
-  public void 
-  setToolsetDirectory
-  (
-   File dir
-  ) 
-  {
-    pProfile.put("ToolsetDirectory", dir);
   }
 
   /**
@@ -712,14 +699,6 @@ class ConfigApp
       else {
 	pProfile.put("HomeDirectory", "/home");
       }
-    }
-
-    /* toolset directory */ 
-    {
-      File dir = (File) pProfile.get("ToolsetDirectory");
-      if(!dir.isAbsolute()) 
-	throw new IllegalConfigException
-	  ("The root toolset directory (" + dir + ") was not absolute!");
     }
       
     /* temporary directory */ 
@@ -1174,8 +1153,7 @@ class ConfigApp
        "  plconfig --copyright\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--host-ids]\n" +
-       "  [--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
+       "  [--host-ids][--home-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
        "  [--file-host=...][--disable-cache][--file-port=...][--prod-dir=...]\n" +
        "  [--notify-control-port][--notify-monitor-port]\n" + 

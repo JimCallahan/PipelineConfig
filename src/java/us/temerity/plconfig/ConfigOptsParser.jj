@@ -73,7 +73,6 @@ TOKEN :
 			 						    
 | <HOST_IDS:         	 "--host-ids">      : PATH_SEP
 | <HOME_DIR:       	 "--home-dir">      : PATH_SEP    
-| <TOOLSET_DIR:          "--toolset-dir">   : PATH_SEP
 | <TEMP_DIR:             "--temp-dir">      : PATH_SEP
 
 | <MASTER_HOST:          "--master-host">   : HOSTNAME_SEP
@@ -309,7 +308,7 @@ GlobalOpts()
 {
   (RootDir() | 
    Evaluation() | Annual() | Perpetual() |
-   HostIDs() | HomeDir() | ToolsetDir() | TempDir() | 
+   HostIDs() | HomeDir() | TempDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
    FileHost() | DisableCache() | FilePort() | 
    NotifyControlPort() | NotifyMonitorPort() | ProdDir() | 
@@ -397,18 +396,6 @@ HomeDir() :
   <HOME_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setHomeDirectory(new File(t.image));
-  }
-}
-
-void
-ToolsetDir() :
-{
-  Token t;
-}
-{
-  <TOOLSET_DIR> EQ() t=<PATH_ARG>
-  { 
-    pApp.setToolsetDirectory(new File(t.image));
   }
 }
 
