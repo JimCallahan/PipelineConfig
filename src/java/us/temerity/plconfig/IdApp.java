@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.3 2004/09/01 04:30:34 jim Exp $
+// $Id: IdApp.java,v 1.4 2004/09/02 14:11:48 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -270,12 +270,10 @@ class IdApp
 	  throw new IOException();
       }
       
-      /* get the CPU, PCI amd SCSCI info */ 
+      /* get the CPU info */ 
       {
 	String[] files = {
-	  "/proc/cpuinfo",
-	  "/proc/pci", 
-	  "/proc/scsi/scsi"
+	  "/proc/cpuinfo"
 	};
 	  
 	byte[] buf = new byte[4096];
