@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.18 2004/11/06 21:20:45 jim Exp $
+// $Id: ConfigApp.java,v 1.19 2005/01/15 02:35:19 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -83,6 +83,9 @@ class ConfigApp
       pProfile.put("QueuePort",      53139);
       pProfile.put("JobPort",        53140);
       pProfile.put("QueueDirectory", new File("/usr/share/pipeline"));
+
+      pProfile.put("PluginHostname",  "localhost");
+      pProfile.put("PluginPort",     53141);
     }
   }
 
@@ -105,6 +108,8 @@ class ConfigApp
     pProfile.put("PipelineUser", user);
   }
 
+
+  /*----------------------------------------------------------------------------------------*/
 
   /**
    * Get the root installation directory.
@@ -146,6 +151,8 @@ class ConfigApp
     pProfile.put("RootInstallDirectory", canon);
   }
 
+
+  /*----------------------------------------------------------------------------------------*/
 
   /** 
    * Set the duration of an evaluation license.
@@ -199,6 +206,8 @@ class ConfigApp
   }
 
   
+  /*----------------------------------------------------------------------------------------*/
+
   /**
    * Read the contents of the host IDs file. 
    */
@@ -280,6 +289,9 @@ class ConfigApp
     }
   }
 
+
+  /*----------------------------------------------------------------------------------------*/
+
   /**
    * Set the root user home directory.
    */
@@ -305,6 +317,7 @@ class ConfigApp
   }
 
 
+  /*----------------------------------------------------------------------------------------*/
 
   /**
    * Set the hostname which runs plmaster(1).
@@ -348,6 +361,7 @@ class ConfigApp
   }
 
 
+  /*----------------------------------------------------------------------------------------*/
 
   /**
    * Set the portname which runs plfilemgr(1).
@@ -400,8 +414,10 @@ class ConfigApp
   }
 
 
+  /*----------------------------------------------------------------------------------------*/
+
   /**
-   * Set the hostname which runs plqueue(1).
+   * Set the hostname which runs plqueuemgr(1).
    */
   public void 
   setQueueHostname
@@ -413,7 +429,7 @@ class ConfigApp
   }
 
   /**
-   * Set the the network port listened to by plqueue(1).
+   * Set the the network port listened to by plqueuemgr(1).
    */
   public void 
   setQueuePort
@@ -459,6 +475,39 @@ class ConfigApp
   }
 
 
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Set the hostname which runs plpluginmgr(1).
+   */
+  public void 
+  setPluginHostname
+  (
+   String host
+  ) 
+  {
+    pProfile.put("PluginHostname", host);
+  }
+
+  /**
+   * Set the the network port listened to by plpluginmgr(1).
+   */
+  public void 
+  setPluginPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The plugin port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("PluginPort", num);
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
 
   /**
    * Set additional Java class search path.
@@ -484,7 +533,6 @@ class ConfigApp
     pProfile.put("LibraryPath", path);
   }
   
-
 
   
   /*----------------------------------------------------------------------------------------*/
@@ -710,10 +758,7 @@ class ConfigApp
 	
       {
 	ArrayList<String> jars = new ArrayList<String>();
-	jars.add("vecmath.jar");
-	jars.add("j3daudio.jar");
-	jars.add("j3dcore.jar");
-	jars.add("j3dutils.jar");
+	jars.add("jogl.jar");
 
 	for(String jar : jars) {
 	  boolean found = false;
@@ -727,7 +772,7 @@ class ConfigApp
 
 	  if(!found) {
 	    StringBuffer buf = new StringBuffer();
-	    buf.append("Could not find the Java 3D JAR file (" + jar + ") in either the " + 
+	    buf.append("Could not find the JOGL JAR file (" + jar + ") in either the " + 
 		       "JRE or any of the directories supplied with the --class-path " + 
 		       "option.n\n" + 
 		       "Directories Searched:\n");
@@ -798,8 +843,8 @@ class ConfigApp
 	
       {
 	ArrayList<String> jars = new ArrayList<String>();
-	jars.add("libj3daudio.so");
-	jars.add("libJ3DUtils.so");
+	jars.add("libjogl.so");
+	jars.add("libjogl_cg.so");
 
 	for(String jar : jars) {
 	  boolean found = false;
@@ -813,7 +858,7 @@ class ConfigApp
 
 	  if(!found) {
 	    StringBuffer buf = new StringBuffer();
-	    buf.append("Could not find the Java 3D native library (" + jar + ") in either " + 
+	    buf.append("Could not find the JOGL native library (" + jar + ") in either " + 
 		       "the JRE or any of the directories supplied with the --library-path " +
 		       "option.\n\n" + 
 		       "Directories Searched:\n");
@@ -864,6 +909,7 @@ class ConfigApp
       titles.add("FilePort");
       titles.add("QueuePort");
       titles.add("JobPort");
+      titles.add("PluginPort");
       
       HashMap<Integer,String> names = new HashMap<Integer,String>();
       for(String title : titles) {
@@ -1114,11 +1160,12 @@ class ConfigApp
        "  plconfig --copyright\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--host-ids][--home-dir=...][--temp-dir=...]\n" + 
-       "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
-       "  [--queue-host=...][--queue-port=...][-queue-dir=...][--job-port=...]\n" + 
-       "  [--file-host=...][--disable-cache][--file-port=...][--prod-dir=...]\n" +
-       "  [--class-path][--library-path]\n" +
+       "  [--host-ids][--home-dir=...] [--temp-dir=...]\n" + 
+       "  [--master-host=...] [--master-port=...] [node-dir=...]\n" + 
+       "  [--queue-host=...] [--queue-port=...] [-queue-dir=...] [--job-port=...]\n" + 
+       "  [--file-host=...] [--disable-cache] [--file-port=...] [--prod-dir=...]\n" +
+       "  [--plugin-host=...] [--plugin-port=...]\n" + 
+       "  [--class-path] [--library-path]\n" +
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
@@ -1305,18 +1352,17 @@ class ConfigApp
     return (buf.toString());
   }
   
-
   /**
    * Log a command-line argument parsing exception.
    */
-  private void
+  protected void
   handleParseException
   (
    ParseException ex
   ) 
   {
     StringBuffer buf = new StringBuffer();
-    buf.append("Illegal Args: ");
+    buf.append("ERROR: ");
 
     try {
       /* build a non-duplicate set of expected token strings */ 
@@ -1324,37 +1370,38 @@ class ConfigApp
       {
 	int wk;
 	for(wk=0; wk<ex.expectedTokenSequences.length; wk++) {
-	  String str = ex.tokenImage[ex.expectedTokenSequences[wk][0]];
-	  if(!str.equals("\"\\n\"") && !str.equals("<NL1>"))
-	    expected.add(ex.tokenImage[ex.expectedTokenSequences[wk][0]]);
+	  int kind = ex.expectedTokenSequences[wk][0];
+	  String explain = tokenExplain(kind, true);
+	  if(explain != null) 
+	    expected.add(explain);
 	}
       }
-
       
       /* message header */ 
       Token tok = ex.currentToken.next;
       String next = ex.tokenImage[tok.kind];
       if(next.length() > 0) {
-	
-	char[] ary = next.toCharArray();
-	boolean hasKind  = (ary.length>0 && ary[0] == '<' && ary[ary.length-1] == '>');
-	
 	String value = toASCII(tok.image);
-	boolean hasValue = (value.length() > 0);
+	boolean hasValue = (value.length() > 0);	
+	String explain = tokenExplain(tok.kind, false);
+
+	if(hasValue || (explain != null)) {
+	  buf.append("Found ");
+	  
+	  if(explain != null)
+	    buf.append(explain + ", ");
 	
-	if(hasKind || hasValue) 
-	  buf.append("found ");
-	
-	if(hasKind) 
-	  buf.append(next + ", ");
-	
-	if(hasValue)
-	  buf.append("\"" + value + "\", ");
+	  if(hasValue)
+	    buf.append("\"" + value + "\" ");
+
+	  buf.append("s");
+	}
+	else {
+	  buf.append("S");
+	}
+
+	buf.append("tarting at character (" + ex.currentToken.next.beginColumn + ").\n");
       }
-      
-      buf.append("starting at arg " + ex.currentToken.next.beginLine + 
-		 ", character " + ex.currentToken.next.beginColumn + ".\n");
-      
 
       /* expected token list */ 
       Iterator iter = expected.iterator();
@@ -1382,7 +1429,50 @@ class ConfigApp
     /* log the message */ 
     System.out.print(buf.toString() + "\n");
   }
- 
+
+  /**
+   * Generate an explanitory message for the non-literal token.
+   */ 
+  protected String
+  tokenExplain
+  (
+   int kind,
+   boolean printLiteral
+  ) 
+  {
+    switch(kind) {
+    case ConfigOptsParserConstants.EOF:
+      return "EOF";
+
+    case ConfigOptsParserConstants.UNKNOWN_OPTION:
+      return "an unknown option";
+
+    case ConfigOptsParserConstants.UNKNOWN_COMMAND:
+      return "an unknown command";
+
+    case ConfigOptsParserConstants.INTEGER:
+      return "an integer";
+
+    case ConfigOptsParserConstants.PATH_ARG:
+      return "an file system path";
+
+    case ConfigOptsParserConstants.SEARCH_PATH_ARG:
+      return "an directory search path";
+
+    case ConfigOptsParserConstants.HOSTNAME:
+      return "a hostname";
+    
+    case ConfigOptsParserConstants.USERNAME:
+      return "a user name";
+
+    default: 
+      if(printLiteral) 
+	return ConfigOptsParserConstants.tokenImage[kind];
+      else 
+	return null;
+    }      
+  }
+
   /**
    * Convert non-printable characters in the given <CODE>String</CODE> into ASCII literals.
    */ 

@@ -88,6 +88,9 @@ TOKEN :
 | <JOB_PORT:             "--job-port">     : INTEGER_SEP
 | <QUEUE_DIR:            "--queue-dir">    : PATH_SEP
 
+| <PLUGIN_HOST:          "--plugin-host">  : HOSTNAME_SEP
+| <PLUGIN_PORT:          "--plugin-port">  : INTEGER_SEP
+
 | <CLASS_PATH:           "--class-path">    : SEARCH_PATH_SEP
 | <LIBRARY_PATH:         "--library-path">  : SEARCH_PATH_SEP
 
@@ -309,6 +312,7 @@ GlobalOpts()
    MasterHost() | MasterPort() | NodeDir() | 
    FileHost() | FilePort() | ProdDir() | 
    QueueHost() | QueuePort() | JobPort() | QueueDir() | 
+   PluginHost() | PluginPort() | 
    ClassPath() | LibraryPath() | 
    PipelineUser()) 
   {}
@@ -531,6 +535,33 @@ QueueDir() :
   <QUEUE_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setQueueDirectory(new File(t.image));
+  }
+}
+
+
+
+void
+PluginHost() :
+{
+  Token t;
+}
+{
+  <PLUGIN_HOST> EQ() t=<HOSTNAME>
+  { 
+    pApp.setPluginHostname(t.image);
+  }
+}
+
+void
+PluginPort()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <PLUGIN_PORT> EQ() t=<INTEGER>
+  { 
+    pApp.setPluginPort(new Integer(t.image));
   }
 }
 
