@@ -81,6 +81,7 @@ TOKEN :
 | <NODE_DIR:             "--node-dir">      : PATH_SEP
 
 | <FILE_HOST:            "--file-host">            : HOSTNAME_SEP
+| <DISABLE_CACHE:        "--disable-cache"> 
 | <FILE_PORT:            "--file-port">            : INTEGER_SEP
 | <NOTIFY_CONTROL_PORT:  "--notify-control-port">  : INTEGER_SEP
 | <NOTIFY_MONITOR_PORT:  "--notify-monitor-port">  : INTEGER_SEP
@@ -95,8 +96,6 @@ TOKEN :
 | <LIBRARY_PATH:         "--library-path">  : SEARCH_PATH_SEP
 
 | <PIPELINE_USER:        "--pipeline-user">   : USERNAME_SEP
-
-| <LOCK:                 "--lock">
 
 
   /* seperators */ 
@@ -312,9 +311,10 @@ GlobalOpts()
    Evaluation() | Annual() | Perpetual() |
    HostIDs() | HomeDir() | ToolsetDir() | TempDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
-   FileHost() | FilePort() | NotifyControlPort() | NotifyMonitorPort() | ProdDir() | 
+   FileHost() | DisableCache() | FilePort() | 
+   NotifyControlPort() | NotifyMonitorPort() | ProdDir() | 
    QueueHost() | QueuePort() | JobPort() | QueueDir() | 
-   ClassPath() | LibraryPath() | Lock() |
+   ClassPath() | LibraryPath() | 
    PipelineUser()) 
   {}
 }
@@ -475,6 +475,16 @@ FileHost() :
   }
 }
 
+void 
+DisableCache() : 
+{}
+{
+  <DISABLE_CACHE>
+  {
+    pApp.disableCache(); 
+  }
+}
+
 void
 FilePort()
   throws IllegalConfigException :
@@ -602,16 +612,6 @@ LibraryPath() :
   }
 }
 
-
-void 
-Lock() : 
-{}
-{
-  <LOCK>
-  {
-    pApp.lockOutputFiles();
-  }
-}
 
 
 

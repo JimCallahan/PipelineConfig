@@ -44,31 +44,9 @@ to login to
 all hosts which will run Pipeline programs with an identical user and
 group ID.&nbsp; Once a site configuration profile has been generated
 using <span style="font-weight: bold;">plconfig</span>(1), the user
-ID and group ID for this user should not be modified.<br>
-  <br>
-In addition, the root installation directory (see <a href="#--root-dir"><span
- style="font-weight: bold;">--root-dir</span></a>) for Pipeline needs
-to be
-created and have its file access permissions and ownership set before
-running <span style="font-weight: bold;">plconfig</span>(1) exactly as
-follows:<br>
-  <div style="margin-left: 40px;"><br>
-  <code>&gt; mkdir <span style="font-style: italic;">root-install-directory<span
- style="font-style: italic;"><br>
-  </span></span>&gt; chown root.pipeline <span
- style="font-style: italic;">root-install-directory<br>
-  </span>&gt; chmod 775<span style="font-style: italic;"> </span><span
- style="font-style: italic;"><span style="font-style: italic;">root-install-directory</span></span><span
- style="font-style: italic;"><span style="font-style: italic;"></span></span></code></div>
-  <br>
-Where the (<span style="font-style: italic;">root-install-directory</span>)
-is replaced with the location chosen for the Pipeline installation for
-your site.&nbsp; Once these steps have been taken, you are ready to
-configure PIpeline for your site.<code><span style="font-style: italic;"></span></code><br>
+ID and group ID for this user should not be modified.<code><span
+ style="font-style: italic;"></span></code><br>
   <h4>Configuring Pipeline</h4>
-Once the steps described above, its a relatively simple matter to
-generate the Pipeline configuration and license key.&nbsp; <br>
-  <br>
 The set of options which must be specified are described in
 the <a href="#Required_Options"><span style="font-weight: bold;">Required
 Options</span></a> section.&nbsp; The rest of the options are not
@@ -78,27 +56,42 @@ or given reasonable default values.&nbsp; The choices for all
 configuration parameters will be printed by <span
  style="font-weight: bold;">plconfig</span>(1) when run.&nbsp; <br>
   <br>
-Regardless of whether <span style="font-weight: bold;">plconfig</span>(1)
-is run in graphical or command-line mode, it
-writes (or overwrites) the following three files under the root
-installation directory (see <a href="#--root-dir"><span
- style="font-weight: bold;">--root-dir</span></a>):<br>
+When run, <span style="font-weight: bold;">plconfig</span>(1)
+writes (or overwrites) the following three files:<br>
   <span style="font-style: italic;"><br>
-  <a name="temerity_software.key"></a>root-install-directory</span>/config/<span
- style="font-weight: bold;">temerity-software.key</span><br>
+  <a name="temerity_software.key"></a></span><span
+ style="font-weight: bold;">plconfig/temerity-software.key</span><br>
   <div style="margin-left: 40px;"><br>
 This file contains the license key required by Pipeline for your
 site.&nbsp;
 This file should be zealously protected as it
 represents confidential information covered by the <a href="#License"><span
  style="font-weight: bold;">Temerity Software License Agreement</span></a>.
+  <br>
+  <br>
 Once
-Pipeline is installed, this file will be required in order to run the
-programs which make up Pipeline.<br>
+Pipeline is installed, this file must be copied to the following
+location before Pipeline programs will start:<br>
+  <br>
+  </div>
+  <div style="margin-left: 40px;">
+  <div style="margin-left: 40px;"><span style="font-style: italic;">root-install-directory</span>/<span
+ style="font-style: italic;">pipeline-version-date</span>/<span
+ style="font-family: monospace;">plconfig/temerity-software.key</span><br>
   </div>
   <br>
-  <span style="font-style: italic;"><a name="customer_profile"></a>root-install-directory</span>/config/<span
- style="font-weight: bold;">customer-profile</span><br>
+Where (<span style="font-style: italic;">root-install-directory)</span>
+is the directory specified by the <a href="#--root-dir"><span
+ style="font-weight: bold;">--root-dir</span></a> option and (<span
+ style="font-style: italic;">pipeline-version-date) </span>is the name
+of the pipeline distribution built for your site (see <a
+ href="#Obtaining_and_Installing_Pipeline"><span
+ style="font-weight: bold;">below</span></a>).<span
+ style="font-weight: bold;"></span><br>
+  <span style="font-weight: bold;"></span></div>
+  <span style="font-weight: bold;"><br>
+  </span> <span style="font-style: italic;"><a name="customer_profile"></a></span><span
+ style="font-weight: bold;">plconfig/customer-profile</span><br>
   <br>
   <div style="margin-left: 40px;">This file contains the site specific
 configuration profile data which will be used build the custom Pipeline
@@ -108,8 +101,8 @@ this file will need to be pasted into the <span
  style="font-weight: bold;">License Application Form</span>. <br>
   <br>
   </div>
-  <span style="font-style: italic;"><a name="plconfig_settings.txt"></a>root-install-directory</span>/config/<span
- style="font-weight: bold;">plconfig-settings.txt</span><br>
+  <span style="font-style: italic;"><a name="plconfig_settings.txt"></a></span><span
+ style="font-weight: bold;">plconfig/plconfig-settings.txt</span><br>
   <br>
   <div style="margin-left: 40px;">This is a plain text file similar to
 the configuration parameters printed by<span style="font-weight: bold;">
@@ -126,21 +119,90 @@ option the rest of your option choices. This option make the above
 three file read-only to prevent any accidental destruction at a later
 date by running <span style="font-weight: bold;">plconfig</span>(1)
 again.<br>
-  <h4><span style="font-weight: bold;">Obtaining and Installing Pipeline</span></h4>
+  <h4><span style="font-weight: bold;"><a
+ name="Obtaining_and_Installing_Pipeline"></a>Obtaining and Installing
+Pipeline</span></h4>
 Once you have successfully completed the configuration process above, a
 distribution of Pipeline configured for your site may be obtained by
 completing the <span style="font-weight: bold;">License
-Application Form</span>.&nbsp; Pipeline is distributed as an <a
- href="http://rpm.org/"><span style="font-weight: bold;">RPM</span></a>
-which is customized for your site.&nbsp; Once your license application
+Application Form</span>.&nbsp; Pipeline is distributed as a set of <a
+ href="http://rpm.org/"><span style="font-weight: bold;">RPMs</span></a>
+which are customized for your site packaged as a self extracting shell
+archive.&nbsp; Once your license application
 as been processed, you will be sent an email containing the download
-location for this custom RPM specific to your site.&nbsp; <br>
+location for this distribution file.&nbsp; <br>
+  <br>
+The name of the distribution file will have the following format: <br>
+  <br>
+  <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-</span><span
+ style="font-style: italic;">customer</span>-<span
+ style="font-style: italic;">version</span>-<span
+ style="font-style: italic;">date</span><span
+ style="font-family: monospace;">.bin</span><br>
+  </div>
+  <br>
+Where (customer) is a short name assigned by Temerity Software for your
+site, (version) is the Pipeline release version number and (date) is
+the date that the distribution was built.&nbsp;&nbsp; For example, a
+distribution of Pipeline 1.8.3 build for hypothetical Studio X on
+October 18, 2004 would be named:<br>
+  <div style="margin-left: 40px;"><br>
+  <span style="font-family: monospace;">pipeline-studiox-1.8.3-041018.bin</span><br>
+  </div>
+  <br>
+When executed, this example shell archive would create the following
+RPMs: <br>
+  <br>
+  <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+ style="font-family: monospace;">pipeline-studiox-1.8.3-041018.i686.rpm<br>
+  </span><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+ style="font-family: monospace;">plmaster-studiox-1.8.3-041018.i686.rpm<br>
+  </span><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+ style="font-family: monospace;">plqueumgr-studiox-1.8.3-041018.i686.rpm<br>
+  </span><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+ style="font-family: monospace;">plnotify-studiox-1.8.3-041018.src.rpm</span></div>
+  <br>
+The "pipeline" RPM contains the binaries which make up distribution and
+can be installed on any host which can write to the directories
+specified by the <a href="#--root-dir"><span style="font-weight: bold;">--root-dir</span></a>
+and <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>
+options.&nbsp; Since the installation directory is located on a network
+accessable file system, this RPM only needs to be installed once for
+the site.<br>
+  <br>
+The "plmaster" RPM contains the directory structure and config files
+needed by the <span style="font-weight: normal;">Pipeline master </span><span
+ style="font-weight: normal;">server daemon</span><span
+ style="font-weight: normal;"> </span><span style="font-weight: bold;">plmaster</span><span
+ style="font-weight: normal;">(1) and </span>must be installed on the
+host specified by the <a href="#--master-host"><span
+ style="font-weight: bold;">--master-host</span></a> option.&nbsp; All
+files will be installed under the directory specified by the <a
+ href="#--node-dir"><b><b>--node-dir</b></b></a> option.<br>
+  <br>
+The "plqueuemgr" RPM contains the directory structure and config files
+needed by the <span style="font-weight: normal;">Pipeline queue </span>management
+  <span style="font-weight: normal;">daemon </span><span
+ style="font-weight: normal;"></span><span style="font-weight: bold;">plmaster</span><span
+ style="font-weight: normal;">(1) and </span>must be installed on the
+host specified by the <a href="#--queue-host"><span
+ style="font-weight: bold;">--queue-host</span></a> option.&nbsp; All
+files will be installed under the directory specified by the <a
+ href="#--queue-dir"><b><b>--queue-dir</b></b></a> option.<br>
+  <br>
+The "plnotify" source RPM is not normally needed, but is provided for
+site's which have unsual system configurations of file server host (see
+--file-host) which need to rebuild the native C++ libraries and
+binaries of Pipeline from sources.<br>
   <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
 version 2.4 or later) operating system.&nbsp; Support for other flavors
 of UNIX are possible as long as they support the same file system
-related system calls as Linux.<br>
+related system calls as Linux.&nbsp; In particular the file and
+directory change notification feature of the kernel is required for
+sites which want to use the <span style="font-weight: bold;">plnotify</span>(1)
+Pipeline program to optimize file comparison tests by Pipeline.<br>
   <br>
 In order to enable the full functionality of the Pipeline command-line
 and graphical client programs, they must also be run on a Linux
@@ -245,16 +307,13 @@ for any site.<br>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--root-dir"></a>--root-dir</b>=<span style="font-style: italic;">dir</span></h4>
 <h4 style="font-weight: normal; margin-left: 80px;">The path
-to the root installation directory (<span style="font-style: italic;">dir</span>)
-of Pipeline.&nbsp; All
-programs and data files which make up Pipeline will live under this
-directory when Pipeline is installed.&nbsp; This directory should
+to the directory (<span style="font-style: italic;">dir</span>)
+under which the top-level directory of the Pipeline installation will
+reside. This directory should
 reside on a network accessible file system such that all machines which
-will run Pipeline related programs can access the directory as (dir). <br>
-</h4>
-<h4 style="font-weight: normal; margin-left: 80px;">This directory must
-exist and be writable by the "pipeline" user at the time <span
- style="font-weight: bold;">plconfig</span>(1) is run.</h4>
+will run Pipeline related programs can access the directory as
+(dir).&nbsp; The top-level directory of the Pipeline installtion will
+have a name matching the Pipeline distribution.</h4>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
  name="--evaluation"></a>--evaluation</span><br
  style="font-weight: bold;">
@@ -364,8 +423,9 @@ If not specified, the temporary directory will default to (/usr/tmp).<br>
 <div style="margin-left: 80px;"><span style="font-weight: normal;">The
 host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline master server </span><span
+ style="font-weight: normal;">daemon </span><span
  style="font-weight: bold;">plmaster</span><span
- style="font-weight: normal;">(1) daemon.&nbsp; This
+ style="font-weight: normal;">(1).&nbsp; This
 daemon should run on a host which can access the root node directory
 (see </span><a style="font-weight: bold;" href="#--node-dir">--node-dir</a><span
  style="font-weight: normal;">)
@@ -390,22 +450,22 @@ host will default to (localhost).<br>
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
 <div style="margin-left: 80px;">The number of the network port (<span
  style="font-style: italic;">num</span>) listened to by the Pipeline
-master server <span style="font-weight: bold;">plmaster</span>(1)
-daemon.&nbsp; <br>
+master server daemon <span style="font-weight: bold;">plmaster</span>(1).&nbsp;
+<br>
 <br>
 If not specified, the port number will default to (53135).<br>
 </div>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--node-dir"></a>--node-dir</b>=<span style="font-style: italic;">dir</span></h4>
-<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
+<div style="margin-left: 80px;"><>The absolute path
 to the root directory under which the persistent copies of Pipeline
 nodes are stored.&nbsp; This directory
 should
-reside on a local file system on the host which will run the Pipeline
-master server <span style="font-weight: bold;">plmaster</span>(1)
-daemon (see <a href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;
+reside on a local file system on the host which will run</><span
+ style="font-weight: bold;"> plmaster</span>(1)&nbsp; (see <a
+ href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;
 <br>
-</h4>
+</div>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the node directory will default to (/usr/share/pipeline).</h4>
 <br>
@@ -416,16 +476,18 @@ the node directory will default to (/usr/share/pipeline).</h4>
 <br>
 </span></span><span style="font-style: italic;"></span></div>
 <div style="margin-left: 80px;">The host name of the machine (host)
-which will run both the Pipeline file management <span
- style="font-weight: bold;">plfilemgr</span>(1)
-daemon and the<span style="font-weight: normal;"> directory change
+which will run the Pipeline file management daemon <span
+ style="font-weight: bold;">plfilemgr</span>(1) and optionally the<span
+ style="font-weight: normal;"> directory change
 notification daemon <span style="font-weight: bold;">plnotify</span>(1)</span>.&nbsp;
 These two daemons should be run on the same host which acts as
 the
-network file server where production data files will reside on your
+network file server where production data files will reside (see <a
+ href="plconfig.src.html#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>)
+on your
 site for optimal
-performance (see <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>).
-<br>
+performance (see <a href="#--disable-cache"><span
+ style="font-weight: bold;">--disable-cache</span></a>).<br>
 <span style="font-weight: normal;"><br>
 Note that a host ID for this host must be generate using <a
  href="plid.html"><span style="font-weight: bold;">plid</span></a>(1)
@@ -434,7 +496,39 @@ and placed in the host IDs file passed to the <a href="#--host-ids"><span
 <br>
 </span><span style="font-weight: normal;"></span><span
  style="font-weight: normal;">If not specified, the file host will
-default to (localhost).</span></div>
+default to (localhost).<br>
+</span></div>
+<h4 style="margin-left: 40px;"><a name="--disable-cache"></a>--disable-cache</h4>
+<div style="margin-left: 80px;">By default, Pipeline is designed to run
+both the <span style="font-weight: bold;">plfilemgr</span>(1) and <span
+ style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)
+daemons on the host which acts as the file server for the production
+directory specified by <a href="#--prod-dir"><span
+ style="font-weight: bold;">--prod-dir</span></a>.&nbsp; The </span><span
+ style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)
+daemon monitors changes to files associated with Pipeline nodes and
+invalidates caches of information related to these files maintained by
+the<span style="font-weight: bold;"> </span></span><span
+ style="font-weight: bold;">plmaster</span>(1) daemon (see <a
+ href="--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;&nbsp;
+<br>
+<br>
+If the file server is a proprietary or non-standard system which is not
+capable of running <span style="font-weight: normal;"></span><span
+ style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1),
+the caching of file information by </span><span
+ style="font-weight: bold;">plmaster</span>(1) can be disabled using
+this option.&nbsp;&nbsp; In caching is disabled, the <span
+ style="font-weight: bold;">plfilemgr</span>(1) daemon may be run on
+any host which has fast access to the production directory (see <a
+ href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>
+and <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>)
+and the<span style="font-weight: bold;"> </span><span
+ style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)</span>
+is no longer needed.<br>
+<br>
+If not specified, caching is enabled.<br>
+</div>
 <h4 style="margin-left: 40px;"><b><a name="--file-port"></a>--file-port</b><span
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
@@ -475,13 +569,18 @@ words, the location where artists will save their work.&nbsp; This root
 production directory should reside on a network accessible
 file system such
 that all machines which will run Pipeline related programs can access
-the directory as (dir). For
-optimal performance this directory should reside on the
-same host which runs the file management daemon <span
- style="font-weight: bold;">plfilemgr</span>(1) (see <a
- href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>).
-<br>
+the directory as (dir). <br>
 </h4>
+<div style="margin-left: 80px;"><>For
+optimal performance this directory should reside on the
+same host which runs the <span style="font-weight: bold;">plfilemgr</span>(1)
+and</><span style="font-weight: normal;"><span
+ style="font-weight: bold;"> plnotify</span>(1) daemons</span><> (see <a
+ href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>)
+although this is not required </>(see <a
+ href="plconfig.src.html#--disable-cache"><span
+ style="font-weight: bold;">--disable-cache</span></a>).<>
+</></div>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the production directory will default to (/base/prod).</h4>
 <br>
@@ -491,8 +590,8 @@ the production directory will default to (/base/prod).</h4>
 </span>
 <div style="margin-left: 40px;"><br>
 The host name of the machine (<span style="font-style: italic;">host</span>)
-which will run the Pipeline queue management <span
- style="font-weight: bold;">plqueuemgr</span>(1) daemon.&nbsp; This
+which will run the Pipeline queue management daemon <span
+ style="font-weight: bold;">plqueuemgr</span>(1).&nbsp; This
 daemon assigns jobs from the queue to the hosts running the job
 execution <span style="font-weight: bold;">pljobmgr</span>(1)
 daemons.&nbsp; It also provides information about the status of these
@@ -519,8 +618,10 @@ default to (localhost).</span></div>
 <div style="margin-left: 40px;"><span style="font-weight: normal;">The
 number of the network port (<span style="font-style: italic;">num</span>)
 listened to by the Pipeline queue management<span
- style="font-weight: bold;"> plqueuemgr</span>(1)</span><span
+ style="font-weight: bold;"></span></span><span
  style="font-weight: normal;"> daemon</span><span
+ style="font-weight: normal;"><span style="font-weight: bold;">
+plqueuemgr</span>(1)</span><span style="font-weight: normal;"></span><span
  style="font-weight: normal;">. </span><span
  style="font-weight: normal;"><br>
 <br>
@@ -555,10 +656,8 @@ under which all queue related data files will reside.&nbsp; This
 directory
 should
 reside on a local file system on the host which will run the Pipeline
-queue server <span style="font-weight: bold;">plqueuemgr</span>(1)
-daemon (see <a
- href="#--queue-host"><span
- style="font-weight: bold;">--queue-host</span></a>).&nbsp;
+queue server daemon <span style="font-weight: bold;">plqueuemgr</span>(1)
+(see <a href="#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>).&nbsp;
 <br>
 <br>
 If not specified,
@@ -615,16 +714,7 @@ variable is searched instead for native libraries as well as the
 standard <span style="font-weight: bold;">JRE</span> locations.<br>
 <br>
 </div>
-<span style="font-weight: bold;"><a name="--lock"></a>--lock</span><br>
-<div style="margin-left: 40px;"><br>
-Makes the generated configuration files (pipeline.key,
-pipeline.profile and pipeline.config) read-only, to protect them from
-being overwritten by a later execution of plconfig(1).&nbsp; It is
-strongly advised that plconfig(1) be run with this option once a final
-configuration has been decided on to prevent accidental damage to your
-Pipeline license key and site profile.<br>
-</div>
-</div>
+<span style="font-weight: bold;"></span></div>
 <h3><a name="See_Also"></a>See Also<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Pipeline

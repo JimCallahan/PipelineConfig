@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.15 2004/08/27 22:18:20 jim Exp $
+// $Id: ConfigApp.java,v 1.16 2004/09/01 12:08:01 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -77,6 +77,7 @@ class ConfigApp
       pProfile.put("NodeDirectory",  new File("/usr/share/pipeline"));
       
       pProfile.put("FileHostname",        "localhost");
+      pProfile.put("EnableCaching",       true);
       pProfile.put("FilePort",            53136);
       pProfile.put("NotifyControlPort",   53137);
       pProfile.put("NotifyMonitorPort",   53138);
@@ -145,10 +146,6 @@ class ConfigApp
     if(!canon.isDirectory())  
       throw new IllegalConfigException
 	("The root installation directory (" + dir + ") is not a directory!");
-
-    if(!canon.canWrite()) 
-      throw new IllegalConfigException
-	("No write permission for the root installation directory (" + dir + ")!");
 
     pProfile.put("RootInstallDirectory", canon);
   }
@@ -381,6 +378,15 @@ class ConfigApp
   }
 
   /**
+   * Disable the used of plnotify(1) and caching by plmaster(1).
+   */ 
+  public void 
+  disableCache() 
+  {
+    pProfile.put("EnableCaching", false);
+  }
+
+  /**
    * Set the network port listened to by plfilemgr(1).
    */
   public void 
@@ -529,15 +535,6 @@ class ConfigApp
   }
   
 
-  /**
-   * Make the generated output files read-only.
-   */
-  public void 
-  lockOutputFiles()
-  {
-    pLock = true;
-  }
-
 
   
   /*----------------------------------------------------------------------------------------*/
@@ -673,24 +670,12 @@ class ConfigApp
       File root = getRootDirectory();
       if(root == null) 
 	throw new ParseException("The --root-dir option is required!");
-    
-      File config = new File(root, "config");
-      if(config.exists()) {
-	if(config.isDirectory()) {
-	  if(!config.canWrite()) 
-	    throw new ParseException
-	      ("The (" + config + ") directory is not writable by the " + 
-	       "(" + pluser + ") user and (" + plgroup  + ") group!");
-	}
-	else {
+
+      if(root.exists()) {
+	if(!root.isDirectory()) {
 	  throw new IllegalConfigException
-	    ("The path (" + config + ") is not a directory!");
+	    ("The path (" + root + ") is not a directory!");
 	}
-      }
-      else {
-	if(!config.mkdir())
-	  throw new IllegalConfigException
-	    ("Unable to create the (" + config + ") directory!");
       }
     }
 
@@ -698,11 +683,11 @@ class ConfigApp
     if((pProfile.get("LicenseStart") == null) || (pProfile.get("LicenseEnd") == null)) 
       throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
-    /* host IDs */ 
+    /* host IDs */
     if(pProfile.get("HostIDs") == null) 
       throw new IllegalConfigException
 	("No hosts where specified using the --host-ids option!"); 
-      
+
     /* system information */ 
     {
       pProfile.put("JavaVendor",       System.getProperty("java.vm.vendor"));
@@ -969,6 +954,18 @@ class ConfigApp
            IllegalBlockSizeException, 
            IOException
   {  
+    File cdir = new File("plconfig");
+    if(cdir.exists()) {
+      if(!cdir.isDirectory()) 
+	throw new IOException
+	  ("Unable to write the configuration files to: " + cdir);
+    }
+    else {
+      if(!cdir.mkdirs()) 
+	throw new IOException
+	  ("Unable to create the configuration file directory: " + cdir);
+    }
+
     /* retrieve the company's public key */ 
     PublicKey publicKey = null;
     {
@@ -1020,7 +1017,7 @@ class ConfigApp
       Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
-      writeEncodedData(new File(getRootDirectory(), "config/temerity-software.key"), 
+      writeEncodedData(new File(cdir, "temerity-software.key"), 
 		       pair.getPrivate().getEncoded(), cipher.doFinal(raw));
     }
 
@@ -1044,7 +1041,7 @@ class ConfigApp
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
       /* write the customer public key and encrypted profile to: customer-profile */ 
-      writeEncodedData(new File(getRootDirectory(), "config/customer-profile"), 
+      writeEncodedData(new File(cdir, "customer-profile"), 
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
@@ -1084,7 +1081,7 @@ class ConfigApp
 
       System.out.print(config);
 
-      File file = new File(getRootDirectory(), "config/plconfig-settings.txt");
+      File file = new File(cdir, "plconfig-settings.txt");
       if(file.exists() && !file.canWrite()) 
 	throw new IOException
 	  ("Unable to write (" + file + ") because it has been locked!");
@@ -1095,9 +1092,6 @@ class ConfigApp
 		"  plconfig " + pPackedArgs + "\n\n");
       out.flush();
       out.close();
-
-      if(pLock)
-	file.setReadOnly();
     }
   }
 
@@ -1141,9 +1135,6 @@ class ConfigApp
     out.write(profileText);
     out.flush();
     out.close();
-
-    if(pLock)
-      file.setReadOnly();
   }
 
   /**
@@ -1176,8 +1167,6 @@ class ConfigApp
       ("USAGE:\n" +
        "  plconfig --root-dir=... --evaluation|--annual|--perpetual [options]\n" + 
        "\n" +
-       "  plconfig --graphical\n" +
-       "\n" + 
        "  plconfig --help\n" +
        "  plconfig --html-help\n" +
        "  plconfig --version\n" + 
@@ -1188,10 +1177,9 @@ class ConfigApp
        "  [--host-ids]\n" +
        "  [--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
-       "  [--file-host=...][--file-port=...][--prod-dir=...]\n" +
+       "  [--file-host=...][--disable-cache][--file-port=...][--prod-dir=...]\n" +
        "  [--notify-control-port][--notify-monitor-port]\n" + 
        "  [--class-path][--library-path]\n" +
-       "  [--lock]\n" +
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
@@ -1528,16 +1516,11 @@ class ConfigApp
   private String pPackedArgs;  
 
 
-
   /**
    * The customer profile table.
    */ 
   private TreeMap<String,Object>  pProfile;
 
-  /**
-   * Make the generated output files read-only?
-   */
-  private boolean pLock;
 }
 
 
