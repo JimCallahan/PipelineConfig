@@ -9,20 +9,20 @@ pushd $plsrcdir
   sh autogen.sh
 popd
 
-pushd i686-pc-linux-gnu-dbg
-  $plsrcdir/configure \
-    --disable-opt \
-    --with-compiler=GNU \
-    --prefix=/usr \
-    --datadir=/usr/share \
-    --with-plsrc=$plsrcdir/../pipeline
-popd
-
-# pushd i686-pc-linux-gnu-opt
+# pushd i686-pc-linux-gnu-dbg
 #   $plsrcdir/configure \
-#     --enable-opt \
+#     --disable-opt \
 #     --with-compiler=GNU \
 #     --prefix=/usr \
 #     --datadir=/usr/share \
 #     --with-plsrc=$plsrcdir/../pipeline
 # popd
+
+pushd i686-pc-linux-gnu-opt
+  $plsrcdir/configure \
+    --enable-opt \
+    --with-compiler=GNU \
+    --prefix=/usr \
+    --datadir=/usr/share \
+    --with-plsrc=$plsrcdir/../pipeline
+popd
