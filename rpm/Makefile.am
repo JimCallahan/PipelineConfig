@@ -30,5 +30,5 @@ rpm-install:
 
 clean:
 	rm -f SPECS/plconfig-@VERSION@.spec 
-	rm -f RPM/i686/plconfig-@VERSION@-1.rpm
+	rm -f RPMS/i686/plconfig-@VERSION@-1.rpm
 
