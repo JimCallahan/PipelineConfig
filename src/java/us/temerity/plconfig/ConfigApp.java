@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.12 2004/04/09 22:18:05 jim Exp $
+// $Id: ConfigApp.java,v 1.13 2004/07/21 07:02:15 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -78,6 +78,11 @@ class ConfigApp
       pProfile.put("NotifyControlPort",   53137);
       pProfile.put("NotifyMonitorPort",   53138);
       pProfile.put("ProductionDirectory", new File("/base/prod"));
+
+      pProfile.put("QueueHostname",  "localhost");
+      pProfile.put("QueuePort",      53139);
+      pProfile.put("JobPort",        53140);
+      pProfile.put("QueueDirectory", new File("/usr/share/pipeline"));
     }
   }
 
@@ -373,6 +378,65 @@ class ConfigApp
   ) 
   {
     pProfile.put("ProductionDirectory", dir);
+  }
+
+
+  /**
+   * Set the hostname which runs plqueue(1).
+   */
+  public void 
+  setQueueHostname
+  (
+   String host
+  ) 
+  {
+    pProfile.put("QueueHostname", host);
+  }
+
+  /**
+   * Set the the network port listened to by plqueue(1).
+   */
+  public void 
+  setQueuePort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The queue port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("QueuePort", num);
+  }
+
+  /**
+   * Set the the network port listened to by pljobmgr(1).
+   */
+  public void 
+  setJobPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The job port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("JobPort", num);
+  }
+
+  /**
+   * Set the root queue directory.
+   */
+  public void 
+  setQueueDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("QueueDirectory", dir);
   }
 
 
@@ -844,6 +908,8 @@ class ConfigApp
       titles.add("FilePort");
       titles.add("NotifyControlPort");
       titles.add("NotifyMonitorPort");
+      titles.add("QueuePort");
+      titles.add("JobPort");
       
       HashMap<Integer,String> names = new HashMap<Integer,String>();
       for(String title : titles) {
