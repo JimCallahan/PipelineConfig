@@ -22,7 +22,7 @@ SPECS/plconfig-@VERSION@.spec: rpm-prep plconfig.spec
 rpm-prep: rpm-mkdirs rpm-install
 
 rpm-mkdirs:
-	mkdir -p BUILD RPMS SOURCES SPECS SRPMS
+	mkdir -p BUILD RPMS SPECS
 
 rpm-install:
 	DESTDIR=`pwd`/BUILD $(MAKE) -C ../src install
@@ -36,8 +36,8 @@ install: all
           $(PIPELINE_SOURCE_ROOT)/plconfig
 
 clean:
-	rm -f SPECS/plconfig-@VERSION@.spec 
-	rm -f RPMS/i686/plconfig-@VERSION@-1.rpm
+	rm -rf BUILD RPMS SPECS
+	rm -f header plconfig-@VERSION@-i686-rpm.bin
 
 
 
