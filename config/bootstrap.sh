@@ -11,6 +11,7 @@ pushd i686-pc-linux-gnu-dbg
   $HOME/code2/src/plconfig/configure \
     --disable-opt \
     --with-compiler=GNU \
-    --prefix=/usr/tmp/plconfig \
-    --datadir=/usr/tmp/plconfig/share/plconfig
+    --prefix=/usr \
+    --datadir=/usr/share \
+    --with-plsrc=$HOME/code2/src/pipeline
 popd

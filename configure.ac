@@ -77,6 +77,27 @@ AC_MSG_RESULT([ ])
 
 
 dnl ------------------------------------------------------------------------------------------
+
+AC_MSG_CHECKING([Pipeline Source Code Directory])
+
+AC_ARG_WITH([plsrc], 
+            [  --with-plsrc=DIR             Root directory of the Pipeline source tree.])
+
+AC_SUBST(PIPELINE_SOURCE_ROOT)
+PIPELINE_SOURCE_ROOT=
+
+if test "$with_plsrc" 
+then
+  PIPELINE_SOURCE_ROOT=$with_plsrc
+else
+  AC_MSG_ERROR([The --with-plsrc option is required.])
+fi
+
+AC_MSG_RESULT([$PIPELINE_SOURCE_ROOT])
+
+
+
+dnl ------------------------------------------------------------------------------------------
 dnl   Build Information.         
 dnl ------------------------------------------------------------------------------------------
 
@@ -249,6 +270,12 @@ then
   CXXFLAGS="$CXXFLAGS -D_REENTRANT"
   PTHREAD_LIB="-lpthread"
 fi
+
+
+dnl ------------------------------------------------------------------------------------------
+
+AC_SUBST(RPM_ROOT)
+RPM_ROOT=`pwd`/rpm
 
 
 dnl ------------------------------------------------------------------------------------------
@@ -460,6 +487,11 @@ AC_CONFIG_FILES([
 
   src/java/scripts/Makefile
   src/java/scripts/plconfig
+
+  rpm/Makefile
+  rpm/plconfig.spec
+  rpm/rpmrc
+  rpm/rpmmacros
 ])
 
 AC_OUTPUT
