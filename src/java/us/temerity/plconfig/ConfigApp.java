@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.17 2004/09/02 14:24:56 jim Exp $
+// $Id: ConfigApp.java,v 1.18 2004/11/06 21:20:45 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -76,10 +76,7 @@ class ConfigApp
       pProfile.put("NodeDirectory",  new File("/usr/share/pipeline"));
       
       pProfile.put("FileHostname",        "localhost");
-      pProfile.put("EnableCaching",       true);
       pProfile.put("FilePort",            53136);
-      pProfile.put("NotifyControlPort",   53137);
-      pProfile.put("NotifyMonitorPort",   53138);
       pProfile.put("ProductionDirectory", new File("/base/prod"));
 
       pProfile.put("QueueHostname",  "localhost");
@@ -388,40 +385,6 @@ class ConfigApp
 	("The file port number (" + num + ") cannot be negative!");
        
     pProfile.put("FilePort", num);
-  }
-
-  /**
-   * Set the network port listened to by plnotify(1) for control requests.
-   */
-  public void 
-  setNotifyControlPort
-  (
-   int num
-  ) 
-    throws IllegalConfigException
-  {
-    if(num < 0) 
-      throw new IllegalConfigException
-	("The notify control port number (" + num + ") cannot be negative!");
-       
-    pProfile.put("NotifyControlPort", num);
-  }
-
-  /**
-   * Set the network port listened to by plnotify(1) for monitor requests.
-   */
-  public void 
-  setNotifyMonitorPort
-  (
-   int num
-  ) 
-    throws IllegalConfigException
-  {
-    if(num < 0) 
-      throw new IllegalConfigException
-	("The notify monitor port number (" + num + ") cannot be negative!");
-       
-    pProfile.put("NotifyMonitorPort", num);
   }
 
   /**
@@ -899,8 +862,6 @@ class ConfigApp
       ArrayList<String> titles = new ArrayList<String>();
       titles.add("MasterPort");
       titles.add("FilePort");
-      titles.add("NotifyControlPort");
-      titles.add("NotifyMonitorPort");
       titles.add("QueuePort");
       titles.add("JobPort");
       
@@ -1155,8 +1116,8 @@ class ConfigApp
        "OPTIONS:\n" +
        "  [--host-ids][--home-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
+       "  [--queue-host=...][--queue-port=...][-queue-dir=...][--job-port=...]\n" + 
        "  [--file-host=...][--disable-cache][--file-port=...][--prod-dir=...]\n" +
-       "  [--notify-control-port][--notify-monitor-port]\n" + 
        "  [--class-path][--library-path]\n" +
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");

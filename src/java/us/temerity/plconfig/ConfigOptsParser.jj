@@ -80,10 +80,7 @@ TOKEN :
 | <NODE_DIR:             "--node-dir">      : PATH_SEP
 
 | <FILE_HOST:            "--file-host">            : HOSTNAME_SEP
-| <DISABLE_CACHE:        "--disable-cache"> 
 | <FILE_PORT:            "--file-port">            : INTEGER_SEP
-| <NOTIFY_CONTROL_PORT:  "--notify-control-port">  : INTEGER_SEP
-| <NOTIFY_MONITOR_PORT:  "--notify-monitor-port">  : INTEGER_SEP
 | <PROD_DIR:             "--prod-dir">             : PATH_SEP
 
 | <QUEUE_HOST:           "--queue-host">   : HOSTNAME_SEP
@@ -181,8 +178,8 @@ TOKEN :
 <HOSTNAME_STATE> 
 TOKEN :
 {
-  <HOSTNAME:         ((["a"-"z","A"-"Z","0"-"9"])+ 
-		      ("." (["a"-"z","A"-"Z","0"-"9"])+)*)>   : DEFAULT
+  <HOSTNAME:         ((["a"-"z","A"-"Z","0"-"9","-"])+ 
+		      ("." (["a"-"z","A"-"Z","0"-"9","-"])+)*)>   : DEFAULT
 | <MISSING_HOSTNAME: [" ","\t"]>                              : IGNORE_STATE
 | <ILLEGAL_HOSTNAME: (~[" ","\t"])+>                          : IGNORE_STATE
 }
@@ -310,8 +307,7 @@ GlobalOpts()
    Evaluation() | Annual() | Perpetual() |
    HostIDs() | HomeDir() | TempDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
-   FileHost() | DisableCache() | FilePort() | 
-   NotifyControlPort() | NotifyMonitorPort() | ProdDir() | 
+   FileHost() | FilePort() | ProdDir() | 
    QueueHost() | QueuePort() | JobPort() | QueueDir() | 
    ClassPath() | LibraryPath() | 
    PipelineUser()) 
@@ -462,16 +458,6 @@ FileHost() :
   }
 }
 
-void 
-DisableCache() : 
-{}
-{
-  <DISABLE_CACHE>
-  {
-    pApp.disableCache(); 
-  }
-}
-
 void
 FilePort()
   throws IllegalConfigException :
@@ -482,32 +468,6 @@ FilePort()
   <FILE_PORT> EQ() t=<INTEGER>
   { 
     pApp.setFilePort(new Integer(t.image));
-  }
-}
-
-void
-NotifyControlPort()
-  throws IllegalConfigException :
-{
-  Token t;
-}
-{
-  <NOTIFY_CONTROL_PORT> EQ() t=<INTEGER>
-  { 
-    pApp.setNotifyControlPort(new Integer(t.image));
-  }
-}
-
-void
-NotifyMonitorPort()
-  throws IllegalConfigException :
-{
-  Token t;
-}
-{
-  <NOTIFY_MONITOR_PORT> EQ() t=<INTEGER>
-  { 
-    pApp.setNotifyMonitorPort(new Integer(t.image));
   }
 }
 

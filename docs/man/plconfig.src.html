@@ -197,12 +197,10 @@ binaries of Pipeline from sources.<br>
   <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
-version 2.4 or later) operating system.&nbsp; Support for other flavors
-of UNIX are possible as long as they support the same file system
-related system calls as Linux.&nbsp; In particular the file and
-directory change notification feature of the kernel is required for
-sites which want to use the <span style="font-weight: bold;">plnotify</span>(1)
-Pipeline program to optimize file comparison tests by Pipeline.<br>
+version 2.4 or later) operating system.&nbsp; Pipeline has been
+developed and tested on a Red Hat 9.0 environment.&nbsp; Support for
+other flavors
+of Linux or UNIX in general is possible but has not been tested.<br>
   <br>
 In order to enable the full functionality of the Pipeline command-line
 and graphical client programs, they must also be run on a Linux
@@ -226,10 +224,11 @@ when run and can be customized by the <a href="#--class-path"><span
  href="#--library-path"><span style="font-weight: bold;">--library-path</span></a>
 options:<br>
   <br>
-  <div style="margin-left: 40px;"><a href="http://java.sun.com/"><span
+  <div style="margin-left: 40px;"><a
+ href="http://java.sun.com/j2se/1.5.0/download.jsp"><span
  style="font-weight: bold;">Java Runtime Environment</span></a><br>
   <span style="font-weight: bold;"></span></div>
-  <div style="margin-left: 80px;">J2SE (1.5.0 or later)<br>
+  <div style="margin-left: 80px;">J2SE (5.0 or later)<br>
   </div>
   <div style="margin-left: 40px;"><br>
   <a href="http://java.sun.com/products/jce/"><span
@@ -371,18 +370,16 @@ or automatically by using the <a href="plid.html#--append"><span
  style="font-weight: normal;">=</span><span
  style="font-style: italic; font-weight: normal;">dir</span></h4>
 <div style="margin-left: 40px;">
-<div style="margin-left: 40px;"><>The absolute path to the parent
+<div style="margin-left: 40px;">The absolute path to the parent
 directory of all user home
-directories.&nbsp; </><br>
-<></><br>
-<>If not specified, this location is derived
+directories.&nbsp; If not specified, this location is derived
 from the environment under which <span style="font-weight: bold;">plconfig</span>(1)
 is run or (/home) if the location cannot be determined from the
-environment.</><br>
+environment.<br>
 </div>
-<></></div>
-<><br>
-<span style="font-weight: bold;"></span></>
+<br>
+</div>
+<span style="font-weight: bold;"></span>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
  name="--temp-dir"></a>--temp-dir</span>=<span
  style="font-style: italic;">dir</span><br>
@@ -442,7 +439,7 @@ If not specified, the port number will default to (53135).<br>
 </div>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--node-dir"></a>--node-dir</b>=<span style="font-style: italic;">dir</span></h4>
-<div style="margin-left: 80px;">&lt;&gt;The absolute path
+<div style="margin-left: 80px;">The absolute path
 to the root directory under which the persistent copies of Pipeline
 nodes are stored.&nbsp; This directory
 should
@@ -462,17 +459,17 @@ the node directory will default to (/usr/share/pipeline).</h4>
 </span></span><span style="font-style: italic;"></span></div>
 <div style="margin-left: 80px;">The host name of the machine (host)
 which will run the Pipeline file management daemon <span
- style="font-weight: bold;">plfilemgr</span>(1) and optionally the<span
- style="font-weight: normal;"> directory change
-notification daemon <span style="font-weight: bold;">plnotify</span>(1)</span>.&nbsp;
-These two daemons should be run on the same host which acts as
+ style="font-weight: bold;">plfilemgr</span>(1)<span
+ style="font-weight: normal;"></span>.&nbsp;
+For optimal performance, this daemon should be run on the same host
+which acts as
 the
 network file server where production data files will reside (see <a
- href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>)
-on your
-site for optimal
-performance (see <a href="#--disable-cache"><span
- style="font-weight: bold;">--disable-cache</span></a>).<br>
+ href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>).&nbsp;
+If local file acess is not possible or desireable, the <span
+ style="font-weight: bold;">plfilemgr</span>(1) daemon should be run on
+a dedicated host which has the fastest possible network access to the
+production directories.<span style="font-weight: normal;"></span><br>
 <span style="font-weight: normal;"><br>
 Note that a host ID for this host must be generate using <a
  href="plid.html"><span style="font-weight: bold;">plid</span></a>(1)
@@ -483,37 +480,6 @@ and placed in the host IDs file passed to the <a href="#--host-ids"><span
  style="font-weight: normal;">If not specified, the file host will
 default to (localhost).<br>
 </span></div>
-<h4 style="margin-left: 40px;"><a name="--disable-cache"></a>--disable-cache</h4>
-<div style="margin-left: 80px;">By default, Pipeline is designed to run
-both the <span style="font-weight: bold;">plfilemgr</span>(1) and <span
- style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)
-daemons on the host which acts as the file server for the production
-directory specified by <a href="#--prod-dir"><span
- style="font-weight: bold;">--prod-dir</span></a>.&nbsp; The </span><span
- style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)
-daemon monitors changes to files associated with Pipeline nodes and
-invalidates caches of information related to these files maintained by
-the<span style="font-weight: bold;"> </span></span><span
- style="font-weight: bold;">plmaster</span>(1) daemon (see <a
- href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;&nbsp;
-<br>
-<br>
-If the file server is a proprietary or non-standard system which is not
-capable of running <span style="font-weight: normal;"></span><span
- style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1),
-the caching of file information by </span><span
- style="font-weight: bold;">plmaster</span>(1) can be disabled using
-this option.&nbsp;&nbsp; In caching is disabled, the <span
- style="font-weight: bold;">plfilemgr</span>(1) daemon may be run on
-any host which has fast access to the production directory (see <a
- href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>
-and <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>)
-and the<span style="font-weight: bold;"> </span><span
- style="font-weight: normal;"><span style="font-weight: bold;">plnotify</span>(1)</span>
-is no longer needed.<br>
-<br>
-If not specified, caching is enabled.<br>
-</div>
 <h4 style="margin-left: 40px;"><b><a name="--file-port"></a>--file-port</b><span
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
@@ -524,27 +490,6 @@ listened to by the Pipeline file management daemon <span
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
 not
 specified, the port number will default to (53136).</span></h4>
-<h4 style="margin-left: 40px;"><b><a name="--notify-control-port"></a>--notify-control-port</b><span
- style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
-<h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
-number of the network port (<span style="font-style: italic;">num</span>)
-listened to by the Pipeline directory change notification daemon <span
- style="font-weight: bold;">plnotify</span>(1) for control
-requests.&nbsp; <br>
-</span></h4>
-<h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
-not
-specified, the port number will default to (53137).</span></h4>
-<h4 style="margin-left: 40px;"><b><a name="--notify-monitor-port"></a>--notify-monitor-port</b><span
- style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
-<h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
-number of the network port (<span style="font-style: italic;">num</span>)
-listened to by the Pipeline directory change notification daemon <span
- style="font-weight: bold;">plnotify</span>(1) monitoring requests.<br>
-</span></h4>
-<h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
-not
-specified, the port number will default to (53138).</span></h4>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--prod-dir"></a>--prod-dir</b>=<span style="font-style: italic;">dir</span></h4>
 <h4 style="font-weight: normal; margin-left: 80px;">The absolute path
@@ -556,14 +501,12 @@ file system such
 that all machines which will run Pipeline related programs can access
 the directory as (dir). <br>
 </h4>
-<div style="margin-left: 80px;">&lt;&gt;For
+<div style="margin-left: 80px;">For
 optimal performance this directory should reside on the
 same host which runs the <span style="font-weight: bold;">plfilemgr</span>(1)
-and<span style="font-weight: normal;"><span style="font-weight: bold;">
-plnotify</span>(1) daemons</span>&lt;&gt; (see <a href="#--file-host"><span
- style="font-weight: bold;">--file-host</span></a>)
-although this is not required (see <a href="#--disable-cache"><span
- style="font-weight: bold;">--disable-cache</span></a>).&lt;&gt;
+<span style="font-weight: normal;">daemon</span> (see <a
+ href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>)
+although this is not required.
 </div>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the production directory will default to (/base/prod).</h4>
