@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in,v 1.5 2004/03/22 03:40:05 jim Exp $
+// $Id: CryptoApp.java.in,v 1.6 2004/03/22 03:54:41 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -436,7 +436,7 @@ class CryptoApp
 	  String path = source.getPath();
 	  assert(path.endsWith(".class"));
 	  String cname = 
-	    ("us/temerity/pipeline/" + path.substring(0, path.length()-6).replace('/', '.'));
+	    ("us.temerity.pipeline." + path.substring(0, path.length()-6).replace('/', '.'));
 
 	  out.write(String.format("%09d", cname.length()).getBytes());
 	  out.write(cname.getBytes());
