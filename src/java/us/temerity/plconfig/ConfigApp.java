@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.2 2004/03/18 00:56:47 jim Exp $
+// $Id: ConfigApp.java,v 1.3 2004/03/18 18:00:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -47,7 +47,7 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
   
   /**
-   * Construct an application with the given name and command-line arguments.
+   * Construct the <B>plconfig</B>(1) application with the given command-line arguments.
    * 
    * @param args [<B>in</B>]
    *   The command-line arguments.
@@ -448,6 +448,7 @@ class ConfigApp
 
     /* java libraries */ 
     {
+
       // ... 
 
     }
@@ -473,10 +474,10 @@ class ConfigApp
     /* retrieve the company's public key */ 
     PublicKey publicKey = null;
     {
-      byte bytes[] = new byte[TemerityPublicKey.sKey.length];
+      byte bytes[] = new byte[CompanyPublicKey.sBytes.length];
       int wk;
       for(wk=0; wk<bytes.length; wk++) 
-	bytes[wk] = Integer.valueOf(TemerityPublicKey.sKey[wk] - 128).byteValue();
+	bytes[wk] = Integer.valueOf(CompanyPublicKey.sBytes[wk] - 128).byteValue();
 
       KeyFactory factory = KeyFactory.getInstance("DH");
       X509EncodedKeySpec spec = new X509EncodedKeySpec(bytes);
@@ -527,14 +528,10 @@ class ConfigApp
       writeProfile(pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
-    // DEBUG -------------
+    /* print the configuration parameters */ 
     {
-      CustomerProfile cp = 
-	new CustomerProfile(new File(getRootDirectory(), "pipeline.profile"));
-
-      System.out.print("CUSTOMER PROFILE:\n");
-      for(String title : cp.getTitles()) 
-	System.out.print("  " + title + " = " + cp.getEntry(title) + "\n");
+      for(String title : pProfile.keySet()) 
+	System.out.print("  " + title + " = " + pProfile.get(title) + "\n");
     }
   }
 
