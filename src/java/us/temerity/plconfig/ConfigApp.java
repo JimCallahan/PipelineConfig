@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.4 2004/03/18 23:54:08 jim Exp $
+// $Id: ConfigApp.java,v 1.5 2004/03/20 05:45:01 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -331,7 +331,7 @@ class ConfigApp
 
 
   /**
-   * Set additional Java class path.
+   * Set additional Java class search path.
    */
   public void 
   setClassPath
@@ -342,6 +342,27 @@ class ConfigApp
     pProfile.put("ClassPath", path);
   }
   
+  /**
+   * Set additional native library search path.
+   */
+  public void 
+  setLibraryPath
+  (
+   String path
+  ) 
+  {
+    pProfile.put("LibraryPath", path);
+  }
+  
+
+  /**
+   * Make the generated output files read-only.
+   */
+  public void 
+  lockOutputFiles()
+  {
+    pLock = true;
+  }
 
 
   
@@ -499,14 +520,175 @@ class ConfigApp
 	  ("The root production directory (" + dir + ") was not absolute!");
     }
 
-    /* java libraries */ 
+    /* support JAR files */ 
     {
+      TreeSet<File> paths = new TreeSet<File>();
+      {
+	String jre = (String) pProfile.get("JavaHome");
+	if(jre != null) 
+	  paths.add(new File(jre, "lib/ext"));
 
-      // ... 
+	String cpath = (String) pProfile.get("ClassPath");
+	if(cpath != null) {
+	  String parts[] = cpath.split(":");
+	  int wk;
+	  for(wk=0; wk<parts.length; wk++) {
+	    File dir = new File(parts[wk]);
+	    if(dir.isDirectory())
+	      paths.add(dir);
+	  }
+	}
+      }
+	
+      {
+	ArrayList<String> jars = new ArrayList<String>();
+	jars.add("vecmath.jar");
+	jars.add("j3daudio.jar");
+	jars.add("j3dcore.jar");
+	jars.add("j3dutils.jar");
 
+	for(String jar : jars) {
+	  boolean found = false;
+	  for(File dir : paths) {
+	    File path = new File(dir, jar);
+	    if(path.isFile()) {
+	      found = true;
+	      break;
+	    }
+	  }
+
+	  if(!found) {
+	    StringBuffer buf = new StringBuffer();
+	    buf.append("Could not find the Java 3D JAR file (" + jar + ") in either the " + 
+		       "JRE or any of the directories supplied with the --class-path " + 
+		       "option.n\n" + 
+		       "Directories Searched:\n");
+
+	    for(File dir : paths) 
+	      buf.append("  " + dir + "\n");
+
+	    throw new IllegalConfigException(buf.toString());
+	  }
+	}
+      }	
+
+      {
+	ArrayList<String> jars = new ArrayList<String>();
+	jars.add("jai_core.jar");
+	jars.add("jai_codec.jar");
+	jars.add("mlibwrapper_jai.jar");
+	jars.add("jai_imageio.jar");
+	jars.add("clibwrapper_jiio.jar");
+
+	for(String jar : jars) {
+	  boolean found = false;
+	  for(File dir : paths) {
+	    File path = new File(dir, jar);
+	    if(path.isFile()) {
+	      found = true;
+	      break;
+	    }
+	  }
+
+	  if(!found) {
+	    StringBuffer buf = new StringBuffer();
+	    buf.append("Could not find the Java Advanced Imaging JAR file (" + jar + ") in " +
+		       "either the JRE or any of the directories supplied with the " + 
+		       "--class-path option.\n\n" + 
+		       "Directories Searched:\n");
+
+	    for(File dir : paths) 
+	      buf.append("  " + dir + "\n");
+
+	    throw new IllegalConfigException(buf.toString());
+	  }
+	}
+      }
+    }
+
+    /* support native libraries */ 
+    {
+      TreeSet<File> paths = new TreeSet<File>();
+      {
+	String jre = (String) pProfile.get("JavaHome");
+	if(jre != null) 
+	  paths.add(new File(jre, "lib/i386"));
+
+	String lpath = (String) pProfile.get("LibraryPath");
+	if(lpath == null) 
+	  lpath = System.getenv("LD_LIBRARY_PATH");
+	if(lpath != null) {
+	  String parts[] = lpath.split(":");
+	  int wk;
+	  for(wk=0; wk<parts.length; wk++) {
+	    File dir = new File(parts[wk]);
+	    if(dir.isDirectory())
+	      paths.add(dir);
+	  }
+	}
+      }
+	
+      {
+	ArrayList<String> jars = new ArrayList<String>();
+	jars.add("libj3daudio.so");
+	jars.add("libJ3DUtils.so");
+
+	for(String jar : jars) {
+	  boolean found = false;
+	  for(File dir : paths) {
+	    File path = new File(dir, jar);
+	    if(path.isFile()) {
+	      found = true;
+	      break;
+	    }
+	  }
+
+	  if(!found) {
+	    StringBuffer buf = new StringBuffer();
+	    buf.append("Could not find the Java 3D native library (" + jar + ") in either " + 
+		       "the JRE or any of the directories supplied with the --library-path " +
+		       "option.\n\n" + 
+		       "Directories Searched:\n");
+
+	    for(File dir : paths) 
+	      buf.append("  " + dir + "\n");
+
+	    throw new IllegalConfigException(buf.toString());
+	  }
+	}
+      }	
+
+      {
+	ArrayList<String> jars = new ArrayList<String>();
+	jars.add("libmlib_jai.so");
+	jars.add("libclib_jiio.so");
+
+	for(String jar : jars) {
+	  boolean found = false;
+	  for(File dir : paths) {
+	    File path = new File(dir, jar);
+	    if(path.isFile()) {
+	      found = true;
+	      break;
+	    }
+	  }
+
+	  if(!found) {
+	    StringBuffer buf = new StringBuffer();
+	    buf.append("Could not find the Java Advanced Imaging native library (" + jar + 
+		       ") in either the JRE or any of the directories supplied with the " +
+		       "--library-path option.\n\n" + 
+		       "Directories Searched:\n");
+	    
+	    for(File dir : paths) 
+	      buf.append("  " + dir + "\n");
+
+	    throw new IllegalConfigException(buf.toString());
+	  }
+	}
+      }
     }
   }
-
   
   /**
    * Generate and write the output files.
@@ -607,10 +789,34 @@ class ConfigApp
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
-    /* print the configuration parameters */ 
+    /* print the configuration parameters and write them to: pipeline.config */ 
     {
-      for(String title : pProfile.keySet()) 
-	System.out.print("  " + title + " = " + pProfile.get(title) + "\n");
+      String config = null;
+      {
+	StringBuffer buf = new StringBuffer();
+	buf.append("Pipeline Configuration:\n");
+	for(String title : pProfile.keySet()) 
+	  buf.append("  " + title + " = " + pProfile.get(title) + "\n");
+	buf.append("\n");
+	config = buf.toString();
+      }
+
+      System.out.print(config);
+
+      File file = new File(getRootDirectory(), "pipeline.config");
+      if(file.exists() && !file.canWrite()) 
+	throw new IOException
+	  ("Unable to write (" + file + ") because it has been locked!");
+
+      FileWriter out = new FileWriter(file);
+      out.write(config);
+      out.write("Command Line:\n" +
+		"  plconfig " + pPackedArgs + "\n\n");
+      out.flush();
+      out.close();
+
+      if(pLock)
+	file.setReadOnly();
     }
   }
 
@@ -626,7 +832,6 @@ class ConfigApp
   ) 
     throws IOException
   {
-
     if(file.exists() && !file.canWrite()) 
       throw new IOException
 	("Unable to write (" + file + ") because it has been locked!");
@@ -651,10 +856,13 @@ class ConfigApp
     String profileText = encodeBytes(profile);
 
     FileWriter out = new FileWriter(file);
-    out.write(keyText, 0, keyText.length());
-    out.write(profileText, 0, profileText.length());
+    out.write(keyText);
+    out.write(profileText);
     out.flush();
     out.close();
+
+    if(pLock)
+      file.setReadOnly();
   }
 
   /**
@@ -693,23 +901,23 @@ class ConfigApp
   help()
   {
     System.out.print
-      ("USAGE:  \n" +
-       "  plconfig [options] \n" + 
+      ("USAGE:\n" +
+       "  plconfig --root-dir=... --evaluation|--annual|--perpetual [options]\n" + 
        "\n" +
-       "  plconfig --graphical \n" +
+       "  plconfig --graphical\n" +
        "\n" + 
-       "  plconfig --help \n" +
-       "  plconfig --html-help \n" +
-       "  plconfig --version \n" + 
-       "  plconfig --release-date \n" + 
-       "  plconfig --copyright \n" + 
+       "  plconfig --help\n" +
+       "  plconfig --html-help\n" +
+       "  plconfig --version\n" + 
+       "  plconfig --release-date\n" + 
+       "  plconfig --copyright\n" + 
        "\n" + 
-       "GLOBAL OPTIONS: \n" +
-       "  [--root-dir=...][--node-dir=...][--prod-dir=...][--toolset-dir=...]\n" + 
-       "  [--master-host=...][--file-host=...] \n" + 
-       "  [--master-port=...][--file-port=...] \n" +
-       "  [--home-dir=...] \n" + 
-       "\n" + 
+       "OPTIONS:\n" +
+       "  [--domain=...][--home-dir=...][--toolset-dir=...]\n" + 
+       "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
+       "  [--file-host=...][--file-port=...][--prod-dir=...]\n" +
+       "  [--class-path][--library-path]\n" +
+       "  [--lock]\n" +
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
@@ -1052,6 +1260,10 @@ class ConfigApp
    */ 
   private TreeMap<String,Object>  pProfile;
 
+  /**
+   * Make the generated output files read-only?
+   */
+  private boolean pLock;
 }
 
 
