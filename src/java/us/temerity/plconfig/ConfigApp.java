@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.10 2004/03/23 07:40:43 jim Exp $
+// $Id: ConfigApp.java,v 1.11 2004/04/01 23:05:38 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -64,6 +64,8 @@ class ConfigApp
 
     pProfile = new TreeMap<String,Object>();
     {
+      pProfile.put("PlConfigVersion", PackageInfo.sVersion);
+
       pProfile.put("ToolsetDirectory", new File("/base/toolset"));
       pProfile.put("TemporaryDirectory", new File("/usr/tmp"));
       
@@ -73,6 +75,8 @@ class ConfigApp
       
       pProfile.put("FileHostname",        "localhost");
       pProfile.put("FilePort",            53136);
+      pProfile.put("NotifyControlPort",   53137);
+      pProfile.put("NotifyMonitorPort",   53138);
       pProfile.put("ProductionDirectory", new File("/base/prod"));
     }
   }
@@ -81,34 +85,6 @@ class ConfigApp
 
   /*----------------------------------------------------------------------------------------*/
   /*   A C C E S S                                                                         */
-  /*----------------------------------------------------------------------------------------*/
-
-  /**
-   * Get the titles of the configuration parameters. 
-   */
-  public Set<String>
-  getParameterTitles() 
-  {
-    return Collections.unmodifiableSet(pProfile.keySet());
-  }
-
-  /**
-   * Get the configuration parameter entry with the given title.
-   * 
-   * @return
-   *   The entry value or <CODE>null</CODE> if no entry with the given title exists.
-   */
-  public Object
-  getParameter
-  (
-   String name
-  )
-  {
-    return pProfile.get(name);
-  } 
-
-
-
   /*----------------------------------------------------------------------------------------*/
 
   /**
@@ -216,9 +192,32 @@ class ConfigApp
   (
    String name
   ) 
+    throws IllegalConfigException
   {
+    if(pProfile.get("IPAddrs") != null) 
+      throw new IllegalConfigException
+	("The --ip-addrs and --domain options are mutually exclusive!");
+	
     pProfile.put("DomainName", name);
   }
+  
+  /**
+   * Set the site IP addresses.
+   */
+  public void 
+  setIPAddrs
+  (
+   HashSet addrs
+  ) 
+    throws IllegalConfigException
+  {
+    if(pProfile.get("DomainName") != null) 
+      throw new IllegalConfigException
+	("The --ip-addrs and --domain options are mutually exclusive!");
+	
+    pProfile.put("IPAddrs", addrs);
+  }
+
 
   /**
    * Set the root user home directory.
@@ -328,6 +327,40 @@ class ConfigApp
 	("The file port number (" + num + ") cannot be negative!");
        
     pProfile.put("FilePort", num);
+  }
+
+  /**
+   * Set the network port listened to by plnotify(1) for control requests.
+   */
+  public void 
+  setNotifyControlPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The notify control port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("NotifyControlPort", num);
+  }
+
+  /**
+   * Set the network port listened to by plnotify(1) for monitor requests.
+   */
+  public void 
+  setNotifyMonitorPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The notify monitor port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("NotifyMonitorPort", num);
   }
 
   /**
@@ -489,12 +522,13 @@ class ConfigApp
     }
 
     /* license period */ 
-    if((getParameter("LicenseStart") == null) || (getParameter("LicenseEnd") == null)) 
+    if((pProfile.get("LicenseStart") == null) || (pProfile.get("LicenseEnd") == null)) 
       throw new ParseException("One of --evaluation, --annual or --perpetual is required!");
 
-    /* site domain name */ 
-    if(getParameter("DomainName") == null) {
+    /* site specification */ 
+    {
       TreeSet<String> domains = new TreeSet<String>();
+      HashSet<InetAddress> ips = new HashSet<InetAddress>();
 
       Enumeration nets = NetworkInterface.getNetworkInterfaces();  
       while(nets.hasMoreElements()) {
@@ -504,6 +538,8 @@ class ConfigApp
 	  InetAddress addr = (InetAddress) addrs.nextElement();
 	  String ip = addr.getHostAddress();
 	  if(!ip.equals("127.0.0.1")) {
+	    ips.add(addr);
+
 	    String host = addr.getCanonicalHostName();
 	    int idx = host.indexOf('.');
 	    domains.add(host.substring(idx+1));
@@ -511,30 +547,66 @@ class ConfigApp
 	}
       }
 
-      switch(domains.size()) {
-      case 0:
-	throw new IllegalConfigException
-	  ("The site domain name was not specified and could not be determined!\n" + 
-	   "You must explicitly specify the domain with the --domain option.");
+      if(pProfile.get("DomainName") != null) {
+	String domain = (String) pProfile.get("DomainName");
+
+	boolean match = false;
+	for(String d : domains) {
+	  if(d.equals(domain)) {
+	    match = true;
+	    break;
+	  }
+	}	
+
+	if(!match) 
+	  throw new IllegalConfigException
+	    ("The machine running plconfig(1) is not a member of the domain (" + domain + 
+	     ") specified by the --domain option!");      
+      }
+      else if(pProfile.get("IPAddrs") != null) {
+	HashSet addrs = (HashSet) pProfile.get("IPAddrs");
 	
-      case 1:
-	for(String domain : domains) 
-	  pProfile.put("DomainName", domain);
-	break;
+	boolean match = false;
+	for(Object obj : addrs) {
+	  InetAddress addr = (InetAddress) obj;
+	  if(ips.contains(addr)) {
+	    match = true;
+	    break;
+	  }
+	}	
 
-      default:
-	{
-	  StringBuffer buf = new StringBuffer(); 
-	  buf.append("The site domain name was not specified and several domains where " +
-		     "detected:\n\n");
-
-	  for(String domain : domains) 
-	    buf.append("  " + domain + "\n");
+	if(!match) 
+	  throw new IllegalConfigException
+	    ("The machine running plconfig(1) did not have any of the IP addresses " + 
+	     "specified by the --ip-addrs option!");
+      }
+      else {
+	switch(domains.size()) {
+	case 0:
+	  throw new IllegalConfigException
+	    ("The site not specified and could not be automatically determined!\n" + 
+	     "You must use either the --domain or --ip-addrs option to specify the site.");
 	  
-	  buf.append("\nYou must explicitly specify the domain with the --domain option.\n");
-
-	  throw new IllegalConfigException(buf.toString());
-	}	  
+	case 1:
+	  for(String domain : domains) 
+	    pProfile.put("DomainName", domain);
+	  break;
+	  
+	default:
+	  {
+	    StringBuffer buf = new StringBuffer(); 
+	    buf.append("The site domain name was not specified and several domains where " +
+		       "detected:\n\n");
+	    
+	    for(String domain : domains) 
+	      buf.append("  " + domain + "\n");
+	    
+	    buf.append("\nYou must explicitly specify one of these domains with the " + 
+		       "--domain option or use the --ip-addrs option to specify the site.\n");
+	    
+	    throw new IllegalConfigException(buf.toString());
+	  }	  
+	}
       }
     }
 
@@ -553,7 +625,7 @@ class ConfigApp
     }
 
     /* home directory */ 
-    if(getParameter("HomeDirectory") == null) {
+    if(pProfile.get("HomeDirectory") == null) {
       String home = System.getProperty("user.home"); 
       if(home != null) {
 	if(home.endsWith("pipeline"))
@@ -764,6 +836,26 @@ class ConfigApp
 	}
       }
     }
+
+    /* make sure the network ports don't conflict */ 
+    {
+      ArrayList<String> titles = new ArrayList<String>();
+      titles.add("MasterPort");
+      titles.add("FilePort");
+      titles.add("NotifyControlPort");
+      titles.add("NotifyMonitorPort");
+      
+      HashMap<Integer,String> names = new HashMap<Integer,String>();
+      for(String title : titles) {
+	if(names.containsKey(pProfile.get(title))) {
+	  throw new IllegalConfigException
+	    ("The network port (" + pProfile.get(title)  + ") cannot be used by both " +
+	     "the " + title + " and the " + names.get(pProfile.get(title)) + "!");
+	}
+	
+	names.put((Integer) pProfile.get(title), title);
+      }    
+    }
   }
   
   /**
@@ -817,7 +909,14 @@ class ConfigApp
 	TreeMap<String,Object> table = new TreeMap<String,Object>();
 	table.put("LicenseStart", pProfile.get("LicenseStart"));
 	table.put("LicenseEnd",   pProfile.get("LicenseEnd"));
-	table.put("DomainName",   pProfile.get("DomainName"));
+
+	Object domain = pProfile.get("DomainName");
+	if(domain != null) 
+	  table.put("DomainName", domain);
+
+	Object addrs = pProfile.get("IPAddrs");
+	if(addrs != null) 
+	  table.put("IPAddrs", addrs);
 
 	ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
@@ -867,8 +966,25 @@ class ConfigApp
       {
 	StringBuffer buf = new StringBuffer();
 	buf.append("Pipeline Configuration:\n");
-	for(String title : pProfile.keySet()) 
-	  buf.append("  " + title + " = " + pProfile.get(title) + "\n");
+	for(String title : pProfile.keySet()) {
+	  buf.append("  " + title + " = ");
+	  if(title.equals("IPAddrs")) {
+	    buf.append("\n");
+
+	    TreeSet<String> names = new TreeSet<String>();
+	    HashSet addrs = (HashSet) pProfile.get("IPAddrs");
+	    for(Object obj : addrs) {
+	      InetAddress addr = (InetAddress) obj;
+	      names.add(addr.getHostAddress());
+	    }
+
+	    for(String name : names)
+	      buf.append("    " + name + "\n");
+	  }
+	  else {
+	    buf.append(pProfile.get(title) + "\n");
+	  }
+	}
 	buf.append("\n");
 	config = buf.toString();
       }
@@ -974,11 +1090,14 @@ class ConfigApp
        "  plconfig --version\n" + 
        "  plconfig --release-date\n" + 
        "  plconfig --copyright\n" + 
+       "  plconfig --license\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--domain=...][--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
+       "  [--domain=...][--ip-addrs]\n" +
+       "  [--home-dir=...][--toolset-dir=...][--temp-dir=...]\n" + 
        "  [--master-host=...][--master-port=...][node-dir=...]\n" + 
        "  [--file-host=...][--file-port=...][--prod-dir=...]\n" +
+       "  [--notify-control-port][--notify-monitor-port]\n" + 
        "  [--class-path][--library-path]\n" +
        "  [--lock]\n" +
        "\n" +  
@@ -1085,6 +1204,15 @@ class ConfigApp
   copyright()
   {
     System.out.print(PackageInfo.sCopyright + "\n");
+  }
+    
+  /**
+   * The implementation of the <CODE>--license</CODE> command-line option.
+   */ 
+  public void
+  license()
+  {
+    System.out.print(PackageInfo.sLicense + "\n");
   }
     
 

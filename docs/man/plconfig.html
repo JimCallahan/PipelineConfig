@@ -8,7 +8,7 @@
 <body>
 <h3><a name="Name"></a>Name</h3>
 <blockquote><b>plconfig</b> - the Pipeline configuration and license
-generator program<br>
+generator tool<br>
 </blockquote>
 <h3><a name="Synopsis"></a>Synopsis</h3>
 <blockquote><b>plconfig</b> [<a href="#Global_Options"><span
@@ -22,6 +22,8 @@ generator program<br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--version_">--version</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--release-date">--release-date</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--copyright">--copyright</a><br>
+  <span style="font-weight: bold;">plconfig</span> <a href="#--license"><span
+ style="font-weight: bold;">--license</span></a><br>
 </blockquote>
 <h3><a name="Description"></a>Description<br>
 </h3>
@@ -94,8 +96,10 @@ installation directory (see <a href="#-root-dir"><span
   <div style="margin-left: 40px;"><br>
 This file contains the license key for Pipeline for your site.&nbsp;
 This file should be zealously protected as it
-represents confidential information covered by the <span
- style="font-weight: bold;">Pipeline License Agreement</span>. Once
+represents confidential information covered by the <a
+ href="#License_Agreement"><span style="font-weight: bold;">Pipeline
+Config License Agreement</span></a>.
+Once
 Pipeline is installed, this file will be required in order to run the
 programs which make up the Pipeline.<br>
   </div>
@@ -129,13 +133,13 @@ date by running <span style="font-weight: bold;">plconfig</span>(1)
 again.<br>
   <h4><span style="font-weight: bold;">Obtaining and Installing Pipeline</span></h4>
 Once you have successfully completed the configuration process above, a
-distribution of Pipeline&nbsp; for your site may be obtained by
+distribution of Pipeline configured for your site may be obtained by
 completing the <span style="font-weight: bold;">Pipeline License
 Application Form</span>.&nbsp; Pipeline is distributed as an <a
  href="http://rpm.org/"><span style="font-weight: bold;">RPM</span></a>
-which are customized for your site.&nbsp; Once your license application
+which is customized for your site.&nbsp; Once your license application
 as been processed, you will be sent an email containing the download
-location for this custom RPM for your site.&nbsp; <br>
+location for this custom RPM specific to your site.&nbsp; <br>
   <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
@@ -147,14 +151,15 @@ In order to enable the full functionality of the Pipeline command-line
 and graphical client programs, they must also be run on a Linux
 host.&nbsp; However, these client programs are written entirely in Java
 and may be run on any host which has a functional Java VM with some
-loss of functionality.&nbsp; The biggest limitation is that editor and
-viewer programs cannot be launched by non-Linux Pipeline clients.&nbsp;
+loss of functionality.&nbsp; The biggest limitation is that
+editor/viewer programs cannot be launched by non-Linux Pipeline
+clients.&nbsp;
 Otherwise, all other Pipeline operations are functional on non-Linux
 machines.<br>
   <br>
 Finally, both Pipeline client and server programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
-tool depends on at least a minimal Java Runtime Environment.<br>
+tool depends on at least the Java Runtime Environment.<br>
   <br>
 The
 existence and locations of the following Java
@@ -214,6 +219,11 @@ and then immediately exit:</blockquote>
   </b><br>
   <div style="margin-left: 40px;"> Prints copyright notice for this
 software and exits.<br>
+  <br>
+  </div>
+  <b><a name="--license"></a>--license</b><br>
+  <div style="margin-left: 40px;"><b> </b><br>
+Prints license agreement for this software and exits. <br>
   </div>
 </blockquote>
 <blockquote>
@@ -275,14 +285,39 @@ the configuration parameters for your site which would otherwise be
 auto-detected or given default values.<br>
 <br>
 <span style="font-weight: bold;"><a name="--domain"></a>--domain</span>=<span
- style="font-style: italic;">name</span><br>
-<div style="margin-left: 40px;"><br>
-The fully qualified domain name of the site for which Pipeline is being
-configured. For example, (your-studio.com).&nbsp; Pipeline licenses are
-always site-wide and specific to a particular internet domain.<br>
+ style="font-style: italic;">name<br>
+</span><span style="font-weight: bold;"><a name="--ip-mask"></a>--ip-addrs</span>=<span
+ style="font-style: italic;">pattern</span>[,pattern]<br>
 <br>
-If not specified, the domain name will be determined from the name of
+<div style="margin-left: 40px;">
+One of these two options can be
+used to configure the set of hosts which will be considered the site
+for which Pipeline is licensed.&nbsp; These two options are mutually
+exclusive.&nbsp; If neither option is given, then domain name based
+licensing will be used and the name of the domain will be determined
+from the the name of
 the machine running <span style="font-weight: bold;">plconfig</span>(1).<br>
+<br>
+If the <b>--domain</b> option is
+given, the site will be considered to be all machines who's fully
+qualified
+name are members of the given domain (<span style="font-style: italic;">name</span>).&nbsp;
+The machine running <span style="font-weight: bold;">plconfig</span>(1)
+must currently be a member of this domain and the domain must be
+registered to the Pipeline license applicant.<br>
+<br>
+If the <b>--ip-addrs</b> option is
+given, the site will be defined by combining the set of IP address
+patterns given (<span style="font-style: italic;">pattern</span>).&nbsp;
+An IP address pattern can either specifiy a single address using a
+standard IP address such as (194.24.48.145) or a set of related
+addresses where one of the last two address numbers are replaced by a
+wildcard (*) or a range.&nbsp; For example, for following IP address
+patterns are legal:&nbsp; (194.24.48.*), (194.24.48.[12-30,32,50-63]),
+(194.24.[48,49].*).&nbsp; The machine running <span
+ style="font-weight: bold;">plconfig</span>(1) must have one of the IP
+addresses specified by the patterns and all of the IP addresses must be
+registered to the Pipeline license applicant.<br>
 </div>
 </div>
 <h4 style="margin-left: 40px;"><b><a name="--home-dir"></a>--home-dir</b><span
@@ -390,11 +425,12 @@ the node directory will default to (/usr/share/pipeline).</h4>
  style="font-weight: normal;">=</span><span style="font-style: italic;"><span
  style="font-weight: normal;">host</span></span><br>
 <span style="font-style: italic;"></span></div>
-<h4 style="margin-left: 40px;"></h4>
 <div style="margin-left: 80px;">The host name of the machine (host)
-which will run the Pipeline file management <span
+which will run both the Pipeline file management <span
  style="font-weight: bold;">plfilemgr</span>(1)
-daemon.&nbsp; This daemon should be run on the same host which acts as
+daemon and the<span style="font-weight: normal;"> directory change
+notification daemon <span style="font-weight: bold;">plnotify</span>(1)</span>
+.&nbsp; These two daemons should be run on the same host which acts as
 the
 network file server where production data files will reside on your
 site for optimal
@@ -415,6 +451,27 @@ listened to by the Pipeline file management daemon <span
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
 not
 specified, the port number will default to (53136).</span></h4>
+<h4 style="margin-left: 40px;"><b><a name="--notify-control-port"></a>--notify-control-port</b><span
+ style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
+<h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
+number of the network port (<span style="font-style: italic;">num</span>)
+listened to by the Pipeline directory change notification daemon <span
+ style="font-weight: bold;">plnotify</span>(1) for control
+requests.&nbsp; <br>
+</span></h4>
+<h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
+not
+specified, the port number will default to (53137).</span></h4>
+<h4 style="margin-left: 40px;"><b><a name="--notify-monitor-port"></a>--notify-monitor-port</b><span
+ style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
+<h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
+number of the network port (<span style="font-style: italic;">num</span>)
+listened to by the Pipeline directory change notification daemon <span
+ style="font-weight: bold;">plnotify</span>(1) monitoring requests.<br>
+</span></h4>
+<h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
+not
+specified, the port number will default to (53138).</span></h4>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--prod-dir"></a>--prod-dir</b>=<span style="font-style: italic;">dir</span></h4>
 <h4 style="font-weight: normal; margin-left: 80px;">The absolute path
@@ -495,7 +552,6 @@ configuration has been decided on to prevent accidental damage to your
 Pipeline license key and site profile.<br>
 </div>
 </div>
-<h4 style="font-weight: normal; margin-left: 80px;"></h4>
 <h3><a name="See_Also"></a>See Also<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Other
@@ -510,39 +566,131 @@ Software</span><br>
 <a href="#pipeline.profile">pipeline.profile</a><br>
 <a href="#pipeline.config">pipeline.config</a><br>
 </div>
-<h3>Author </h3>
-<blockquote><span style="font-weight: bold;"> Jim Callahan &lt;</span><a
- style="font-weight: bold;" href="mailto:jim@polaris.net">jim@polaris.net</a><span
- style="font-weight: bold;">&gt;</span>
-  <blockquote>Sole designer and author of <b>plconfig</b>(1).<br>
-  </blockquote>
-</blockquote>
+<h3><a name="Author"></a>Author<span style="font-weight: bold;"></span></h3>
+<div style="margin-left: 40px;">Created by <span
+ style="font-weight: bold;">Jim Callahan</span> of <a
+ href="http://temerity.us/"><span style="font-weight: bold;">Temerity
+Software</span></a>.</div>
 <h3><a name="Copyright"></a>Copyright<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Copyright
-(c) 2002, 2003, 2004 James M. Callahan.</span><br
- style="font-weight: bold;">
+(c) 2004 Temerity Software</span><br style="font-weight: bold;">
 </div>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
+<p>
+</p>
 <div style="margin-left: 40px;"> THE SOFTWARE IS PROVIDED "AS-IS" AND
 WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE, INCLUDING
 WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR FITNESS FOR A
-PARTICULAR PURPOSE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+PARTICULAR PURPOSE.
+<p> </p>
+</div>
+<div style="margin-left: 40px;"> IN NO EVENT SHALL TEMERITY SOFTWARE BE
+LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES
+OF ANY KIND, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA
+OR
+PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON
+ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE
+OR
+PERFORMANCE OF THIS SOFTWARE.<br>
+</div>
+<h3><span style="font-weight: bold;"></span><a name="License_Agreement"></a>License
+Agreement<br>
+</h3>
+<div style="margin-left: 40px;">
+<div style="text-align: center; font-weight: bold;">Temerity Software,
+Inc.<br>
+License Agreement<br>
+PIPELINE CONFIGURATION TOOL, VERSION 1.3.0<br>
+</div>
+<br style="font-weight: bold;">
+<span style="font-weight: bold;">TEMERITY SOFTWARE, INC ("Temerity") IS
+WILLING TO LICENSE THE PIPELINE CONFIGURATION TOOL, VERSION 1.3.0, TO
+LICENSEE ONLY UPON THE CONDITION THAT LICENSEE ACCEPTS ALL OF THE TERMS
+CONTAINED IN THIS LICENSE AGREEMENT ("AGREEMENT"). PLEASE READ THE
+TERMS AND CONDITIONS OF THIS AGREEMENTCAREFULLY. BY DOWNLOADING OR
+INSTALLING THIS SOFTWARE, LICENSEE ACCEPTS THE TERMS AND CONDITIONS OF
+THIS LICENSE AGREEMENT.</span><br>
+<br>
+<span style="font-weight: bold;">1. DEFINITIONS</span><br>
+"Software" means the Pipeline Configuration Tool, Version 1.3.0,
+software in binary and/or source code forms, any other machine readable
+materials (including, but not limited to, libraries, source files,
+header files, and data files), any user manuals, programming guides and
+other documentation provided to Licensee by Temerity under this
+Agreement.<br>
+<br>
+<span style="font-weight: bold;">2. LICENSE TO USE.</span> <br>
+Temerity grants you a non-exclusive and non-transferable license for
+the internal use only of Software.<br>
+<br>
+<span style="font-weight: bold;">3. RESTRICTIONS.</span> <br>
+Software is confidential and copyrighted. Title to Softwareand all
+associated intellectual property rights is retained by Temerity. You
+may not make copies of Software, other than a single copy of Software
+for archival purposes. Unless enforcement is prohibited by applicable
+law, you may not modify, decompile, or reverse engineer Software. No
+right, title or interest in or to any trademark, service mark, logo or
+trade name of Temerity or its licensors is granted under this Agreement.<br>
+<br>
+<span style="font-weight: bold;">4. GENERATED KEY.</span> <br>
+Upon successful execution of Software a license key data file ("Key")
+named "<a style="font-weight: bold;" href="#pipeline.key">pipeline.key</a>"
+is generated by Software.&nbsp; Key is confidential and all
+intellectual property rights to Key are retained by Temerity.&nbsp; You
+may not make copies of Key, other than a single copy of Key for
+archival purposes. Unless enforcement is prohibited by applicable law,
+you may not modify, decompile, or reverse engineer Key. Temerity grants
+Licensee a non-exclusive and non-transferable license for the internal
+use only of Key.<br>
+<br>
+<span style="font-weight: bold;">5. LIMITED WARRANTY.</span> <br>
+Temerity warrants to you that for a period of ninety (90) days from the
+date of purchase, as evidenced by a copy of the receipt, the media on
+which Software is furnished (if any) will be free of defects in
+materials and workmanship under normal use. Except for the foregoing,
+Software is provided "AS IS". Your exclusive remedy and Temerity's
+entire liability under this limited warranty will be at Temerity's
+option to replace Software media or <br>
+refund the fee paid for Software.<br>
+<br>
+<span style="font-weight: bold;">6. DISCLAIMER OF WARRANTY.</span> <br>
+UNLESS SPECIFIED IN THIS AGREEMENT, ALL EXPRESSOR IMPLIED CONDITIONS,
+REPRESENTATIONS AND WARRANTIES, INCLUDING ANY IMPLIEDWARRANTY OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT
+ARE DISCLAIMED, EXCEPT TO THE EXTENT THAT THESE DISCLAIMERSARE HELD TO
+BE LEGALLY INVALID.<br>
+<br>
+<span style="font-weight: bold;">7. LIMITATION OF LIABILITY. </span><br
+ style="font-weight: bold;">
+TO THE EXTENT NOT PROHIBITED BY LAW, IN NO EVENTWILL TEMERITY SOFTWARE
+BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR SPECIAL,
+INDIRECT, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES,HOWEVER CAUSED
+REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF ORRELATED TO THE
+USE OF OR INABILITY TO USE SOFTWARE, EVEN IF TEMERITY SOFTWARE HAS BEEN
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. In no event will Temerity's
+liability to you, whether in contract, tort (including negligence), or
+otherwise, exceed the amount paid by you for Software under this
+Agreement. The foregoing limitations will apply even if the above
+stated warranty fails of its essential purpose.<br>
+<br>
+<span style="font-weight: bold;">8. SEVERABILITY.</span> <br>
+If any provision of this Agreement is held to be unenforceable, this
+Agreement will remain in effect with the provision<br>
+omitted, unless omission would frustrate the intent of the parties, in
+which case this Agreement will immediately terminate.<br>
+<br>
+<span style="font-weight: bold;">9. INTEGRATION.</span> <br>
+This Agreement is the entire agreement between you and Temerity
+relating to its subject matter. It supersedes all prior or <br>
+contemporaneous oral or written communications, proposals,
+representations and warranties and prevails over any conflicting or
+additional terms of any quote, order, acknowledgment, or other
+communication between the parties relating to its subject matter during
+the term of this Agreement. No modification of this Agreement will be
+binding, unless in writing and signed by an authorized representative
+of each party.<br>
 <br>
 </div>
-<div style="margin-left: 40px;"> IN NO EVENT SHALL JAMES M. CALLAHAN BE
-LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES
-OF
-ANY KIND, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
-PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON
-ANY
-THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.</div>
-<blockquote> </blockquote>
-<blockquote> </blockquote>
-<br>
 <br>
 </body>
 </html>

@@ -7,9 +7,10 @@ PARSER_BEGIN(ConfigOptsParser)
 package us.temerity.plconfig;
 
 import java.util.*;
+import java.util.logging.*;
 import java.text.*;
 import java.io.*;
-import java.util.logging.*;
+import java.net.*;
 
 /*------------------------------------------------------------------------------------------*/
 /*   F I L E   M G R   O P T S   P A R S E R                                                */
@@ -57,36 +58,40 @@ PARSER_END(ConfigOptsParser)
 TOKEN :
 {       
   /* information options */ 
-  <HELP:           "--help">         
-| <HTML_HELP:      "--html-help">    
-| <VERSION:        "--version">      
-| <RELEASE_DATE:   "--release-date"> 
-| <COPYRIGHT:      "--copyright">    
+  <HELP:                 "--help">         		    
+| <HTML_HELP:      	 "--html-help">    		    
+| <VERSION:        	 "--version">      		    
+| <RELEASE_DATE:   	 "--release-date"> 		    
+| <COPYRIGHT:      	 "--copyright">    		    
+| <LICENSE:      	 "--license">    		    
+			 						    
+  /* global options */				    
+| <ROOT_DIR:       	 "--root-dir">      : PATH_SEP    
+			 						    
+| <EVALUATION:     	 "--evaluation">  		    
+| <ANNUAL:         	 "--annual">			    
+| <PERPETUAL:      	 "--perpetual">		    
+			 						    
+| <DOMAIN:         	 "--domain">        : HOSTNAME_SEP
+| <IP_ADDRS:       	 "--ip-addrs">      : IP_ADDRS_SEP
+| <HOME_DIR:       	 "--home-dir">      : PATH_SEP    
+| <TOOLSET_DIR:          "--toolset-dir">   : PATH_SEP
+| <TEMP_DIR:             "--temp-dir">      : PATH_SEP
 
-  /* global options */	
-| <ROOT_DIR:       "--root-dir">      : PATH_SEP
+| <MASTER_HOST:          "--master-host">   : HOSTNAME_SEP
+| <MASTER_PORT:          "--master-port">   : INTEGER_SEP
+| <NODE_DIR:             "--node-dir">      : PATH_SEP
 
-| <EVALUATION:     "--evaluation">  
-| <ANNUAL:         "--annual">
-| <PERPETUAL:      "--perpetual">
+| <FILE_HOST:            "--file-host">            : HOSTNAME_SEP
+| <FILE_PORT:            "--file-port">            : INTEGER_SEP
+| <NOTIFY_CONTROL_PORT:  "--notify-control-port">  : INTEGER_SEP
+| <NOTIFY_MONITOR_PORT:  "--notify-monitor-port">  : INTEGER_SEP
+| <PROD_DIR:             "--prod-dir">             : PATH_SEP
 
-| <DOMAIN:         "--domain">        : HOSTNAME_SEP
-| <HOME_DIR:       "--home-dir">      : PATH_SEP
-| <TOOLSET_DIR:    "--toolset-dir">   : PATH_SEP
-| <TEMP_DIR:       "--temp-dir">      : PATH_SEP
+| <CLASS_PATH:           "--class-path">    : SEARCH_PATH_SEP
+| <LIBRARY_PATH:         "--library-path">  : SEARCH_PATH_SEP
 
-| <MASTER_HOST:    "--master-host">   : HOSTNAME_SEP
-| <FILE_HOST:      "--file-host">     : HOSTNAME_SEP
-| <NODE_DIR:       "--node-dir">      : PATH_SEP
-
-| <MASTER_PORT:    "--master-port">   : INTEGER_SEP
-| <FILE_PORT:      "--file-port">     : INTEGER_SEP
-| <PROD_DIR:       "--prod-dir">      : PATH_SEP
-
-| <CLASS_PATH:     "--class-path">    : SEARCH_PATH_SEP
-| <LIBRARY_PATH:   "--library-path">  : SEARCH_PATH_SEP
-
-| <LOCK:           "--lock">
+| <LOCK:                 "--lock">
 
 
   /* seperators */ 
@@ -180,6 +185,27 @@ TOKEN :
 }
 
 
+/* IP address pattern arguments */ 
+<IP_ADDRS_SEP> 
+TOKEN :
+{
+  <EQ5:                    "=">   : IP_ADDRS_STATE
+| <MISSING_IP_ADDRS_ARG: ~["="]>  : IGNORE_STATE
+}
+
+<IP_ADDRS_STATE> 
+TOKEN :
+{
+  <NUMBER:        (["0"-"9"])+>
+| <DOT:           ".">
+| <STAR:          "*">
+| <OPEN_BRACE:    "[">
+| <CLOSE_BRACE:   "]">
+| <COMMA:         ",">
+| <DASH:          "-">
+| <WS2:           ([" ","\t"])+>   : DEFAULT
+}
+
 
 /*------------------------------------------------------------------------------------------*/
 /*   T O P   L E V E L                                                                      */
@@ -214,7 +240,7 @@ void
 InformationOpts() :
 {}
 {
-  (Help() | HtmlHelp() | Version() | ReleaseDate() | Copyright())
+  (Help() | HtmlHelp() | Version() | ReleaseDate() | Copyright() | License())
   {
     System.exit(0);
   }
@@ -270,6 +296,16 @@ Copyright() :
   }
 }
 
+void
+License() :
+{}
+{
+  <LICENSE> WS() 
+  { 
+    pApp.license(); 
+  }
+}
+
 
 
 /*------------------------------------------------------------------------------------------*/
@@ -283,16 +319,17 @@ GlobalOpts()
 {
   (RootDir() | 
    Evaluation() | Annual() | Perpetual() |
-   Domain() | HomeDir() | ToolsetDir() | TempDir() | 
+   Domain() | IpAddrs() | HomeDir() | ToolsetDir() | TempDir() | 
    MasterHost() | MasterPort() | NodeDir() | 
-   FileHost() | FilePort() | ProdDir() | 
+   FileHost() | FilePort() | NotifyControlPort() | NotifyMonitorPort() | ProdDir() | 
    ClassPath() | LibraryPath() | Lock())
   {}
 }
 
 
 void
-Domain() :
+Domain()
+  throws IllegalConfigException :
 {
   Token t;
 }
@@ -302,6 +339,137 @@ Domain() :
     pApp.setDomainName(t.image);
   }
 }
+
+
+void
+IpAddrs()
+  throws IllegalConfigException :
+{
+  int a[];
+  int b[];
+  int c[];
+  int d[];
+}
+{
+  <IP_ADDRS> EQ() 
+    a=AddrComp() <DOT> b=AddrComp() <DOT> c=AddrComp() <DOT> d=AddrComp()
+  { 
+    HashSet addrs = new HashSet();
+    
+    int ak, bk, ck, dk;
+    for(ak=0; ak<a.length; ak++) {
+      for(bk=0; bk<b.length; bk++) {
+	for(ck=0; ck<c.length; ck++) {
+	  for(dk=0; dk<d.length; dk++) {
+	    try {
+	      String name = (a[ak] + "." + b[bk] + "." + c[ck] + "." + d[dk]);
+	      addrs.add(InetAddress.getByName(name));
+	    }
+	    catch(UnknownHostException ex) {
+	    }
+	  }
+	}
+      }
+    }
+    
+    pApp.setIPAddrs(addrs);
+  }
+}
+
+int[] 
+AddrComp() : 
+{
+  int c[];
+}
+{
+  (c=AddrNumber() | c=AddrWildcard() | c=AddrPattern()) 
+  {
+    return c;
+  }
+}
+
+int[] 
+AddrNumber() : 
+{
+  Token t;
+}
+{
+  t=<NUMBER>
+  {
+    try {
+      int n = Integer.parseInt(t.image);
+      if((n < 0) || (n > 255))
+	throw new ParseException
+	  ("The IP address component (" + t.image + ") must be in the range: [0,255]!");      
+      int c[] = new int[1];
+      c[0] = n;
+
+      return c;
+    }
+    catch(NumberFormatException ex) {
+      throw new ParseException
+	("IP address component (" + t.image + ") was illegal!");      
+    }
+  }
+}
+
+int[] 
+AddrWildcard() : 
+{}
+{
+  <STAR>
+  {
+    int c[] = new int[256];
+    int wk;
+    for(wk=0; wk<c.length; wk++)
+      c[wk] = wk;
+
+    return c;
+  }
+}
+
+int[] 
+AddrPattern() : 
+{
+  ArrayList cs = new ArrayList();
+}
+{
+  <OPEN_BRACE> AddrPatternComp(cs) (<COMMA> AddrPatternComp(cs))* <CLOSE_BRACE>
+  {
+    int c[] = new int[cs.size()];
+    int wk;
+    for(wk=0; wk<c.length; wk++)
+      c[wk] = (Integer) cs.get(wk);
+
+    return c;
+  }
+}
+
+void 
+AddrPatternComp(ArrayList cs) : 
+{
+  int[] a;
+  int[] b = null;
+}
+{
+  a=AddrNumber() (<DASH> b=AddrNumber())?
+  {
+    if(b == null) {
+      cs.add(a[0]);
+    }
+    else {
+      if(a[0] > b[0]) 
+        throw new ParseException
+          ("The start of the IP address range (" + a[0] + ") was greater-than the end " + 
+	   "of the range (" + b[0] + ")!");
+      
+      int wk;
+      for(wk=a[0]; wk<=b[0]; wk++)     
+        cs.add(wk);
+    }
+  }  
+}
+
 
 void
 RootDir() 
@@ -458,6 +626,32 @@ FilePort()
 }
 
 void
+NotifyControlPort()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <NOTIFY_CONTROL_PORT> EQ() t=<INTEGER>
+  { 
+    pApp.setNotifyControlPort(new Integer(t.image));
+  }
+}
+
+void
+NotifyMonitorPort()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <NOTIFY_MONITOR_PORT> EQ() t=<INTEGER>
+  { 
+    pApp.setNotifyMonitorPort(new Integer(t.image));
+  }
+}
+
+void
 ProdDir() :
 {
   Token t;
@@ -518,7 +712,7 @@ WS() :
   Token t;
 }
 {
-  (t=<WS1>)
+  (t=<WS1> | t=<WS2>)
   { 
     return t; 
   }
@@ -531,7 +725,7 @@ EQ() :
   Token t;
 }
 {
-  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4>)
+  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5>)
   { 
     return t; 
   }
