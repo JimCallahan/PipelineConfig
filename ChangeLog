@@ -1,5 +1,22 @@
 2004-04-01  Jim Callahan  <jim@salamander>
 
+	* configure.ac, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in.in, src/java/us/temerity/plconfig/crypto/Makefile.in:
+	renamed CryptoApp.java.in to CryptoApp.java.in.in in order to get @VERSION@ replacement
+
+	* ChangeLog: latest
+
+	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
+	support for printing IPAddrs param
+
+	* src/java/us/temerity/plconfig/PackageInfo.java.in: added sLicense
+
+	* src/java/us/temerity/plconfig/ConfigApp.java, docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
+	added --ip-addr, --notify-control-port and --notify-monitor-port
+
+	* configure.ac: version 1.3.1
+
+2004-04-01  Jim Callahan  <jim@salamander>
+
 	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
 	support for printing IPAddrs param
 
