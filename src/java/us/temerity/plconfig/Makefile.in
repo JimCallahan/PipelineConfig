@@ -206,11 +206,11 @@ crypto-all:
 install: installdirs install-jar
 
 install-jar: $(TARGET)
-	$(INSTALL) -m 444 $< $(datadir)/jar/$<
+	$(INSTALL) -m 444 $< $(DESTDIR)$(datadir)/plconfig-$(VERSION)/$(TARGET)
 
 .PHONY: installdirs
 installdirs:
-	$(mkinstalldirs) $(datadir)/jar
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/plconfig-$(VERSION)
 
 
 #--------------------------------------------------------------------------------------------#
@@ -218,7 +218,7 @@ installdirs:
 uninstall: uninstall-jar
 
 uninstall-jar: 
-	rm -f $(prefix)/jar/$(TARGET)
+	rm -f $(DESTDIR)$(datadir)/plconfig-$(VERSION)/$(TARGET)
 
 
 #--------------------------------------------------------------------------------------------#
