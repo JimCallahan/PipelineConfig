@@ -168,7 +168,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
     ENUM_SOURCES = $(patsubst %,$(srcdir)/%.java,$(ENUMS))
 
     JAVA_SOURCES = $(ENUM_SOURCES) $(filter-out $(ENUM_SOURCES),$(ALL_SOURCES)) \
-                   PackageInfo.java CompanyPublicKey.java \
+                   PackageInfo.java Enigma.java \
                    $(patsubst %,%.java,$(PARSERS))
 
 
@@ -188,12 +188,12 @@ java-all: $(JAVA_SOURCES)
 	touch $@
 	rm -f $(top_builddir)/docs/javadoc/docs-all
 
-CompanyPublicKey.java: crypto-all
+Enigma.java: crypto-all
 
 .PHONY: crypto-all
 crypto-all:
 	$(MAKE) -C crypto all
-	rm -f CompanyPublicKey.class
+	rm -f Enigma.class
 
 %.java: %.jj
 	cp --force $(srcdir)/parser/ParseException.java .
@@ -242,7 +242,7 @@ clean-class:
 clean-aux:
 	rm -f ParseException.java SimpleCharStream.java Token.java TokenMgrError.java
 	rm -f PackageInfo.java
-	rm -f CompanyPublicKey.java
+	rm -f Enigma.java
 
 clean-parser:
 	@list='$(PARSERS)'; \
