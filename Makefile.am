@@ -18,7 +18,7 @@ EXTRA_DIST = \
 
 
 install-src: all
-	$(INSTALL_DATA) rpm/RPMS/i686/plconfig-1.1.0-1.i686.rpm \
+	$(INSTALL_DATA) rpm/plconfig-@VERSION@-i686-rpm.bin \
           $(PIPELINE_SOURCE_ROOT)/plconfig
 	$(INSTALL_DATA) src/java/us/temerity/plconfig/crypto/CryptoApp.class \
           $(PIPELINE_SOURCE_ROOT)/plconfig

@@ -1,10 +1,19 @@
 
 noinst_DATA = \
-  RPM/i686/plconfig-@VERSION@-1.i686.rpm
+  RPMS/i686/plconfig-@VERSION@-1.i686.rpm \
+  plconfig-@VERSION@-i686-rpm.bin
 
 
+plconfig-@VERSION@-i686-rpm.bin: RPMS/i686/plconfig-@VERSION@-1.i686.rpm header
+	rm -f $@
+	cat header RPMS/i686/plconfig-@VERSION@-1.i686.rpm > $@
+	chmod 555 $@
 
-RPM/i686/plconfig-@VERSION@-1.i686.rpm: SPECS/plconfig-@VERSION@.spec
+header: RPMS/i686/plconfig-@VERSION@-1.i686.rpm install-header
+	(cd RPMS/i686; checksum=`md5sum plconfig-@VERSION@-1.i686.rpm`; cd ../../; \
+         sed -e "s/@CHECKSUM@/$$checksum/g" install-header > header)
+
+RPMS/i686/plconfig-@VERSION@-1.i686.rpm: SPECS/plconfig-@VERSION@.spec
 	rpmbuild --rcfile rpmrc -bb SPECS/plconfig-@VERSION@.spec
 
 SPECS/plconfig-@VERSION@.spec: rpm-prep plconfig.spec
@@ -22,3 +31,4 @@ rpm-install:
 clean:
 	rm -f SPECS/plconfig-@VERSION@.spec 
 	rm -f RPM/i686/plconfig-@VERSION@-1.rpm
+

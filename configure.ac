@@ -490,6 +490,7 @@ AC_CONFIG_FILES([
 
   rpm/Makefile
   rpm/plconfig.spec
+  rpm/install-header
   rpm/rpmrc
   rpm/rpmmacros
 ])
