@@ -32,13 +32,13 @@ Options</span></a> section for details about the site specific
 parameters which can be configured.<br>
   <h4>Before You Start<br>
   </h4>
-Before running this program, a new user called "pipeline" who's user
-group is also called "pipeline" needs to be created at your site.&nbsp;
+Before running this program, a new user called (pipeline) who's user
+group is also called (pipeline) needs to be created at your site.&nbsp;
 The <span style="font-weight: bold;">plconfig</span>(1) program must
 be
-run as the "pipeline" user.&nbsp; This user will eventually be used
+run as the (pipeline) user.&nbsp; This user will eventually be used
 to run various daemon processes and other privileged programs which
-make up the Pipeline system.&nbsp; The "pipeline" user should be able
+make up the Pipeline system.&nbsp; The (pipeline) user should be able
 to login to
 all hosts which will run Pipeline programs with an identical user and
 group ID.&nbsp; Once a site configuration profile has been generated
@@ -75,12 +75,10 @@ display a set of dialogs which will walk you through the configuration
 process.<br>
   <br>
 Otherwise, <span style="font-weight: bold;">plconfig</span>(1) is run
-in command-line mode and requires a core set of options to be given<span
- style="font-weight: bold;"></span>
-which are marked as such in the <a
- href="file:///home/jim/code2/src/pipeline/docs/man/plkeygen.html#Global_Options"><span
- style="font-weight: bold;">Global
-Options</span></a> section.&nbsp; The non-required options are either
+in command-line mode and requires a core set of options described in
+the <a href="#Required_Options"><span style="font-weight: bold;">Required
+Options</span></a> section.&nbsp; The rest of the options are not
+required and the configuration parameters they control are either
 auto-detected by <span style="font-weight: bold;">plconfig</span>(1)
 or given reasonable default values.&nbsp; The choices for all
 configuration parameters will be printed by <span
@@ -97,7 +95,7 @@ installation directory (see <a href="#-root-dir"><span
 This file contains the license key for Pipeline for your site.&nbsp;
 This file
 is created with file access permissions which make it readable only by
-the "pipeline" user. This file should be zealously protected as it
+the (pipeline) user. This file should be zealously protected as it
 represents confidential information covered by the <span
  style="font-weight: bold;">Pipeline License Agreement</span>. Once
 Pipeline is installed, this file will be required in order to run the
@@ -140,7 +138,7 @@ Application Form</span>.&nbsp; Pipeline is distributed as an <a
 which are customized for your site.&nbsp; Once your license application
 as been processed, you will be sent an email containing the download
 location for this custom RPM for your site.&nbsp; <br>
-  <h4>System Prerequisites</h4>
+  <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
 version 2.4 or later) operating system.&nbsp; Support for other flavors
@@ -157,8 +155,10 @@ Otherwise, all other Pipeline operations are functional on non-Linux
 machines.<br>
   <br>
 Finally, both Pipeline client and server programs are heavily dependent
-on Java.&nbsp; The existence and locations of the following Java
-prerequisites are checked be <span style="font-weight: bold;">plconfig</span>(1)
+on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
+tool depends on at least a minimal Java Runtime Environment.&nbsp; The
+existence and locations of the following Java
+prerequisites are checked by <span style="font-weight: bold;">plconfig</span>(1)
 when run and can be customized by <span style="font-weight: bold;">plconfig</span>(1)
 options:<br>
   <br>
@@ -169,7 +169,10 @@ options:<br>
   </div>
   <div style="margin-left: 40px;"><br>
   <a href="http://java.sun.com/products/java-media/jai/"><span
- style="font-weight: bold;"></span></a><a>Java Advanced Imaging</a> <br>
+ style="font-weight: bold;"></span></a><a
+ href="http://java.sun.com/products/java-media/jai/"
+ style="font-weight: bold;">Java Advanced Imaging<span
+ style="font-weight: bold;"> </span></a><br>
   <div style="margin-left: 40px;">JAI (1.1.2 or later)<br>
 JAI Image I/O API (1.0 or later)<br>
   <br>
@@ -227,48 +230,60 @@ Options</h4>
 <h4 style="margin-left: 40px; font-weight: normal;">If run in
 non-graphical mode, the following set of options must be specified each
 time <span style="font-weight: bold;">plconfig</span>(1) is run. These
-options set the minimal <br>
+options control the minimal set of configuration parameters required
+for any site.<br>
 </h4>
 <h4 style="margin-left: 40px; font-weight: normal;"><b><a
  name="--root-dir"></a>--root-dir</b>=<span style="font-style: italic;">dir</span></h4>
-<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
+<h4 style="font-weight: normal; margin-left: 80px;">The path
 to the root installation directory (<span style="font-style: italic;">dir</span>)
 of Pipeline.&nbsp; All
 programs and data files which make up Pipeline will live under this
 directory when Pipeline is installed.&nbsp; This directory should
 reside on a network accessible file system such that all machines which
-will run Pipeline related programs can access the directory as (dir).</h4>
-<h4 style="font-weight: normal; margin-left: 40px;"><b><a
- name="--node-dir"></a>--node-dir</b>=<span style="font-style: italic;">dir</span></h4>
-<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
-to the root directory under which the persistent copies of Pipeline
-nodes and related information is stored.&nbsp; This directory should
-reside on a local file system on the host which will run the Pipeline
-master server <span style="font-weight: bold;">plmaster</span>(1)
-daemon (see <a href="--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;
+will run Pipeline related programs can access the directory as (dir). <br>
+</h4>
+<h4 style="font-weight: normal; margin-left: 80px;">This directory must
+exist and be writable by the "pipeline" user at the time <span
+ style="font-weight: bold;">plconfig</span>(1) is run.</h4>
+<h4 style="margin-left: 40px;"><a name="Non-Required_Options"></a>Non-Required
+Options</h4>
+<div style="margin-left: 40px;">If run in non-graphical mode, the
+following set of options are not required but may be used to customize
+the configuration parameters for your site which would otherwise be
+auto-detected or given default values.<br>
 <br>
-</h4>
-<h4 style="font-weight: normal; margin-left: 40px;"><b><a
- name="--prod-dir"></a>--prod-dir</b>=dir</h4>
-<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
-to the root directory
-under which all production data files will reside.&nbsp; In other
-words, the location where artists will save their work.&nbsp; This root
-production directory should reside on a network accessible
-file system such
-that all machines which will run Pipeline related programs can access
-the directory as (dir). For
-optimal performance this directory should reside on the
-same host which runs the file management daemon <span
- style="font-weight: bold;">plfilemgr</span>(1) (see <a
- href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>).&nbsp;
-<span style="font-style: italic;"></span><br>
-</h4>
+<span style="font-weight: bold;"><a name="--domain"></a>--domain</span>=<span
+ style="font-style: italic;">name</span><br>
+<div style="margin-left: 40px;"><br>
+The internet domain name of the site being configured such as
+(your-studio.com).&nbsp; Pipeline licenses are always site-wide and
+specific to a particular domain.<br>
+<br>
+If not specified, the domain name will be determined from the name of
+the machine running <span style="font-weight: bold;">plconfig</span>(1).<br>
+</div>
+</div>
+<h4 style="margin-left: 40px;"><b><a name="--home-dir"></a>--home-dir</b><span
+ style="font-weight: normal;">=</span><span
+ style="font-style: italic; font-weight: normal;">dir</span></h4>
+<div style="margin-left: 80px;">The absolute path to the parent
+directory of all user home
+directories.&nbsp; <br>
+<br>
+If not specified, this location is derived
+from the environment under which <span style="font-weight: bold;">plconfig</span>(1)
+is run or (/home) if the location cannot be determined from the
+environment.<br>
+<br>
+</div>
 <div style="margin-left: 40px;"><b><a name="--toolset-dir"></a>--toolset-dir</b>=<span
- style="font-style: italic;"><span style="font-style: italic;">dir<br>
-<br>
+ style="font-style: italic;"><span style="font-style: italic;">dir</span></span><br>
+<span style="font-style: italic;"><span style="font-style: italic;"></span></span></div>
+<div style="margin-left: 80px;"><span style="font-style: italic;"><span
+ style="font-style: italic;"><br>
 </span></span>
-<div style="margin-left: 40px;">The absolute path to the root directory
+The absolute path to the root directory
 (<span style="font-style: italic;">dir</span>) of the installed
 toolsets for the site.&nbsp; Toolsets represent named shell
 environments under which various Pipeline editors and jobs are
@@ -280,72 +295,134 @@ each machine which is kept consistent via some automated process such
 as <span style="font-weight: bold;">rdist</span>(1). In either case,
 this directory needs to be accessible from all machines which will run
 Pipeline related programs and have a consistent contents.<br>
-</div>
-<span style="font-style: italic;"><span style="font-style: italic;"><br>
-</span></span><b><a name="--master-host"></a>--master-host</b>=<span
- style="font-style: italic;"><span style="font-style: italic;">host</span></span><br>
 <br>
-<div style="margin-left: 40px;">The host name of the machine (host)
-which will run the Pipeline master server <span
- style="font-weight: bold;">plmaster</span>(1) daemon.&nbsp; This
+If not specified, the toolset directory will default to (/base/toolset).<br>
+<br>
+<br>
+</div>
+<h4 style="margin-left: 40px;"><b><a name="--master-host"></a>--master-host</b><span
+ style="font-weight: normal;">=</span><span
+ style="font-style: italic; font-weight: normal;"><span
+ style="font-style: italic;">host</span></span><br
+ style="font-weight: normal;">
+</h4>
+<div style="margin-left: 80px;"><span style="font-weight: normal;">The
+host name of the machine (<span style="font-style: italic;">host</span>)
+which will run the Pipeline master server </span>plmaster<span
+ style="font-weight: normal;">(1) daemon.&nbsp; This
 daemon should run on a host which can access the root node directory
-(see <a href="--node-dir"><span style="font-weight: bold;">--node-dir</span></a>)
+(see </span><a style="font-weight: bold;"
+ href="file:///home/jim/code2/src/plconfig/docs/man/--node-dir">--node-dir</a><span
+ style="font-weight: normal;">)
 on a local file system.&nbsp; The master server daemon is responsible
 for managing all Pipeline node operations including dispatching
 jobs.&nbsp; For optimal performance, the host which runs this daemon
 should be dedicated and have a fast network connection to the host
-running the Pipeline file management <span style="font-weight: bold;">plfilemgr</span>(1)
-daemon (see <a href="--file-host"><span style="font-weight: bold;">--file-host</span></a>).<span
- style="font-weight: bold;"></span><br>
-</div>
-<span style="font-style: italic;"><span style="font-style: italic;"><br>
-</span></span><b><a name="--file-host"></a>--file-host</b>=<span
- style="font-style: italic;">host<br>
+running the Pipeline file management </span>plfilemgr<span
+ style="font-weight: normal;">(1)
+daemon (see </span><a style="font-weight: bold;"
+ href="file:///home/jim/code2/src/plconfig/docs/man/--file-host">--file-host</a><span
+ style="font-weight: normal;">).&nbsp; <br>
 <br>
-</span>
-<div style="margin-left: 40px;">The host name of the machine (host)
+</span><span style="font-weight: normal;">If not specified, the master
+host will default to (localhost).<br>
+</span></div>
+<h4 style="margin-left: 40px;"><b><a name="--master-port"></a>--master-port</b><span
+ style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
+<div style="margin-left: 80px;">The number of the network port (<span
+ style="font-style: italic;">num</span>) listened to by the Pipeline
+master server <span style="font-weight: bold;">plmaster</span>(1)
+daemon.&nbsp; <br>
+<br>
+If not specified, the port number will default to (53135).<br>
+</div>
+<h4 style="font-weight: normal; margin-left: 40px;"><b><a
+ name="--node-dir"></a>--node-dir</b>=<span style="font-style: italic;">dir</span></h4>
+<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
+to the root directory under which the persistent copies of Pipeline
+nodes and node related information are stored.&nbsp; This directory
+should
+reside on a local file system on the host which will run the Pipeline
+master server <span style="font-weight: bold;">plmaster</span>(1)
+daemon (see <a
+ href="file:///home/jim/code2/src/plconfig/docs/man/--master-host"><span
+ style="font-weight: bold;">--master-host</span></a>).&nbsp; <br>
+</h4>
+<h4 style="font-weight: normal; margin-left: 80px;">If not specified,
+the node directory will default to (/usr/share/pipeline).</h4>
+<br>
+<br>
+<div style="margin-left: 40px;"><b><a name="--file-host"></a>--file-host</b><span
+ style="font-weight: normal;">=</span><span style="font-style: italic;"><span
+ style="font-weight: normal;">host</span></span><br>
+<span style="font-style: italic;"></span></div>
+<h4 style="margin-left: 40px;"></h4>
+<div style="margin-left: 80px;">The host name of the machine (host)
 which will run the Pipeline file management <span
  style="font-weight: bold;">plfilemgr</span>(1)
 daemon.&nbsp; This daemon should be run on the same host which acts as
 the
 network file server where production data files will reside on your
 site for optimal
-performance (see <a href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>).<span
- style="font-style: italic;"></span><br>
-<span style="font-style: italic;"></span></div>
-</div>
-<h4 style="margin-left: 40px;"><a name="Non-Required_Options"></a>Non-Required
-Options</h4>
-<div style="margin-left: 40px;">If run in non-graphical mode, the
-following set of options are not required but may be given to override
-auto-detected or default configuration values.<br>
-</div>
-<h4 style="margin-left: 40px;"><b><a name="--home-dir"></a>--home-dir</b><span
- style="font-weight: normal;">=</span><span
- style="font-style: italic; font-weight: normal;">dir</span></h4>
-<div style="margin-left: 80px;">The location where user home
-directories reside.&nbsp; If not specified, this location is derived
-from the value of the HOME environmental variable.<br>
-</div>
-<h4 style="margin-left: 40px;"><b><a name="--master-port"></a>--master-port</b><span
- style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
-<div style="margin-left: 80px;">The number of the network port (<span
- style="font-style: italic;">num</span>) listened to by the Pipeline
-master server <span style="font-weight: bold;">plmaster</span>(1)
-daemon.&nbsp; If not specified, the port number will be (53135).<br>
-</div>
+performance (see <a
+ href="file:///home/jim/code2/src/plconfig/docs/man/plconfig.html#--prod-dir"><span
+ style="font-weight: bold;">--prod-dir</span></a>). <br>
+<br>
+<span style="font-weight: normal;"></span><span
+ style="font-weight: normal;">If not specified, the file host will
+default to (localhost).</span></div>
 <h4 style="margin-left: 40px;"><b><a name="--file-port"></a>--file-port</b><span
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
 number of the network port (<span style="font-style: italic;">num</span>)
 listened to by the Pipeline file management daemon <span
- style="font-weight: bold;">plfilemgr</span>(1).&nbsp; If not
-specified, the port number will be (53136).</span><br>
+ style="font-weight: bold;">plfilemgr</span>(1).&nbsp; <br>
+</span></h4>
+<h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
+not
+specified, the port number will default to (53136).</span></h4>
+<h4 style="font-weight: normal; margin-left: 40px;"><b><a
+ name="--prod-dir"></a>--prod-dir</b>=<span style="font-style: italic;">dir</span></h4>
+<h4 style="font-weight: normal; margin-left: 80px;">The absolute path
+to the root directory
+under which all production data files will reside.&nbsp; In other
+words, the location where artists will save their work.&nbsp; This root
+production directory should reside on a network accessible
+file system such
+that all machines which will run Pipeline related programs can access
+the directory as (dir). For
+optimal performance this directory should reside on the
+same host which runs the file management daemon <span
+ style="font-weight: bold;">plfilemgr</span>(1) (see <a
+ href="file:///home/jim/code2/src/plconfig/docs/man/plconfig.html#--file-host"><span
+ style="font-weight: bold;">--file-host</span></a>). <br>
 </h4>
-<blockquote style="margin-left: 80px;"><span style="font-weight: bold;"><a
- href="http://www.gnu.org/software/autoconf/"><span
- style="font-weight: bold;"></span></a></span><span
- style="font-weight: bold;"> </span></blockquote>
+<h4 style="font-weight: normal; margin-left: 80px;">If not specified,
+the production directory will default to (/base/prod).</h4>
+<br>
+<br>
+<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
+ name="--class-path"></a>--class-path</span>=<span
+ style="font-style: italic;">path<br>
+</span>
+<div style="margin-left: 40px;"><br>
+An additional set of colon (:) seperated directories (<span
+ style="font-style: italic;">path</span>) to search for the Java
+prerequisites described in the <a href="#System_Prerequisites"><span
+ style="font-weight: bold;">System Prerequisites</span></a><span
+ style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>section.&nbsp;
+This (<span style="font-style: italic;">path</span>) is appended to the
+normal class search path for the <span style="font-weight: bold;">Java
+Runtime Environment</span> and the JAR file which make up the Pipeline
+distribution.&nbsp; Normally this option is not required as the JAR
+files for <span style="font-weight: bold;">JAI</span> and <span
+ style="font-weight: bold;">Java 3D</span> are usually installed in the
+same location as the <span style="font-weight: bold;">JRE</span>.&nbsp;
+This option is provided to support non-standard installations of these
+support packages.<br>
+</div>
+</div>
+<h4 style="font-weight: normal; margin-left: 80px;"></h4>
 <h3><a name="See_Also"></a>See Also<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Other

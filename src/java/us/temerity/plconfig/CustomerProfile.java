@@ -1,4 +1,4 @@
-// $Id: CustomerProfile.java,v 1.1 2004/03/17 21:50:31 jim Exp $
+// $Id: CustomerProfile.java,v 1.2 2004/03/18 00:56:47 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -42,7 +42,7 @@ class CustomerProfile
   )
     throws IOException
   {
-    pProfile = new HashMap<String,Object>();
+    pProfile = new TreeMap<String,Object>();
 
     try {
       read(file);
@@ -153,7 +153,7 @@ class CustomerProfile
     }
 
     /* decrypt the profile */ 
-    HashMap<String,Object> profile = null;
+    TreeMap<String,Object> profile = null;
     {
       /* retrieve the company's private key */ 
       PrivateKey privateKey = null;
@@ -187,7 +187,7 @@ class CustomerProfile
 	ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
 	ObjectInputStream in = new ObjectInputStream(bin);
-	pProfile = (HashMap<String,Object>) in.readObject();
+	pProfile = (TreeMap<String,Object>) in.readObject();
 	in.close();
       }
     }
@@ -226,7 +226,7 @@ class CustomerProfile
   /**
    * The customer profile table.
    */ 
-  private HashMap<String,Object>  pProfile;
+  private TreeMap<String,Object>  pProfile;
 }
 
 

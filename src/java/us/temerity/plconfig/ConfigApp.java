@@ -1,8 +1,9 @@
-// $Id: ConfigApp.java,v 1.1 2004/03/17 21:50:31 jim Exp $
+// $Id: ConfigApp.java,v 1.2 2004/03/18 00:56:47 jim Exp $
 
 package us.temerity.plconfig;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.security.*;
 import java.security.spec.*;
@@ -60,10 +61,236 @@ class ConfigApp
     pName = "plconfig";
     setPackedArgs(args);
 
-    pHomeDir    = new File("/home");
-    pMasterPort = 53135;
-    pFilePort   = 53136;
+    pProfile = new TreeMap<String,Object>();
+    {
+      pProfile.put("ToolsetDirectory", new File("/base/toolset"));
+      
+      pProfile.put("MasterHostname", "localhost");
+      pProfile.put("MasterPort",     53135);
+      pProfile.put("NodeDirectory",  new File("/usr/share/pipeline"));
+      
+      pProfile.put("FileHostname",        "localhost");
+      pProfile.put("FilePort",            53136);
+      pProfile.put("ProductionDirectory", new File("/base/prod"));
+    }
   }
+
+
+
+  /*----------------------------------------------------------------------------------------*/
+  /*   A C C E S S                                                                         */
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Get the titles of the configuration parameters. 
+   */
+  public Set<String>
+  getParameterTitles() 
+  {
+    return Collections.unmodifiableSet(pProfile.keySet());
+  }
+
+  /**
+   * Get the configuration parameter entry with the given title.
+   * 
+   * @return
+   *   The entry value or <CODE>null</CODE> if no entry with the given title exists.
+   */
+  public Object
+  getParameter
+  (
+   String name
+  )
+  {
+    return pProfile.get(name);
+  } 
+
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Get the root installation directory.
+   */
+  public File
+  getRootDirectory()
+  {
+    return (File) pProfile.get("RootInstallDirectory");
+  }
+
+  /**
+   * Set the root installation directory.
+   */
+  public void 
+  setRootDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    File canon = null;
+    try {
+      canon = dir.getCanonicalFile();
+    }
+    catch(IOException ex) {
+      throw new IllegalConfigException
+	  ("Unable to determine the absolute canonical path to the root installation " +
+	   "directory (" + dir + ")!");
+    }
+
+    if(!canon.exists()) 
+      throw new IllegalConfigException
+	  ("The root installation directory (" + dir + ") does not exist!");
+    
+    if(!canon.isDirectory())  
+      throw new IllegalConfigException
+	("The root installation directory (" + dir + ") is not a directory!");
+
+    if(!canon.canWrite()) 
+      throw new IllegalConfigException
+	("No write permission for the root installation directory (" + dir + ")!");
+
+    pProfile.put("RootInstallDirectory", canon);
+  }
+
+
+  
+  /**
+   * Set the site domain name.
+   */
+  public void 
+  setDomainName
+  (
+   String name
+  ) 
+  {
+    pProfile.put("DomainName", name);
+  }
+
+  /**
+   * Set the root user home directory.
+   */
+  public void 
+  setHomeDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("HomeDirectory", dir);
+  }
+
+  /**
+   * Set the root toolset directory.
+   */
+  public void 
+  setToolsetDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("ToolsetDirectory", dir);
+  }
+
+
+
+  /**
+   * Set the hostname which runs plmaster(1).
+   */
+  public void 
+  setMasterHostname
+  (
+   String host
+  ) 
+  {
+    pProfile.put("MasterHostname", host);
+  }
+
+  /**
+   * Set the the network port listened to by plmaster(1).
+   */
+  public void 
+  setMasterPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The master port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("MasterPort", num);
+  }
+
+  /**
+   * Set the root node directory.
+   */
+  public void 
+  setNodeDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("NodeDirectory", dir);
+  }
+
+
+
+  /**
+   * Set the portname which runs plfilemgr(1).
+   */
+  public void 
+  setFileHostname
+  (
+   String host
+  ) 
+  {
+    pProfile.put("FileHostname", host);
+  }
+
+  /**
+   * Set the network port listened to by plfilemgr(1).
+   */
+  public void 
+  setFilePort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The file port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("FilePort", num);
+  }
+
+  /**
+   * Set the root production directory.
+   */
+  public void 
+  setProdDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("ProductionDirectory", dir);
+  }
+
+
+
+  /**
+   * Set additional Java class path.
+   */
+  public void 
+  setClassPath
+  (
+   String path
+  ) 
+  {
+    pProfile.put("ClassPath", path);
+  }
+  
 
 
   
@@ -79,17 +306,17 @@ class ConfigApp
   {
     boolean success = false;
     try {
+      /* parse the command-line options */ 
       ConfigOptsParser parser = 
 	new ConfigOptsParser(new StringReader(pPackedArgs));
-      
       parser.setApp(this);
       parser.CommandLine();
       
       /* validate and complete the Pipeline configuration */ 
-      HashMap<String,Object> profile = config();
+      validate();
 
       /* generate the output files */ 
-      generate(profile);
+      generate();
 
       success = true;
     }
@@ -97,7 +324,7 @@ class ConfigApp
       handleParseException(ex);
     }
     catch(Exception ex) {
-      ex.printStackTrace(System.out);
+      //ex.printStackTrace(System.out);
       System.out.print("ERROR: " + ex.getMessage() + "\n");
     }
 
@@ -110,41 +337,120 @@ class ConfigApp
   /**
    * Validate and complete the Pipeline configuration. 
    */
-  private HashMap<String,Object> 
-  config()
-    throws ParseException, IllegalConfigException
+  private void
+  validate()
+    throws ParseException, IllegalConfigException, SocketException
   {
-    HashMap<String,Object> profile = new HashMap<String,Object>();
-
-    if(pRootDir == null) 
-      throw new ParseException("The --root-dir option is required!");
-    profile.put("RootDirectory", pRootDir);
-
-    if(pNodeDir == null) 
-      throw new ParseException("The --node-dir option is required!");
-
-    if(pProdDir == null) 
-      throw new ParseException("The --prod-dir option is required!");
-
-    if(pToolsetDir == null) 
-      throw new ParseException("The --toolset-dir option is required!");
-
-    if(pMasterHost == null) 
-      throw new ParseException("The --master-host option is required!");
-    
-    if(pFileHost == null) 
-      throw new ParseException("The --file-host option is required!");
-    
-
+    /* make sure we are "pipeline" */ 
     if(!System.getProperty("user.name").equals("pipeline")) 
       throw new IllegalConfigException
 	("The plconfig(1) tool must be run by the \"pipeline\" user!");
+
+    /* root installation directory */ 
+    if(getRootDirectory() == null) 
+      throw new ParseException("The --root-dir option is required!");
+
+    /* site domain name */ 
+    if(getParameter("DomainName") == null) {
+      TreeSet<String> domains = new TreeSet<String>();
+
+      Enumeration nets = NetworkInterface.getNetworkInterfaces();  
+      while(nets.hasMoreElements()) {
+	NetworkInterface net = (NetworkInterface) nets.nextElement();
+	Enumeration addrs = net.getInetAddresses();
+	while(addrs.hasMoreElements()) {
+	  InetAddress addr = (InetAddress) addrs.nextElement();
+	  String ip = addr.getHostAddress();
+	  if(!ip.equals("127.0.0.1")) {
+	    String host = addr.getCanonicalHostName();
+	    int idx = host.indexOf('.');
+	    domains.add(host.substring(idx+1));
+	  }
+	}
+      }
+
+      switch(domains.size()) {
+      case 0:
+	throw new IllegalConfigException
+	  ("The site domain name was not specified and could not be determined!\n" + 
+	   "You must explicitly specify the domain with the --domain option.");
+	
+      case 1:
+	for(String domain : domains) 
+	  pProfile.put("DomainName", domain);
+	break;
+
+      default:
+	{
+	  StringBuffer buf = new StringBuffer(); 
+	  buf.append("The site domain name was not specified and several domains where " +
+		     "detected:\n\n");
+
+	  for(String domain : domains) 
+	    buf.append("  " + domain + "\n");
+	  
+	  buf.append("\nYou must explicitly specify the domain with the --domain option.\n");
+
+	  throw new IllegalConfigException(buf.toString());
+	}	  
+      }
+    }
+
+    /* system information */ 
+    {
+      pProfile.put("JavaVendor",       System.getProperty("java.vm.vendor"));
+      pProfile.put("JavaName",         System.getProperty("java.vm.name"));
+      pProfile.put("JavaVersion",      System.getProperty("java.vm.version"));
+      pProfile.put("JavaClassVersion", System.getProperty("java.class.version"));
+      pProfile.put("JavaHome",         System.getProperty("java.home"));
+      pProfile.put("BootClassPath",    System.getProperty("sun.boot.class.path"));
+
+      pProfile.put("OS-Name",    System.getProperty("os.name"));
+      pProfile.put("OS-Version", System.getProperty("os.version"));
+      pProfile.put("OS-Arch",    System.getProperty("os.arch"));
+    }
+
+    /* home directory */ 
+    if(getParameter("HomeDirectory") == null) {
+      String home = System.getProperty("user.home"); 
+      if(home != null) {
+	if(home.endsWith("pipeline"))
+	  pProfile.put("HomeDirectory", home.substring(0, home.length() - 9));
+      }
+      else {
+	pProfile.put("HomeDirectory", "/home");
+      }
+    }
+
+    /* toolset directory */ 
+    {
+      File dir = (File) pProfile.get("ToolsetDirectory");
+      if(!dir.isAbsolute()) 
+	throw new IllegalConfigException
+	  ("The root toolset directory (" + dir + ") was not absolute!");
+    }
       
-    //System.getProperties().list(System.out);
+    /* node directory */ 
+    {
+      File dir = (File) pProfile.get("NodeDirectory");
+      if(!dir.isAbsolute()) 
+	throw new IllegalConfigException
+	  ("The root node directory (" + dir + ") was not absolute!");
+    }
+      
+    /* production directory */ 
+    {
+      File dir = (File) pProfile.get("ProductionDirectory");
+      if(!dir.isAbsolute()) 
+	throw new IllegalConfigException
+	  ("The root production directory (" + dir + ") was not absolute!");
+    }
 
-    // ...
+    /* java libraries */ 
+    {
+      // ... 
 
-    return profile;
+    }
   }
 
   
@@ -152,10 +458,7 @@ class ConfigApp
    * Generate and write the output files.
    */
   private void 
-  generate
-  (
-   HashMap<String,Object> profile
-  ) 
+  generate()
     throws 
            NoSuchAlgorithmException, 
            InvalidAlgorithmParameterException, 
@@ -209,7 +512,7 @@ class ConfigApp
 	ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
 	ObjectOutputStream out = new ObjectOutputStream(bout);
-	out.writeObject(profile);
+	out.writeObject(pProfile);
 	out.flush();
 	out.close();
 
@@ -226,7 +529,9 @@ class ConfigApp
 
     // DEBUG -------------
     {
-      CustomerProfile cp = new CustomerProfile(new File(pRootDir, "pipeline.profile"));
+      CustomerProfile cp = 
+	new CustomerProfile(new File(getRootDirectory(), "pipeline.profile"));
+
       System.out.print("CUSTOMER PROFILE:\n");
       for(String title : cp.getTitles()) 
 	System.out.print("  " + title + " = " + cp.getEntry(title) + "\n");
@@ -243,7 +548,7 @@ class ConfigApp
   ) 
     throws IOException
   {
-    File file = new File(pRootDir, "pipeline-license.key");
+    File file = new File(getRootDirectory(), "pipeline-license.key");
     if(file.exists() && !file.canWrite()) 
       throw new IOException
 	("Unable to write (" + file + ") because it has been locked!");
@@ -282,7 +587,7 @@ class ConfigApp
   ) 
     throws IOException
   {
-    File file = new File(pRootDir, "pipeline.profile");
+    File file = new File(getRootDirectory(), "pipeline.profile");
     if(file.exists() && !file.canWrite()) 
       throw new IOException
 	("Unable to write (" + file + ") because it has been locked!");
@@ -521,125 +826,6 @@ class ConfigApp
   }
 
 
-  /*----------------------------------------------------------------------------------------*/
-
-  /**
-   * Set the root installation directory.
-   */
-  public void 
-  setRootDir
-  (
-   File dir
-  ) 
-    throws IllegalConfigException
-  {
-    if(!dir.exists()) 
-      throw new IllegalConfigException
-	  ("The root install directory (" + dir + ") does not exist!");
-    
-    if(!dir.isDirectory())  
-      throw new IllegalConfigException
-	("The root install directory (" + dir + ") is not a directory!");
-
-    pRootDir = dir;
-  }
-  
-  /**
-   * Set the root node directory.
-   */
-  public void 
-  setNodeDir
-  (
-   File dir
-  ) 
-  {
-    pNodeDir = dir;
-  }
-
-  /**
-   * Set the root production directory.
-   */
-  public void 
-  setProdDir
-  (
-   File dir
-  ) 
-  {
-    pProdDir = dir;
-  }
-
-  /**
-   * Set the root toolset directory.
-   */
-  public void 
-  setToolsetDir
-  (
-   File dir
-  ) 
-  {
-    pToolsetDir = dir;
-  }
-
-  /**
-   * Set the root user home directory.
-   */
-  public void 
-  setHomeDir
-  (
-   File dir
-  ) 
-  {
-    pHomeDir = dir;
-  }
-
-  /**
-   * Set the  hostname which runs plmaster(1).
-   */
-  public void 
-  setMasterHost
-  (
-   String hostname
-  ) 
-  {
-    pMasterHost = hostname;
-  }
-
-  /**
-   * Set the the network port listened to by plmaster(1).
-   */
-  public void 
-  setMasterPort
-  (
-   int num
-  ) 
-  {
-    pMasterPort = num;
-  }
-
-  /**
-   * Set the portname which runs plfilemgr(1).
-   */
-  public void 
-  setFileHost
-  (
-   String hostname
-  ) 
-  {
-    pFileHost = hostname;
-  }
-
-  /**
-   * Set the network port listened to by plfilemgr(1).
-   */
-  public void 
-  setFilePort
-  (
-   int num
-  ) 
-  {
-    pFilePort = num;
-  }
-
 
   /*-- PARSING HELPERS ---------------------------------------------------------------------*/
   
@@ -823,49 +1009,10 @@ class ConfigApp
 
 
   /**
-   * The root installation directory.
+   * The customer profile table.
    */ 
-  private File pRootDir;
+  private TreeMap<String,Object>  pProfile;
 
-  /**
-   * The root node directory.
-   */ 
-  private File pNodeDir;
-
-  /**
-   * The root production directory.
-   */ 
-  private File pProdDir;
-
-  /**
-   * The root toolset directory.
-   */ 
-  private File pToolsetDir;
-
-  /**
-   * The root user home directory.
-   */ 
-  private File pHomeDir;
-
-  /**
-   * The hostname which runs plmaster(1).
-   */ 
-  private String pMasterHost;
-
-  /**
-   * The hostname which runs plfilemgr(1).
-   */ 
-  private String pFileHost;
-
-  /**
-   * The network port listened to by plmaster(1).
-   */ 
-  private int pMasterPort;
-
-  /**
-   * The network port listened to by plfilemgr(1).
-   */ 
-  private int pFilePort;
 }
 
 
