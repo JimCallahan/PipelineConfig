@@ -1,0 +1,29 @@
+Summary: The Pipeline configuration and license generator program
+Name: plconfig
+Version: @VERSION@
+Release: 1
+URL: http://us.temerity/pipeline
+License: Commercial
+Vendor: Temerity Software, Inc
+Group: Applications/Productivity
+BuildRoot: @RPM_ROOT@/BUILD
+
+%description
+This program is used by system administrators to generate a Pipeline configuration 
+profile and license key for their site. 
+
+
+%files
+%defattr(555,root,root)
+/usr/bin/plconfig
+
+%defattr(444,root,root)
+/usr/share/doc/plconfig-@VERSION@/plconfig.html
+/usr/share/plconfig-@VERSION@/plconfig.jar
+
+
+%changelog
+* Thu Mar 18 2004 Jim Callahan <jim@salamander>
+- Initial build.
+
+
