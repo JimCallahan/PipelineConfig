@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.19 2005/01/15 02:35:19 jim Exp $
+// $Id: ConfigApp.java,v 1.20 2005/03/11 01:39:08 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -162,9 +162,15 @@ class ConfigApp
     throws IllegalConfigException
   {
     try {
-      long now = TimeService.getTime();
-      pProfile.put("LicenseStart", new Date(now));
-      pProfile.put("LicenseEnd" ,  new Date(now + 2592000000L));
+      long start = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(start));
+      pProfile.put("LicenseStartStamp", new Long(start));
+
+      long end = start + 2592000000L;
+      pProfile.put("LicenseEnd" , new Date(end));
+      pProfile.put("LicenseEndStamp" , new Long(end));
+
+      pProfile.put("LicenseType", "30-Day Evaluation");
     }
     catch(IOException ex) {
       throw new IllegalConfigException(ex.getMessage());
@@ -179,9 +185,15 @@ class ConfigApp
     throws IllegalConfigException
   {
     try {
-      long now = TimeService.getTime();
-      pProfile.put("LicenseStart", new Date(now));
-      pProfile.put("LicenseEnd" ,  new Date(now + 30758400000L)); 
+      long start = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(start));
+      pProfile.put("LicenseStartStamp", new Long(start));
+
+      long end = start + 30758400000L;
+      pProfile.put("LicenseEnd" , new Date(end));
+      pProfile.put("LicenseEndStamp" , new Long(end));
+
+      pProfile.put("LicenseType", "Annual License");
     }
     catch(IOException ex) {
       throw new IllegalConfigException(ex.getMessage());
@@ -196,9 +208,14 @@ class ConfigApp
     throws IllegalConfigException
   {
     try {
-      long now = TimeService.getTime();
-      pProfile.put("LicenseStart", new Date(now));
-      pProfile.put("LicenseEnd" ,  new Date(Long.MAX_VALUE)); 
+      long start = TimeService.getTime();
+      pProfile.put("LicenseStart", new Date(start));
+      pProfile.put("LicenseStartStamp", new Long(start));
+
+      pProfile.put("LicenseEnd" , new Date(Long.MAX_VALUE));
+      pProfile.put("LicenseEndStamp" , Long.MAX_VALUE);
+
+      pProfile.put("LicenseType", "Perpetual License");
     }
     catch(IOException ex) {
       throw new IllegalConfigException(ex.getMessage());
