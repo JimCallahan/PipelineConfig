@@ -28,7 +28,16 @@ rpm-install:
 	DESTDIR=`pwd`/BUILD $(MAKE) -C ../src install
 	DESTDIR=`pwd`/BUILD $(MAKE) -C ../docs install
 
+
+install: all
+	$(INSTALL_PROGRAM) plconfig-@VERSION@-i686-rpm.bin \
+          $(PIPELINE_SOURCE_ROOT)/plconfig
+	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.class \
+          $(PIPELINE_SOURCE_ROOT)/plconfig
+
 clean:
 	rm -f SPECS/plconfig-@VERSION@.spec 
 	rm -f RPMS/i686/plconfig-@VERSION@-1.rpm
+
+
 
