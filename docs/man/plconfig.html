@@ -233,7 +233,7 @@ time <span style="font-weight: bold;">plconfig</span>(1) is run. These
 options control the minimal set of configuration parameters required
 for any site.<br>
 </h4>
-<h4 style="margin-left: 40px; font-weight: normal;"><b><a
+<h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--root-dir"></a>--root-dir</b>=<span style="font-style: italic;">dir</span></h4>
 <h4 style="font-weight: normal; margin-left: 80px;">The path
 to the root installation directory (<span style="font-style: italic;">dir</span>)
@@ -246,6 +246,20 @@ will run Pipeline related programs can access the directory as (dir). <br>
 <h4 style="font-weight: normal; margin-left: 80px;">This directory must
 exist and be writable by the "pipeline" user at the time <span
  style="font-weight: bold;">plconfig</span>(1) is run.</h4>
+<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
+ name="--evaluation"></a>--evaluation</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;"><a name="--anual"></a>--annual</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;"><a name="--perpetual"></a>--perpetual<br>
+</span>
+<div style="margin-left: 40px;"><br>
+Specifies the time period the Pipeline license will remain valid.&nbsp;
+An evaluation license is valid for 30-days. An annual license is valid
+for one year.&nbsp; A perpetual license is valid forever.&nbsp; One and
+only one of these options must be given.<br>
+</div>
+</div>
 <h4 style="margin-left: 40px;"><a name="Non-Required_Options"></a>Non-Required
 Options</h4>
 <div style="margin-left: 40px;">If run in non-graphical mode, the
@@ -256,9 +270,9 @@ auto-detected or given default values.<br>
 <span style="font-weight: bold;"><a name="--domain"></a>--domain</span>=<span
  style="font-style: italic;">name</span><br>
 <div style="margin-left: 40px;"><br>
-The internet domain name of the site being configured such as
-(your-studio.com).&nbsp; Pipeline licenses are always site-wide and
-specific to a particular domain.<br>
+The fully qualified domain name of the site for which Pipeline is being
+configured. For example, (your-studio.com).&nbsp; Pipeline licenses are
+always site-wide and specific to a particular internet domain.<br>
 <br>
 If not specified, the domain name will be determined from the name of
 the machine running <span style="font-weight: bold;">plconfig</span>(1).<br>
