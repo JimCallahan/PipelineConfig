@@ -201,11 +201,6 @@ crypto-all:
 	cp --force $(srcdir)/parser/TokenMgrError.java .
 	$(JAVA_CC) $<
 
-PackageInfo.java: PackageInfo.java.src
-	@echo Adding legal notices to: $@
-	awk -- '/@JAVA_LICENSE_STRING@/ { system("cat @top_srcdir@/docs/legal/java-@LICENSE_DOC@") } \
-               !/@JAVA_LICENSE_STRING@/ { print }' $< > $@
-
 
 #--------------------------------------------------------------------------------------------#
 

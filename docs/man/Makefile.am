@@ -6,12 +6,10 @@ html_DATA = \
   plid.html
 
 
-$(html_DATA): %.html: %.src.html copyright @LICENSE_DOC@
+$(html_DATA): %.html: %.src.html copyright
 	@echo Adding legal notices to: $@
 	@awk -- '/@COPYRIGHT@/ { system("cat copyright") } \
-               !/@COPYRIGHT@/ { print }' $< | \
-        awk -- '/@LICENSE@/ { system("cat @LICENSE_DOC@") } \
-               !/@LICENSE@/ { print }' > $@
+               !/@COPYRIGHT@/ { print }' $< > $@
 
 %: ../legal/%.html
 	@(cnt=`wc -l $< | awk '{print $$1}'`; \
@@ -19,5 +17,5 @@ $(html_DATA): %.html: %.src.html copyright @LICENSE_DOC@
 
 clean:
 	rm -f $(html_DATA) 
-	rm -f copyright @LICENSE_DOC@
+	rm -f copyright
 
