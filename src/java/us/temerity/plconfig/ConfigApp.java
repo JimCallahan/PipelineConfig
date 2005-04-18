@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.21 2005/03/11 06:09:58 jim Exp $
+// $Id: ConfigApp.java,v 1.22 2005/04/18 17:57:53 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1156,10 +1156,12 @@ class ConfigApp
        "  plconfig --copyright\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--host-ids][--home-dir=...] [--temp-dir=...]\n" + 
-       "  [--master-host=...] [--master-port=...] [node-dir=...]\n" + 
-       "  [--queue-host=...] [--queue-port=...] [-queue-dir=...] [--job-port=...]\n" + 
-       "  [--file-host=...] [--disable-cache] [--file-port=...] [--prod-dir=...]\n" +
+       "  [--pipeline-user=...] [--host-ids]\n" + 
+       "  [--home-dir=...] [--temp-dir=...]\n" + 
+       "  [--master-host=...] [--master-port=...] [--node-dir=...]\n" + 
+       "  [--file-host=...] [--file-port=...] [--prod-dir=...]\n" +
+       "  [--queue-host=...] [--queue-port=...] [--queue-dir=...]\n" + 
+       "  [--job-port=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--class-path] [--library-path]\n" +
        "\n" +  
