@@ -97,9 +97,11 @@ of the pipeline distribution built for your site (see <a
   <div style="margin-left: 40px;">This file contains the site specific
 configuration profile data which will be used build the custom Pipeline
 distribution for your site.&nbsp; The contents of
-this file will need to be pasted into the <span
- style="font-weight: bold;">Site Profile</span> section of the online <span
- style="font-weight: bold;">License Application Form</span>. <br>
+this file will need to be pasted&nbsp; (or uploaded) into the <span
+ style="font-weight: bold;">Customer Site Profile</span> section of the
+  <span style="font-weight: bold;">Customer Registration Form</span> on
+the <a href="http://www.temerity.us"><span style="font-weight: bold;">Temerity
+Software</span></a> website.&nbsp; <br>
   <br>
   </div>
   <span style="font-style: italic;"><a name="plconfig_settings.txt"></a></span><span
@@ -113,20 +115,15 @@ provided solely to document the configuration settings used to
 generating the other two files for your future reference.<br>
   <br>
   </div>
-Once you've decided on a configuration, you should run <span
- style="font-weight: bold;">plconfig</span>(1) one last time adding the
-  <a href="#--lock"><span style="font-weight: bold;">--lock</span></a>
-option the rest of your option choices. This option makes the above
-three file read-only to prevent any accidental destruction at a later
-date by running <span style="font-weight: bold;">plconfig</span>(1)
-again.<br>
   <h4><span style="font-weight: bold;"><a
  name="Obtaining_and_Installing_Pipeline"></a>Obtaining and Installing
 Pipeline</span></h4>
 Once you have successfully completed the configuration process above, a
 distribution of Pipeline configured for your site may be obtained by
-completing the <span style="font-weight: bold;">License
-Application Form</span>.&nbsp; Pipeline is distributed as a set of <a
+completing the <span style="font-weight: bold;"></span><span
+ style="font-weight: bold;">Customer Registration Form</span> on the <a
+ href="http://www.temerity.us/"><span style="font-weight: bold;">Temerity
+Software</span></a> website.&nbsp; Pipeline is distributed as a set of <a
  href="http://rpm.org/"><span style="font-weight: bold;">RPMs</span></a>
 which are customized for your site packaged as a self extracting shell
 archive.&nbsp; Once your license application
@@ -144,22 +141,34 @@ The name of the distribution file will have the following format: <br>
   <br>
 Where (customer) is a short name assigned by Temerity Software for your
 site, (version) is the Pipeline release version number and (date) is
-the date that the distribution was built.&nbsp;&nbsp; For example, a
-distribution of Pipeline 1.8.3 build for hypothetical Studio X on
-October 18, 2004 would be named:<br>
+the date that the site configuration was created.&nbsp;&nbsp; For
+example, a
+distribution of Pipeline 2.0.0 built for a configuration created by
+hypothetical Studio X on April 18, 2005 would be named:<br>
   <div style="margin-left: 40px;"><br>
-  <span style="font-family: monospace;">pipeline-studiox-1.8.3-041018.bin</span><br>
+  <span style="font-family: monospace;">pipeline-studiox-2.0.0-051018.bin</span><br>
   </div>
   <br>
 When executed, this example shell archive would create the following
 RPMs: <br>
   <br>
-  <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+  <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-050418/</span><span
  style="font-family: monospace;">pipeline-studiox-1.8.3-041018.i686.rpm<br>
-  </span><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
+  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-050418/</span><span
  style="font-family: monospace;">plmaster-studiox-1.8.3-041018.i686.rpm<br>
-  </span><span style="font-family: monospace;">pipeline-studiox-1.8.3-041018/</span><span
- style="font-family: monospace;">plqueumgr-studiox-1.8.3-041018.i686.rpm</span><span
+  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-050418/</span><span
+ style="font-family: monospace;">plqueumgr-studiox-1.8.3-041018.i686.rpm<br>
+  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-050418/</span><span
+ style="font-family: monospace;">plutils-</span><span
+ style="font-family: monospace;">studiox-1.8.3-041018.i686.rpm</span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span></div>
@@ -191,25 +200,28 @@ host specified by the <a href="#--queue-host"><span
  style="font-weight: bold;">--queue-host</span></a> option.&nbsp; All
 files will be installed under the directory specified by the <a
  href="#--queue-dir"><b><b>--queue-dir</b></b></a> option.<br>
+  <br>
+The "plutils" RPM contains some useful command-line utilities which are
+not a required part of the Pipeline distribution.&nbsp; This RPM should
+be installed on the same machine as the "pipeline" RPM as the binaries
+and documentation are installed in the usual Pipeline locations under
+the directory specified by <a href="#--root-dir"><span
+ style="font-weight: bold;">--root-dir</span></a>.<br>
   <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
-version 2.4 or later) operating system.&nbsp; Pipeline has been
-developed and tested on a Red Hat 9.0 environment.&nbsp; Support for
-other flavors
-of Linux or UNIX in general is possible but has not been tested.<br>
+version 2.4 or later) operating system.&nbsp; Pipeline was developed
+using a Red Hat 9.0 environment, but should be compatible with other
+flavors of Linux.&nbsp; <a href="http://www.redhat.com/fedora">Fedora
+Core 3</a> and <a href="http://www.redhat.com/software/rhel/">Red Hat
+Enterprise Linux</a> are known to be compatible. <br>
   <br>
-In order to enable the full functionality of the Pipeline command-line
-and graphical client programs, they must also be run on a Linux
-host.&nbsp; However, these client programs are written entirely in Java
-and may be run on any host which has a functional Java VM with some
-loss of functionality.&nbsp; The biggest limitation is that
-editor/viewer programs cannot be launched by non-Linux Pipeline
-clients.&nbsp;
-Otherwise, all other Pipeline operations are functional on non-Linux
-machines.<br>
+The preferred artist workstation environment is also one of the Linux
+versions mentioned above.&nbsp; Windows XP / 2000 and Mac OS X systems
+are also supported, but have some minor limitations in
+functionality.&nbsp;&nbsp; <br>
   <br>
-Finally, both Pipeline client and server programs are heavily dependent
+Finally, all Pipeline programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
 tool depends on at least the Java Runtime Environment.<br>
   <br>
@@ -246,7 +258,7 @@ JAI Image I/O API (1.0 or later)<br>
  style="font-weight: bold;"><a href="https://jogl.dev.java.net/">Java
 JOGL Library</a><br>
   </span>
-  <div style="margin-left: 40px;">Java OpenGL (1.1b07 or later)<br>
+  <div style="margin-left: 40px;">Java OpenGL (1.1b10 or later)<br>
   </div>
   </div>
   <h4><span style="font-weight: bold;"></span></h4>
@@ -283,19 +295,14 @@ software and exits.<br>
 <div style="margin-left: 40px;">
 <h4>Graphical Mode Option<br>
 </h4>
-<span style="font-weight: bold;"><a name="--graphical"></a><span
- style="color: rgb(204, 0, 0);">--graphical</span></span><br>
+<span style="font-weight: bold;"><a name="--graphical"></a>--graphical</span><br>
 <div style="margin-left: 40px;"><br>
-<span style="color: rgb(204, 0, 0);">Display a set of graphical dialogs
+Display a set of graphical dialogs
 which will walk you through the
 configuration process. If this option is given, it must be the only
-option to </span><span
- style="font-weight: bold; color: rgb(204, 0, 0);">plconfig</span><span
- style="color: rgb(204, 0, 0);">(1).&nbsp;
-If this option is not given, </span><span
- style="font-weight: bold; color: rgb(204, 0, 0);">plconfig</span><span
- style="color: rgb(204, 0, 0);">(1)
-will operate in non-graphical mode.</span><br>
+option to <span style="font-weight: bold;">plconfig</span>(1).&nbsp;
+If this option is not given, <span style="font-weight: bold;">plconfig</span>(1)
+will operate in non-graphical mode.<br>
 </div>
 </div>
 <h4 style="margin-left: 40px;"><a name="Required_Options"></a>Required
@@ -418,7 +425,8 @@ on a local file system.&nbsp; The master manager daemon is responsible
 for managing all Pipeline node operations including dispatching
 jobs.&nbsp; For optimal performance, the host which runs this daemon
 should be dedicated and have a fast network connection to the host
-running the Pipeline file management </span>plfilemgr<span
+running the Pipeline file management </span><span
+ style="font-weight: bold;">plfilemgr</span><span
  style="font-weight: normal;">(1)
 daemon (see </span><a style="font-weight: bold;" href="#--file-host">--file-host</a><span
  style="font-weight: normal;">).&nbsp; <br>
@@ -612,8 +620,8 @@ classes and providing loaded plugins to the other Pipeline programs.<span
 </span><span style="font-weight: normal;"><br>
 Note that a host ID for this host must be generate using <a
  href="plid.html"><span style="font-weight: bold;">plid</span></a>(1)
-and placed in the host IDs file passed to the <a
- href="plconfig.src.html#--host-ids"><span style="font-weight: bold;">--host-ids</span></a>
+and placed in the host IDs file passed to the <a href="#--host-ids"><span
+ style="font-weight: bold;">--host-ids</span></a>
 option.<br>
 <br>
 </span><span style="font-weight: normal;">If not specified, the file
@@ -649,7 +657,7 @@ normal class search path for the <span style="font-weight: bold;">Java
 Runtime Environment</span>. Normally this option is not required as the
 JAR
 files for <span style="font-weight: bold;">JAI</span> and <span
- style="font-weight: bold;">Java 3D</span> are usually installed in the
+ style="font-weight: bold;">JOGL</span> are usually installed in the
 same location as the <span style="font-weight: bold;">JRE</span>.&nbsp;
 This option is provided to support non-standard installations of these
 support packages.<br>
@@ -670,7 +678,7 @@ to the
 normal libaray search path for the <span style="font-weight: bold;">Java
 Runtime Environment</span>. Normally this option is not required as the
 native libraries for <span style="font-weight: bold;">JAI</span> and <span
- style="font-weight: bold;">Java 3D</span> are usually installed in the
+ style="font-weight: bold;">JOGL</span> are usually installed in the
 same location as the <span style="font-weight: bold;">JRE</span>.&nbsp;
 This option is provided to support non-standard installations of these
 support packages.<br>
