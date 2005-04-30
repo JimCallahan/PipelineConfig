@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.22 2005/04/18 17:57:53 jim Exp $
+// $Id: ConfigApp.java,v 1.23 2005/04/30 22:18:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -73,14 +73,17 @@ class ConfigApp
       
       pProfile.put("MasterHostname", "localhost");
       pProfile.put("MasterPort",     53135);
+      pProfile.put("MasterHeapSize", 536870912L);      
       pProfile.put("NodeDirectory",  new File("/usr/share/pipeline"));
       
       pProfile.put("FileHostname",        "localhost");
       pProfile.put("FilePort",            53136);
+      pProfile.put("FileHeapSize",        536870912L);  
       pProfile.put("ProductionDirectory", new File("/base/prod"));
 
       pProfile.put("QueueHostname",  "localhost");
       pProfile.put("QueuePort",      53139);
+      pProfile.put("QueueHeapSize",  536870912L);  
       pProfile.put("JobPort",        53140);
       pProfile.put("QueueDirectory", new File("/usr/share/pipeline"));
 
@@ -349,7 +352,7 @@ class ConfigApp
   }
 
   /**
-   * Set the the network port listened to by plmaster(1).
+   * Set the network port listened to by plmaster(1).
    */
   public void 
   setMasterPort
@@ -363,6 +366,20 @@ class ConfigApp
 	("The master port number (" + num + ") cannot be negative!");
        
     pProfile.put("MasterPort", num);
+  }
+
+  /**
+   * Set the maximum heap size of the Java VM running plmaster(1).
+   */
+  public void 
+  setMasterHeapSize
+  (
+   long size
+  ) 
+    throws IllegalConfigException
+  {
+    validateHeapSize(size, "master");
+    pProfile.put("MasterHeapSize", size); 
   }
 
   /**
@@ -419,6 +436,20 @@ class ConfigApp
   }
 
   /**
+   * Set the maximum heap size of the Java VM running plfilemgr(1).
+   */
+  public void 
+  setFileHeapSize
+  (
+   long size
+  ) 
+    throws IllegalConfigException
+  {
+    validateHeapSize(size, "file");
+    pProfile.put("FileHeapSize", size);
+  }
+
+  /**
    * Set the root production directory.
    */
   public void 
@@ -460,6 +491,20 @@ class ConfigApp
 	("The queue port number (" + num + ") cannot be negative!");
        
     pProfile.put("QueuePort", num);
+  }
+
+  /**
+   * Set the maximum heap size of the Java VM running plqueuemgr(1).
+   */
+  public void 
+  setQueueHeapSize
+  (
+   long size
+  ) 
+    throws IllegalConfigException
+  {
+    validateHeapSize(size, "queue");
+    pProfile.put("QueueHeapSize", size);
   }
 
   /**
@@ -1158,10 +1203,10 @@ class ConfigApp
        "OPTIONS:\n" +
        "  [--pipeline-user=...] [--host-ids]\n" + 
        "  [--home-dir=...] [--temp-dir=...]\n" + 
-       "  [--master-host=...] [--master-port=...] [--node-dir=...]\n" + 
-       "  [--file-host=...] [--file-port=...] [--prod-dir=...]\n" +
-       "  [--queue-host=...] [--queue-port=...] [--queue-dir=...]\n" + 
-       "  [--job-port=...]\n" + 
+       "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
+       "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
+       "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
+       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--class-path] [--library-path]\n" +
        "\n" +  
@@ -1463,6 +1508,18 @@ class ConfigApp
     case ConfigOptsParserConstants.USERNAME:
       return "a user name";
 
+    case ConfigOptsParserConstants.BYTE_SIZE:
+      return "a byte size";
+
+    case ConfigOptsParserConstants.KILO:
+      return "\"K\" kilobytes";
+
+    case ConfigOptsParserConstants.MEGA:
+      return "\"M\" megabytes";
+
+    case ConfigOptsParserConstants.GIGA:
+      return "\"G\" gigabytes";
+
     default: 
       if(printLiteral) 
 	return ConfigOptsParserConstants.tokenImage[kind];
@@ -1526,6 +1583,41 @@ class ConfigApp
   }
 
   
+
+  /*----------------------------------------------------------------------------------------*/
+  /*   H E L P E R S                                                                        */
+  /*----------------------------------------------------------------------------------------*/
+  
+  /**
+   * Validate a heap size value. 
+   * 
+   * @param size
+   *   The heap size. 
+   * 
+   * @param title
+   *   The title of the heap.
+   */ 
+  public void
+  validateHeapSize
+  (
+   long size, 
+   String title
+  )
+    throws IllegalConfigException
+  {
+    if(size < 0) 
+      throw new IllegalConfigException
+	("The " + title + " heap size (" + size + ") cannot be negative!");
+
+    if(size < 2097152) 
+      throw new IllegalConfigException
+	("The " + title + " heap size (" + size + ") must be at least (2M)!");
+      
+    if((size % 1024L) != 0) 
+      throw new IllegalConfigException
+	("The " + title + " heap size (" + size + ") must be a multiple of (1024)!");
+  }
+
 
 
   /*----------------------------------------------------------------------------------------*/

@@ -184,7 +184,8 @@ the site.<br>
 The "plmaster" RPM contains the directory structure and config files
 needed by the <span style="font-weight: normal;">Pipeline master </span><span
  style="font-weight: normal;">server daemon</span><span
- style="font-weight: normal;"> </span><span style="font-weight: bold;">plmaster</span><span
+ style="font-weight: normal;"> </span><span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
  style="font-weight: normal;">(1) and </span>must be installed on the
 host specified by the <a href="#--master-host"><span
  style="font-weight: bold;">--master-host</span></a> option.&nbsp; All
@@ -194,7 +195,8 @@ files will be installed under the directory specified by the <a
 The "plqueuemgr" RPM contains the directory structure and config files
 needed by the <span style="font-weight: normal;">Pipeline queue </span>management
   <span style="font-weight: normal;">daemon </span><span
- style="font-weight: normal;"></span><span style="font-weight: bold;">plmaster</span><span
+ style="font-weight: normal;"></span><span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
  style="font-weight: normal;">(1) and </span>must be installed on the
 host specified by the <a href="#--queue-host"><span
  style="font-weight: bold;">--queue-host</span></a> option.&nbsp; All
@@ -284,7 +286,7 @@ browser.&nbsp; </blockquote>
   </b><br>
   <div style="margin-left: 40px;"> Prints <a href="#Copyright"><span
  style="font-weight: bold;">copyright notice</span></a> for this
-software and exits.<br>
+software and exits. <br>
   <br>
   </div>
 </blockquote>
@@ -297,10 +299,20 @@ software and exits.<br>
 </h4>
 <span style="font-weight: bold;"><a name="--graphical"></a>--graphical</span><br>
 <div style="margin-left: 40px;"><br>
-Display a set of graphical dialogs
+Display a set of graphical configuration "wizard"
 which will walk you through the
-configuration process. If this option is given, it must be the only
-option to <span style="font-weight: bold;">plconfig</span>(1).&nbsp;
+configuration process.&nbsp; If any other options are given, they will
+override the default values displayed by the UI.&nbsp; This can be
+useful when editing a previously created configuration.&nbsp; The <a
+ style="font-weight: bold;" href="#plconfig_settings.txt">plconfig-settings.txt</a>
+file which is generated after each successful execution of <span
+ style="font-weight: bold;">plconfig</span>(1) contains the full
+command line&nbsp; options which specify the last configuration
+generated.&nbsp; By adding <span style="font-weight: bold;">--graphical</span>
+to these options, you can use the graphical mode to edit previous
+configuration parameters while preserving any settings you do not wish
+to change.<br>
+<br>
 If this option is not given, <span style="font-weight: bold;">plconfig</span>(1)
 will operate in non-graphical mode.<br>
 </div>
@@ -416,7 +428,8 @@ If not specified, the temporary directory will default to (/usr/tmp).<br>
 host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline master manager </span><span
  style="font-weight: normal;">daemon </span><span
- style="font-weight: bold;">plmaster</span><span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
  style="font-weight: normal;">(1).&nbsp; This
 daemon should run on a host which can access the root node directory
 (see </span><a style="font-weight: bold;" href="#--node-dir">--node-dir</a><span
@@ -426,7 +439,8 @@ for managing all Pipeline node operations including dispatching
 jobs.&nbsp; For optimal performance, the host which runs this daemon
 should be dedicated and have a fast network connection to the host
 running the Pipeline file management </span><span
- style="font-weight: bold;">plfilemgr</span><span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span><span
  style="font-weight: normal;">(1)
 daemon (see </span><a style="font-weight: bold;" href="#--file-host">--file-host</a><span
  style="font-weight: normal;">).&nbsp; <br>
@@ -443,10 +457,35 @@ host will default to (localhost).<br>
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
 <div style="margin-left: 80px;">The number of the network port (<span
  style="font-style: italic;">num</span>) listened to by the Pipeline
-master manager daemon <span style="font-weight: bold;">plmaster</span>(1).&nbsp;
+master manager daemon <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span>(1).&nbsp;
 <br>
 <br>
 If not specified, the port number will default to (53135).<br>
+</div>
+<h4 style="font-weight: normal; margin-left: 40px;"><span
+ style="font-weight: bold;"><a name="--master-mem"></a>--master-heap-size</span>=<span
+ style="font-style: italic;">bytes</span>[K|M|G]</h4>
+<div style="margin-left: 80px;">Sets the maximum heap size of the Java
+VM running the Pipeline master manager daemon <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
+ style="font-weight: normal;">(1)</span> to (<span
+ style="font-style: italic;">bytes</span>).&nbsp; For ideal
+performance, this size should be as large as possible without causing
+the host running <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
+ style="font-weight: normal;"></span>(1) to swap.&nbsp;&nbsp;&nbsp;
+This option directly sets the&nbsp;<a style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xmx</a>
+and indirectly specifies the <a style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xms</a>
+command line options to the Java VM which runs <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
+ style="font-weight: normal;"></span>(1).<br>
+<br>
+If not specified, the deault heap size is (512M).<br>
 </div>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--node-dir"></a>--node-dir</b>=<span style="font-style: italic;">dir</span></h4>
@@ -455,8 +494,10 @@ to the root directory under which the persistent copies of Pipeline
 nodes are stored.&nbsp; This directory
 should
 reside on a local file system on the host which will run<span
- style="font-weight: bold;"> plmaster</span>(1)&nbsp; (see <a
- href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>).&nbsp;
+ style="font-weight: bold;"> </span><span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
+ style="font-weight: normal;"></span>(1) (see <a href="#--master-host"><span
+ style="font-weight: bold;">--master-host</span></a>).&nbsp;
 <br>
 </div>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
@@ -470,7 +511,8 @@ the node directory will default to (/usr/share/pipeline).</h4>
 </span></span><span style="font-style: italic;"></span></div>
 <div style="margin-left: 80px;">The host name of the machine (host)
 which will run the Pipeline file manager daemon <span
- style="font-weight: bold;">plfilemgr</span>(1)<span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span>(1)<span
  style="font-weight: normal;"></span>.&nbsp;
 For optimal performance, this daemon should be run on the same host
 which acts as
@@ -478,7 +520,9 @@ the
 network file server where production data files will reside (see <a
  href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>).&nbsp;
 If local file acess is not possible or desireable, the <span
- style="font-weight: bold;">plfilemgr</span>(1) daemon should be run on
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span>(1)
+daemon should be run on
 a dedicated host which has the fastest possible network access to the
 production directories.<span style="font-weight: normal;"></span><br>
 <span style="font-weight: normal;"><br>
@@ -496,11 +540,38 @@ default to (localhost).<br>
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">The
 number of the network port (<span style="font-style: italic;">num</span>)
 listened to by the Pipeline file manager daemon <span
- style="font-weight: bold;">plfilemgr</span>(1).&nbsp; <br>
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span>(1).&nbsp;
+<br>
 </span></h4>
 <h4 style="margin-left: 80px;"><span style="font-weight: normal;">If
 not
 specified, the port number will default to (53136).</span></h4>
+<h4 style="font-weight: normal; margin-left: 40px;"><span
+ style="font-weight: bold;"><a name="--file-mem"></a>--file-heap-size</span>=<span
+ style="font-style: italic;">bytes</span>[K|M|G]</h4>
+<div style="margin-left: 80px;">Sets the maximum heap size of the Java
+VM running the Pipeline file manager daemon <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span><span
+ style="font-weight: normal;">(1)</span> to (<span
+ style="font-style: italic;">bytes</span>).&nbsp; For ideal
+performance, this size should be as large as possible without causing
+the host running <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span><span
+ style="font-weight: normal;"></span>(1) to swap.&nbsp;&nbsp; This
+option directly sets the&nbsp;<a style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xmx</a>
+and indirectly specifies the <a style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xms</a>
+command line options to the Java VM which runs <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster"><span
+ style="font-weight: bold;"></span></a><a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a><span
+ style="font-weight: bold;"></span>(1).<br>
+<br>
+If not specified, the deault heap size is (512M).<br>
+</div>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--prod-dir"></a>--prod-dir</b>=<span style="font-style: italic;">dir</span></h4>
 <h4 style="font-weight: normal; margin-left: 80px;">The absolute path
@@ -514,7 +585,8 @@ the directory as (dir). <br>
 </h4>
 <div style="margin-left: 80px;">For
 optimal performance this directory should reside on the
-same host which runs the <span style="font-weight: bold;">plfilemgr</span>(1)
+same host which runs the <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span>(1)
 <span style="font-weight: normal;">daemon</span> (see <a
  href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>)
 although this is not required.
@@ -530,13 +602,18 @@ the production directory will default to (/base/prod).</h4>
 <div style="margin-left: 40px;"><br>
 The host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline queue manager daemon <span
- style="font-weight: bold;">plqueuemgr</span>(1).&nbsp; This
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span>(1).&nbsp;
+This
 daemon assigns jobs from the queue to the hosts running the job
-execution <span style="font-weight: bold;">pljobmgr</span>(1)
+execution <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=pljobmgr">pljobmgr</a></span>(1)
 daemons.&nbsp; It also provides information about the status of these
 jobs to both <span style="font-weight: normal;">the Pipeline master
-server </span><span style="font-weight: bold;">plmaster</span><span
- style="font-weight: normal;">(1) and <span style="font-weight: bold;">plui</span>(1)
+server </span><span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a></span><span
+ style="font-weight: normal;">(1) and <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plui">plui</a></span>(1)
 client programs.<br>
 </span><span style="font-weight: normal;"><br>
 Note that a host ID for this host must be generate using <a
@@ -568,6 +645,30 @@ If
 not
 specified, the port number will default to (53139).</span></div>
 </div>
+<h4 style="font-weight: normal; margin-left: 40px;"><span
+ style="font-weight: bold;"><a name="--queue-mem"></a>--queue-heap-size</span>=<span
+ style="font-style: italic;">bytes</span>[K|M|G]</h4>
+<div style="margin-left: 80px;">Sets the maximum heap size of the Java
+VM running the Pipeline queue manager daemon <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span><span
+ style="font-weight: normal;">(1)</span> to (<span
+ style="font-style: italic;">bytes</span>).&nbsp; For ideal
+performance, this size should be as large as possible without causing
+the host running <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span>(1)
+to swap.&nbsp;&nbsp; This option directly sets the <a
+ style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xmx</a>
+and indirectly specifies the <a style="font-weight: bold;"
+ href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/java.html#Xms">-Xms</a>
+command line options to the Java VM which runs <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span><span
+ style="font-weight: normal;">(1).</span><br>
+<br>
+If not specified, the deault heap size is (512M).<br>
+</div>
 <div style="margin-left: 40px;"><br>
 <span style="font-weight: bold;"><a name="--job-port"></a>--job-port</span>=<span
  style="font-style: italic;">num</span><br>
@@ -575,7 +676,10 @@ specified, the port number will default to (53139).</span></div>
 The
 number of the network port (<span style="font-style: italic;">num</span>)
 listened to by the Pipeline job execution<span
- style="font-weight: bold;"> pljobmgr</span>(1)</span><span
+ style="font-weight: bold;"> </span></span><span
+ style="font-weight: bold;"></span><a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=pljobmgr">pljobmgr</a><span
+ style="font-weight: normal;"><span style="font-weight: bold;"></span>(1)</span><span
  style="font-weight: normal;"> daemon</span><span
  style="font-weight: normal;">s.&nbsp; Each host which executes jobs on
 behalf of the Pipeline job queue will run this daemon.</span><br>
@@ -595,7 +699,8 @@ under which all queue related data files will reside.&nbsp; This
 directory
 should
 reside on a local file system on the host which will run the Pipeline
-queue manager daemon <span style="font-weight: bold;">plqueuemgr</span>(1)
+queue manager daemon <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span>(1)
 (see <a href="#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>).&nbsp;
 <br>
 <br>
@@ -613,7 +718,9 @@ the node directory will default to (/usr/share/pipeline).<br>
 <div style="margin-left: 40px;"><br>
 The host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline plugin manager daemon <span
- style="font-weight: bold;">plqueuemgr</span>(1).&nbsp; This daemon is
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span>(1).&nbsp;
+This daemon is
 responsible for loading plugin
 classes and providing loaded plugins to the other Pipeline programs.<span
  style="font-weight: normal;"><br>

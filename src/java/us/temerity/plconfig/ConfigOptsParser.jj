@@ -65,36 +65,39 @@ TOKEN :
 | <COPYRIGHT:      	 "--copyright">    		    
 			 						    
   /* global options */				    
-| <ROOT_DIR:       	 "--root-dir">      : PATH_SEP    
-			 						    
-| <EVALUATION:     	 "--evaluation">  		    
-| <ANNUAL:         	 "--annual">			    
-| <PERPETUAL:      	 "--perpetual">		    
-			 						    
-| <HOST_IDS:         	 "--host-ids">      : PATH_SEP
-| <HOME_DIR:       	 "--home-dir">      : PATH_SEP    
-| <TEMP_DIR:             "--temp-dir">      : PATH_SEP
+| <ROOT_DIR:       	 "--root-dir">          : PATH_SEP    
+			 		   				    
+| <EVALUATION:     	 "--evaluation">   		    
+| <ANNUAL:         	 "--annual">	   		    
+| <PERPETUAL:      	 "--perpetual">	   	    
+			 		   				    
+| <HOST_IDS:         	 "--host-ids">          : PATH_SEP
+| <HOME_DIR:       	 "--home-dir">          : PATH_SEP    
+| <TEMP_DIR:             "--temp-dir">          : PATH_SEP
 
-| <MASTER_HOST:          "--master-host">   : HOSTNAME_SEP
-| <MASTER_PORT:          "--master-port">   : INTEGER_SEP
-| <NODE_DIR:             "--node-dir">      : PATH_SEP
+| <MASTER_HOST:          "--master-host">       : HOSTNAME_SEP
+| <MASTER_PORT:          "--master-port">       : INTEGER_SEP
+| <MASTER_HEAP_SIZE:     "--master-heap-size">  : BYTE_SIZE_SEP
+| <NODE_DIR:             "--node-dir">          : PATH_SEP
 
-| <FILE_HOST:            "--file-host">            : HOSTNAME_SEP
-| <FILE_PORT:            "--file-port">            : INTEGER_SEP
-| <PROD_DIR:             "--prod-dir">             : PATH_SEP
+| <FILE_HOST:            "--file-host">         : HOSTNAME_SEP
+| <FILE_PORT:            "--file-port">         : INTEGER_SEP
+| <FILE_HEAP_SIZE:       "--file-heap-size">    : BYTE_SIZE_SEP
+| <PROD_DIR:             "--prod-dir">          : PATH_SEP
 
-| <QUEUE_HOST:           "--queue-host">   : HOSTNAME_SEP
-| <QUEUE_PORT:           "--queue-port">   : INTEGER_SEP
-| <JOB_PORT:             "--job-port">     : INTEGER_SEP
-| <QUEUE_DIR:            "--queue-dir">    : PATH_SEP
+| <QUEUE_HOST:           "--queue-host">        : HOSTNAME_SEP
+| <QUEUE_PORT:           "--queue-port">        : INTEGER_SEP
+| <QUEUE_HEAP_SIZE:      "--queue-heap-size">   : BYTE_SIZE_SEP
+| <JOB_PORT:             "--job-port">          : INTEGER_SEP
+| <QUEUE_DIR:            "--queue-dir">         : PATH_SEP
 
-| <PLUGIN_HOST:          "--plugin-host">  : HOSTNAME_SEP
-| <PLUGIN_PORT:          "--plugin-port">  : INTEGER_SEP
+| <PLUGIN_HOST:          "--plugin-host">       : HOSTNAME_SEP
+| <PLUGIN_PORT:          "--plugin-port">       : INTEGER_SEP
 
-| <CLASS_PATH:           "--class-path">    : SEARCH_PATH_SEP
-| <LIBRARY_PATH:         "--library-path">  : SEARCH_PATH_SEP
+| <CLASS_PATH:           "--class-path">        : SEARCH_PATH_SEP
+| <LIBRARY_PATH:         "--library-path">      : SEARCH_PATH_SEP 
 
-| <PIPELINE_USER:        "--pipeline-user">   : USERNAME_SEP
+| <PIPELINE_USER:        "--pipeline-user">     : USERNAME_SEP
 
 
   /* seperators */ 
@@ -206,6 +209,27 @@ TOKEN :
 }
 
 
+/* byte size arguments */ 
+<BYTE_SIZE_SEP> 
+TOKEN :
+{
+  <EQ6:                     "=">   : BYTE_SIZE_STATE
+| <MISSING_BYTE_SIZE_ARG: ~["="]>  : IGNORE_STATE
+}
+
+<BYTE_SIZE_STATE> 
+TOKEN :
+{
+  <BYTE_SIZE:         (["0"-"9"])+>   
+| <KILO:              ["k","K"]>                      : DEFAULT
+| <MEGA:              ["m","M"]>                      : DEFAULT
+| <GIGA:              ["g","G"]>                      : DEFAULT
+| <MISSING_BYTE_SIZE: [" ","\t"]>                     : IGNORE_STATE
+| <ILLEGAL_BYTE_SIZE: (~["k","K","m","M","g","G"])+>  : IGNORE_STATE
+}
+
+
+
 /*------------------------------------------------------------------------------------------*/
 /*   T O P   L E V E L                                                                      */
 /*------------------------------------------------------------------------------------------*/
@@ -309,9 +333,9 @@ GlobalOpts()
   (RootDir() | 
    Evaluation() | Annual() | Perpetual() |
    HostIDs() | HomeDir() | TempDir() | 
-   MasterHost() | MasterPort() | NodeDir() | 
-   FileHost() | FilePort() | ProdDir() | 
-   QueueHost() | QueuePort() | JobPort() | QueueDir() | 
+   MasterHost() | MasterPort() | MasterHeapSize() | NodeDir() | 
+   FileHost() | FilePort() | FileHeapSize() | ProdDir() | 
+   QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | 
    ClassPath() | LibraryPath() | 
    PipelineUser()) 
@@ -438,6 +462,19 @@ MasterPort()
 }
 
 void
+MasterHeapSize()
+  throws IllegalConfigException :
+{
+  long size;
+}
+{
+  <MASTER_HEAP_SIZE> EQ() size=ByteSize()
+  { 
+    pApp.setMasterHeapSize(size);
+  }
+}
+
+void
 NodeDir() :
 {
   Token t;
@@ -476,6 +513,19 @@ FilePort()
 }
 
 void
+FileHeapSize()
+  throws IllegalConfigException :
+{
+  long size;
+}
+{
+  <FILE_HEAP_SIZE> EQ() size=ByteSize()
+  { 
+    pApp.setFileHeapSize(size);
+  }
+}
+
+void
 ProdDir() :
 {
   Token t;
@@ -510,6 +560,19 @@ QueuePort()
   <QUEUE_PORT> EQ() t=<INTEGER>
   { 
     pApp.setQueuePort(new Integer(t.image));
+  }
+}
+
+void
+QueueHeapSize()
+  throws IllegalConfigException :
+{
+  long size;
+}
+{
+  <QUEUE_HEAP_SIZE> EQ() size=ByteSize()
+  { 
+    pApp.setQueueHeapSize(size);
   }
 }
 
@@ -608,6 +671,56 @@ PipelineUser()
 
 
 
+long 
+ByteSize()
+  throws IllegalConfigException :
+{
+  Token t; 
+  long scale = 1L;
+}
+{
+  t=<BYTE_SIZE> (scale=Kilo() | scale=Mega() | scale=Giga())?
+  {
+    try {
+      return Long.parseLong(t.image) * scale;
+    }
+    catch(NumberFormatException ex) {
+      throw new IllegalConfigException(ex.getMessage());
+    }
+  }
+}
+
+long 
+Kilo() :
+{}
+{
+  <KILO> 
+  {
+    return 1024L;
+  }
+}
+
+long 
+Mega() :
+{}
+{
+  <MEGA> 
+  {
+    return 1048576L;
+  }
+}
+
+long 
+Giga() :
+{}
+{
+  <GIGA> 
+  {
+    return 1073741824L;
+  }
+}
+
+
 /*------------------------------------------------------------------------------------------*/
 /*   S H A R E D   T O K E N S                                                              */
 /*------------------------------------------------------------------------------------------*/
@@ -631,7 +744,7 @@ EQ() :
   Token t;
 }
 {
-  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5>)
+  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5> | t=<EQ6>)
   { 
     return t; 
   }
