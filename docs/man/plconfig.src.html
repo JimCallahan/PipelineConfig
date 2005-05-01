@@ -43,7 +43,7 @@ to run various daemon processes and other privileged programs which
 make up the Pipeline system.&nbsp; The (pipeline) user should be able
 to login to
 all hosts which will run Pipeline programs with an identical user and
-group ID.&nbsp; Once a site configuration profile has been generated
+group ID.&nbsp; Once a site profile has been generated
 using <span style="font-weight: bold;">plconfig</span>(1), the user
 ID and group ID for this user should not be modified.<code><span
  style="font-style: italic;"></span></code><br>
@@ -91,17 +91,18 @@ of the pipeline distribution built for your site (see <a
  style="font-weight: bold;"></span><br>
   <span style="font-weight: bold;"></span></div>
   <span style="font-weight: bold;"><br>
-  </span> <span style="font-style: italic;"><a name="customer_profile"></a></span><span
- style="font-weight: bold;">plconfig/customer-profile</span><br>
+  </span> <span style="font-style: italic;"><a name="site_profile"></a></span><span
+ style="font-weight: bold;">plconfig/site-profile</span><br>
   <br>
   <div style="margin-left: 40px;">This file contains the site specific
 configuration profile data which will be used build the custom Pipeline
 distribution for your site.&nbsp; The contents of
 this file will need to be pasted&nbsp; (or uploaded) into the <span
- style="font-weight: bold;">Customer Site Profile</span> section of the
-  <span style="font-weight: bold;">Customer Registration Form</span> on
-the <a href="http://www.temerity.us"><span style="font-weight: bold;">Temerity
-Software</span></a> website.&nbsp; <br>
+ style="font-weight: bold;">Site Profile</span> section of either the <a
+ href="https://ez4.ez-web-hosting.com/%7Etemerity/products/pipeline/register.php"><span
+ style="font-weight: bold;">Customer Registration Form</span></a> or <a
+ href="http://www.temeity.us/company/customer-profile.php"><span
+ style="font-weight: bold;">Customer Profile</span></a> page.<br>
   <br>
   </div>
   <span style="font-style: italic;"><a name="plconfig_settings.txt"></a></span><span
@@ -118,13 +119,21 @@ generating the other two files for your future reference.<br>
   <h4><span style="font-weight: bold;"><a
  name="Obtaining_and_Installing_Pipeline"></a>Obtaining and Installing
 Pipeline</span></h4>
-Once you have successfully completed the configuration process above, a
+Once you have successfully completed the configuration process above,
+an evaluation
 distribution of Pipeline configured for your site may be obtained by
-completing the <span style="font-weight: bold;"></span><span
- style="font-weight: bold;">Customer Registration Form</span> on the <a
- href="http://www.temerity.us/"><span style="font-weight: bold;">Temerity
-Software</span></a> website.&nbsp; Pipeline is distributed as a set of <a
- href="http://rpm.org/"><span style="font-weight: bold;">RPMs</span></a>
+completing the <span style="font-weight: bold;"></span> <a
+ href="https://ez4.ez-web-hosting.com/%7Etemerity/products/pipeline/register.php"><span
+ style="font-weight: bold;">Customer Registration Form</span></a>
+.&nbsp; Existing customers may modity their existing site configuration
+and obtain an updated distribution of Pipeline using the <a
+ href="http://www.temeity.us/company/customer-profile.php"><span
+ style="font-weight: bold;">Customer Profile</span></a> page.<a
+ href="https://ez4.ez-web-hosting.com/%7Etemerity/products/pipeline/register.php"><span
+ style="font-weight: bold;"></span></a>&nbsp; <br>
+  <br>
+Pipeline is distributed as a set of <a href="http://rpm.org/"><span
+ style="font-weight: bold;">RPMs</span></a>
 which are customized for your site packaged as a self extracting shell
 archive.&nbsp; Once your license application
 as been processed, you will be sent an email containing the download
@@ -155,23 +164,34 @@ RPMs: <br>
   <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
  style="font-family: monospace;">-050418/</span><span
- style="font-family: monospace;">pipeline-studiox-1.8.3-041018.i686.rpm<br>
-  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;"><br>
+  </span>
+  <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-050418/</span><span
- style="font-family: monospace;">plmaster-studiox-1.8.3-041018.i686.rpm<br>
-  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">-041018.i686.rpm</span><br>
+  <span style="font-family: monospace;"></span></div>
+  <span style="font-family: monospace;"> </span>
+  <div style="margin-left: 40px;"><span style="font-family: monospace;"></span><span
+ style="font-family: monospace;">plmaster-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-050418/</span><span
- style="font-family: monospace;">plqueumgr-studiox-1.8.3-041018.i686.rpm<br>
-  </span><span style="font-family: monospace;">pipeline-studiox-</span><span
+ style="font-family: monospace;">-041018.i686.rpm</span><br>
+  <span style="font-family: monospace;"> </span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;">plqueumgr-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-050418/</span><span
+ style="font-family: monospace;">-041018.i686.rpm</span><br>
+  <span style="font-family: monospace;"> </span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;"></span><span
  style="font-family: monospace;">plutils-</span><span
- style="font-family: monospace;">studiox-1.8.3-041018.i686.rpm</span><span
+ style="font-family: monospace;">studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-041018.i686.rpm</span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span></div>
+  </div>
   <br>
 The "pipeline" RPM contains the binaries which make up distribution and
 can be installed on any host which can write to the directories
@@ -213,9 +233,12 @@ the directory specified by <a href="#--root-dir"><span
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
 version 2.4 or later) operating system.&nbsp; Pipeline was developed
-using a Red Hat 9.0 environment, but should be compatible with other
-flavors of Linux.&nbsp; <a href="http://www.redhat.com/fedora">Fedora
-Core 3</a> and <a href="http://www.redhat.com/software/rhel/">Red Hat
+using a <span style="font-weight: bold;">Red Hat 9.0</span>
+environment, but should be compatible with other
+flavors of Linux.&nbsp; <a style="font-weight: bold;"
+ href="http://www.redhat.com/fedora">Fedora
+Core 3</a> and <a style="font-weight: bold;"
+ href="http://www.redhat.com/software/rhel/">Red Hat
 Enterprise Linux</a> are known to be compatible. <br>
   <br>
 The preferred artist workstation environment is also one of the Linux
@@ -294,33 +317,10 @@ software and exits. <br>
   <blockquote> </blockquote>
 </blockquote>
 <h3><a name="Global_Options"></a>Global Options</h3>
-<div style="margin-left: 40px;">
-<h4>Graphical Mode Option<br>
-</h4>
-<span style="font-weight: bold;"><a name="--graphical"></a>--graphical</span><br>
-<div style="margin-left: 40px;"><br>
-Display a set of graphical configuration "wizard"
-which will walk you through the
-configuration process.&nbsp; If any other options are given, they will
-override the default values displayed by the UI.&nbsp; This can be
-useful when editing a previously created configuration.&nbsp; The <a
- style="font-weight: bold;" href="#plconfig_settings.txt">plconfig-settings.txt</a>
-file which is generated after each successful execution of <span
- style="font-weight: bold;">plconfig</span>(1) contains the full
-command line&nbsp; options which specify the last configuration
-generated.&nbsp; By adding <span style="font-weight: bold;">--graphical</span>
-to these options, you can use the graphical mode to edit previous
-configuration parameters while preserving any settings you do not wish
-to change.<br>
-<br>
-If this option is not given, <span style="font-weight: bold;">plconfig</span>(1)
-will operate in non-graphical mode.<br>
-</div>
-</div>
 <h4 style="margin-left: 40px;"><a name="Required_Options"></a>Required
 Options</h4>
-<h4 style="margin-left: 40px; font-weight: normal;">If run in
-non-graphical mode, the following set of options must be specified each
+<h4 style="margin-left: 40px; font-weight: normal;">The following set
+of options must be specified each
 time <span style="font-weight: bold;">plconfig</span>(1) is run. These
 options control the minimal set of configuration parameters required
 for any site.<br>
@@ -344,7 +344,8 @@ have a name matching the Pipeline distribution.</h4>
 </span>
 <div style="margin-left: 40px;"><br>
 Specifies the time period the Pipeline license will remain valid.&nbsp;
-An evaluation license is valid for 30-days. An annual license is valid
+An evaluation license is valid for 30-days.&nbsp; An annual license is
+valid
 for one year.&nbsp; A perpetual license is valid forever.&nbsp; One and
 only one of these options must be given.<br>
 </div>
@@ -814,7 +815,7 @@ Software</span><br>
 <h3><a name="Files"></a>Files</h3>
 <div style="margin-left: 40px; font-weight: bold;"><a
  href="#temerity_software.key">temerity-software.key</a><br>
-<a href="#customer_profile">customer-profile</a><br>
+<a href="#site_profile">site-profile</a><br>
 <a href="#plconfig_settings.txt">plconfig-settings.txt</a><br>
 </div>
 <h3><a name="Author"></a>Author<span style="font-weight: bold;"></span></h3>

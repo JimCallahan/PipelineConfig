@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.23 2005/04/30 22:18:21 jim Exp $
+// $Id: ConfigApp.java,v 1.24 2005/05/01 22:13:11 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1045,7 +1045,7 @@ class ConfigApp
     writeEncodedData(new File(cdir, "temerity-software.key"), 
 		     pair.getPrivate().getEncoded(), null);
 
-    /* write the customer profile as: customer-profile */ 
+    /* write the customer profile as: site-profile */ 
     {
       /* convert the profile table into raw bytes */ 
       byte raw[] = null;
@@ -1064,8 +1064,8 @@ class ConfigApp
       Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
       cipher.init(Cipher.ENCRYPT_MODE, key);
 
-      /* write the customer public key and encrypted profile to: customer-profile */ 
-      writeEncodedData(new File(cdir, "customer-profile"), 
+      /* write the customer public key and encrypted profile to: site-profile */ 
+      writeEncodedData(new File(cdir, "site-profile"), 
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
 
