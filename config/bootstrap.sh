@@ -15,7 +15,8 @@ popd
 #     --with-compiler=GNU \
 #     --prefix=/usr \
 #     --datadir=/usr/share \
-#     --with-plsrc=$plsrcdir/../pipeline
+#     --with-pipeline=$plsrcdir/../pipeline \
+#     --with-temerity=$plsrcdir/../temerity
 # popd
 
 pushd i686-pc-linux-gnu-opt
@@ -24,5 +25,6 @@ pushd i686-pc-linux-gnu-opt
     --with-compiler=GNU \
     --prefix=/usr \
     --datadir=/usr/share \
-    --with-plsrc=$plsrcdir/../pipeline
+    --with-pipeline=$plsrcdir/../pipeline \
+    --with-temerity=$plsrcdir/../temerity
 popd

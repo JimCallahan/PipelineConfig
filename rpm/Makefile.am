@@ -26,6 +26,8 @@ install: all
           $(PIPELINE_SOURCE_ROOT)/plconfig
 	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.class \
           $(PIPELINE_SOURCE_ROOT)/plconfig
+	$(INSTALL_DATA) RPMS/i686/plconfig-@VERSION@-1.i686.rpm \
+          $(TEMERITY_SOURCE_ROOT)/www/products/pipeline/plconfig
 
 clean: 
 	rm -rf BUILD RPMS SPECS

@@ -80,20 +80,40 @@ dnl ----------------------------------------------------------------------------
 
 AC_MSG_CHECKING([Pipeline Source Code Directory])
 
-AC_ARG_WITH([plsrc], 
-            [  --with-plsrc=DIR             Root directory of the Pipeline source tree.])
+AC_ARG_WITH([pipeline], 
+            [  --with-pipeline=DIR        Root directory of the Pipeline source tree.])
 
 AC_SUBST(PIPELINE_SOURCE_ROOT)
 PIPELINE_SOURCE_ROOT=
 
-if test "$with_plsrc" 
+if test "$with_pipeline" 
 then
-  PIPELINE_SOURCE_ROOT=$with_plsrc
+  PIPELINE_SOURCE_ROOT=$with_pipeline
 else
-  AC_MSG_ERROR([The --with-plsrc option is required.])
+  AC_MSG_ERROR([The --with-pipeline option is required.])
 fi
 
 AC_MSG_RESULT([$PIPELINE_SOURCE_ROOT])
+
+
+
+AC_MSG_CHECKING([Temerity Web Site Source Directory])
+
+AC_ARG_WITH([temerity], 
+            [  --with-temerity=DIR        Root directory of the Temerity source tree.])
+
+AC_SUBST(TEMERITY_SOURCE_ROOT)
+TEMERITY_SOURCE_ROOT=
+
+if test "$with_temerity" 
+then
+  TEMERITY_SOURCE_ROOT=$with_temerity
+else
+  AC_MSG_ERROR([The --with-temerity option is required.])
+fi
+
+AC_MSG_RESULT([$TEMERITY_SOURCE_ROOT])
+
 
 
 dnl ------------------------------------------------------------------------------------------
