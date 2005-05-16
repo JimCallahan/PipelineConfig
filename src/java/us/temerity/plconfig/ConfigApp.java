@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.24 2005/05/01 22:13:11 jim Exp $
+// $Id: ConfigApp.java,v 1.25 2005/05/16 22:24:00 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -211,9 +211,8 @@ class ConfigApp
     throws IllegalConfigException
   {
     try {
-      long start = TimeService.getTime();
-      pProfile.put("LicenseStart", new Date(start));
-      pProfile.put("LicenseStartStamp", new Long(start));
+      pProfile.put("LicenseStart", new Date(0L));
+      pProfile.put("LicenseStartStamp", new Long(0L));
 
       pProfile.put("LicenseEnd" , new Date(Long.MAX_VALUE));
       pProfile.put("LicenseEndStamp" , Long.MAX_VALUE);
