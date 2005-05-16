@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.25 2005/05/16 22:24:00 jim Exp $
+// $Id: ConfigApp.java,v 1.26 2005/05/16 22:33:40 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -210,18 +210,13 @@ class ConfigApp
   setPerpetualLicense()
     throws IllegalConfigException
   {
-    try {
-      pProfile.put("LicenseStart", new Date(0L));
-      pProfile.put("LicenseStartStamp", new Long(0L));
-
-      pProfile.put("LicenseEnd" , new Date(Long.MAX_VALUE));
-      pProfile.put("LicenseEndStamp" , Long.MAX_VALUE);
-
-      pProfile.put("LicenseType", "Perpetual");
-    }
-    catch(IOException ex) {
-      throw new IllegalConfigException(ex.getMessage());
-    }
+    pProfile.put("LicenseStart", new Date(0L));
+    pProfile.put("LicenseStartStamp", new Long(0L));
+    
+    pProfile.put("LicenseEnd" , new Date(Long.MAX_VALUE));
+    pProfile.put("LicenseEndStamp" , Long.MAX_VALUE);
+    
+    pProfile.put("LicenseType", "Perpetual");
   }
 
   
