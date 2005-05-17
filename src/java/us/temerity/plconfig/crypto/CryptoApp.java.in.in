@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in.in,v 1.3 2004/08/23 20:09:14 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.4 2005/05/17 13:21:36 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -73,7 +73,7 @@ import com.sun.crypto.provider.SunJCE;
  *     (<I>target-file</I>).
  *   </DIV> <P> 
  * 
- *   --build-vault <I>source-file1</I> [<I>source-file2</I> ...] <I>vault-file</I><BR> 
+ *   --build-vault <I>source-list</I> <I>vault-file</I><BR> 
  *   <DIV style="margin-left: 40px;">
  *     Encrypts and archives one or more input files (<I>source-file</I>) to build a
  *     monolithic output file (<I>vault-file</I>).  Finally, the information needed to decrypt
@@ -167,26 +167,41 @@ class CryptoApp
       else if(args[1].equals("--build-vault")) {
 	pBuildVaultOpt = true;
 	pVaultSources = new ArrayList<File>();
-	int wk;
-	for(wk=2; wk<(args.length-1); wk++)
-	  pVaultSources.add(new File(args[wk]));
-	pVaultTarget = new File(args[args.length-1]);
+	try {
+	  FileReader in = new FileReader(args[2]);
+
+	  StringBuffer buf = new StringBuffer();
+	  char[] cs = new char[4096];
+	  while(true) {
+	    int cnt = in.read(cs);
+	    if(cnt == -1) 
+	      break;
+	    
+	    buf.append(cs, 0, cnt);
+	  }
+
+	  in.close();
+	  
+	  String sources[] = buf.toString().split("\\p{Space}");
+	  int wk;
+	  for(wk=0; wk<sources.length; wk++) 
+	    pVaultSources.add(new File(sources[wk]));
+	}
+	catch(IOException ex) {
+	  System.out.print
+	    ("IO problems reading vault list file (" + args[2] + "):\n" + 
+	     ex.getMessage() + "\n");
+	  System.exit(1);
+	}
+
+	pVaultTarget = new File(args[3]);
       }
       else 
 	usage();
       break;
 
     default:
-      if(args[1].equals("--build-vault")) {
-	pBuildVaultOpt = true;
-	pVaultSources = new ArrayList<File>();
-	int wk;
-	for(wk=2; wk<(args.length-1); wk++)
-	  pVaultSources.add(new File(args[wk]));
-	pVaultTarget = new File(args[args.length-1]);
-      }
-      else 
-	usage();
+      usage();
     }
       
     if(!pVersionOpt) {
