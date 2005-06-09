@@ -170,26 +170,34 @@ RPMs: <br>
   </span>
   <div style="margin-left: 40px;"><span style="font-family: monospace;">pipeline-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-041018.i686.rpm</span><br>
+ style="font-family: monospace;">-</span><span
+ style="font-family: monospace;">050418</span><span
+ style="font-family: monospace;">.i686.rpm</span><br>
   <span style="font-family: monospace;"></span></div>
   <span style="font-family: monospace;"> </span>
   <div style="margin-left: 40px;"><span style="font-family: monospace;"></span><span
  style="font-family: monospace;">plmaster-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-041018.i686.rpm</span><br>
+ style="font-family: monospace;">-</span><span
+ style="font-family: monospace;">050418</span><span
+ style="font-family: monospace;">.i686.rpm</span><br>
   <span style="font-family: monospace;"> </span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;">plqueumgr-studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-041018.i686.rpm</span><br>
+ style="font-family: monospace;">-</span><span
+ style="font-family: monospace;">050418</span><span
+ style="font-family: monospace;">.i686.rpm</span><br>
   <span style="font-family: monospace;"> </span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
- style="font-family: monospace;">plutils-</span><span
+ style="font-family: monospace;">plmac-</span><span
  style="font-family: monospace;">studiox-</span><span
  style="font-family: monospace;">2.0.0</span><span
- style="font-family: monospace;">-041018.i686.rpm</span><span
+ style="font-family: monospace;">-</span><span
+ style="font-family: monospace;">050418</span><span
+ style="font-family: monospace;">.i686.rpm</span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span></div>
@@ -225,28 +233,37 @@ host specified by the <a href="#--queue-host"><span
 files will be installed under the directory specified by the <a
  href="#--queue-dir"><b><b>--queue-dir</b></b></a> option.<br>
   <br>
-The "plutils" RPM contains some useful command-line utilities which are
-not a required part of the Pipeline distribution.&nbsp; This RPM should
-be installed on the same machine as the "pipeline" RPM as the binaries
-and documentation are installed in the usual Pipeline locations under
-the directory specified by <a href="#--root-dir"><span
- style="font-weight: bold;">--root-dir</span></a>.<br>
+The optional "plmac" RPM contains launcher scripts, icons and other
+resources needed run Pipeline client programs on Mac OS X
+systems.&nbsp; See the <a href="#Mac_OS_X_Support">Mac OS X Support</a>
+section below for details.&nbsp; This RPM should
+be installed on the same machine as the "pipeline" RPM.&nbsp; All files
+are installed under the main Pipeline install directory specified by <a
+ href="#--root-dir"><span style="font-weight: bold;">--root-dir</span></a>
+and are accessed remotely on a network accessable filesystem by Mac
+artist workstations.&nbsp; Pipeline does not need to be installed on
+individual Mac hosts.<br>
   <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
 Pipeline requires that the master server, file server and any hosts
 which be part of the Pipeline job execution queue run the Linux (kernel
 version 2.4 or later) operating system.&nbsp; Pipeline was developed
-using a <span style="font-weight: bold;">Red Hat 9.0</span>
+using a <a href="http://www.redhat.com">Red Hat 9.0</a>
 environment, but should be compatible with other
-flavors of Linux.&nbsp; <a style="font-weight: bold;"
- href="http://www.redhat.com/fedora">Fedora
-Core 3</a> and <a style="font-weight: bold;"
- href="http://www.redhat.com/software/rhel/">Red Hat
+flavors of Linux.&nbsp; <a href="http://www.redhat.com/fedora">Fedora
+Core 3</a> and <a href="http://www.redhat.com/software/rhel/">Red Hat
 Enterprise Linux</a> are known to be compatible. <br>
   <br>
 The preferred artist workstation environment is also one of the Linux
-versions mentioned above.&nbsp; Windows XP / 2000 and Mac OS X systems
-are also supported, but have some minor limitations in
-functionality.&nbsp;&nbsp; <br>
+versions mentioned above.&nbsp; The Pipeline graphical client program <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plui">plui</a></span><span
+ style="font-weight: normal;">(1)</span> is also fully supported on <a
+ href="http://www.apple.com/macosx">Mac OS X</a> systems. See the <a
+ href="#Mac_OS_X_Support">Mac OS X Support</a> section below for
+details.&nbsp; <a
+ href="http://www.microsoft.com/windowsxp/pro/default.mspx">Windows XP</a>
+systems are currently not supported, but support is planned in a future
+release.<br>
   <br>
 Finally, all Pipeline programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
@@ -266,27 +283,54 @@ options:<br>
   <span style="font-weight: bold;"></span></div>
   <div style="margin-left: 80px;">J2SE (5.0 or later)<br>
   </div>
-  <div style="margin-left: 40px;"><br>
-  <a href="http://java.sun.com/products/jce/"><span
- style="font-weight: bold;">Java Cryptography Extension</span></a><br>
-  <div style="margin-left: 40px;"> Unlimited Strength Jurisdiction
-Policy Files</div>
-  <br>
-  <a href="http://java.sun.com/products/java-media/jai/"><span
- style="font-weight: bold;"></span></a><a
- href="http://java.sun.com/products/java-media/jai/"
- style="font-weight: bold;">Java Advanced Imaging<span
- style="font-weight: bold;"> </span></a><br>
-  <div style="margin-left: 40px;">JAI (1.1.2 or later)<br>
-JAI Image I/O API (1.0 or later)<br>
-  <br>
-  </div>
-  <span style="font-weight: bold;"></span><span
+  <div style="margin-left: 40px;"><a
+ href="http://java.sun.com/products/jce/"><span
+ style="font-weight: bold;"><br>
+  </span></a> <span style="font-weight: bold;"></span><span
  style="font-weight: bold;"><a href="https://jogl.dev.java.net/">Java
 JOGL Library</a><br>
   </span>
   <div style="margin-left: 40px;">Java OpenGL (1.1b10 or later)<br>
   </div>
+  </div>
+  <h4><a name="Mac_OS_X_Support"></a>Mac OS X Support</h4>
+The Pipeline client programs can be run on Mac OS X systems.&nbsp; If
+you need to use Pipeline on Mac's, you will need to provide some
+additional file system configuration information using the <a
+ href="#--mac-root-dir"><span style="font-weight: bold;">--mac-root-dir</span></a>
+and <a href="#--mac-prod-dir"><span style="font-weight: bold;">--mac-prod-dir</span></a>
+options.&nbsp; These options specify the paths to use from Mac hosts to
+access the corresponding network file system directories as specified
+for Linux hosts using the <a href="#--root-dir"><span
+ style="font-weight: bold;">--root-dir</span></a> and <a
+ href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>
+options.&nbsp; If either of these options is specified, both must be
+given and a Mac OS X specific RPM will be generated as part of the
+Pipeline distribution for your site.<br>
+  <br>
+Pipeline on Mac OS X systems also require the J2SE 5.0 and JOGL
+libraries.&nbsp; A special release of the Java Runtime can be obtained
+for Mac OS X systems here: <a style="font-weight: bold;"
+ href="http://www.apple.com/downloads/macosx/apple/java2se50release1.html"><span
+ class="page_title">J2SE 5.0 Release 1 for Mac OS X</span></a>.&nbsp;&nbsp;
+The JOGL jar and native libraries will need to be installed manually
+under this J2SE 5.0 release in the following locations.<br>
+  <br>
+  <div style="margin-left: 40px;">/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/<br>
+  <div style="margin-left: 40px;">Home/lib/ext/jogl.jar<br>
+Libraries/libjogl.jnilib<br>
+Libraries/libjogl_cg.jnilib<br>
+  </div>
+  </div>
+  <br>
+In addition, user and group names as well as UIDs and GIDs need to be
+identical between the Linux and Mac OS X systems at your site.&nbsp;
+This includes the Pipeline administration user specified by the <a
+ href="#--pipeline-user"><span style="font-weight: bold;">--pipeline-user</span></a>
+option.<span style="font-weight: bold;"><br>
+  </span>
+  <div style="margin-left: 40px;">
+  <div style="margin-left: 40px;"> </div>
   </div>
   <h4><span style="font-weight: bold;"></span></h4>
 </blockquote>
@@ -327,16 +371,17 @@ time <span style="font-weight: bold;">plconfig</span>(1) is run. These
 options control the minimal set of configuration parameters required
 for any site.<br>
 </h4>
-<h4 style="font-weight: normal; margin-left: 40px;"><b><a
- name="--root-dir"></a>--root-dir</b>=<span style="font-style: italic;">dir</span></h4>
+<div style="margin-left: 40px;"><b><a name="--root-dir"></a>--root-dir</b>=<span
+ style="font-style: italic;">dir</span></div>
 <h4 style="font-weight: normal; margin-left: 80px;">The path
 to the directory (<span style="font-style: italic;">dir</span>)
 under which the top-level directory of the Pipeline installation will
 reside. This directory should
 reside on a network accessible file system such that all machines which
 will run Pipeline related programs can access the directory as
-(dir).&nbsp; The top-level directory of the Pipeline installtion will
-have a name matching the Pipeline distribution.</h4>
+(dir).&nbsp; The top-level directory of the Pipeline installation will
+have a name matching the Pipeline distribution.<span
+ style="font-style: italic;"></span></h4>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
  name="--evaluation"></a>--evaluation</span><br
  style="font-weight: bold;">
@@ -799,6 +844,60 @@ standard <span style="font-weight: bold;">JRE</span> locations.<br>
 <br>
 </div>
 <span style="font-weight: bold;"></span></div>
+<div style="margin-left: 40px;">
+<h4>Mac OS X Options</h4>
+These options specify the paths to use from Mac OS X hosts to access
+the
+corresponding network file system directories as specified for Linux
+hosts using the non-mac versions of these options.<br>
+<br>
+<b><a name="--mac-root-dir"></a>--mac-root-dir</b>=<span
+ style="font-style: italic;">dir<br>
+<br>
+</span></div>
+<div style="margin-left: 80px;">The path
+to the directory (<span style="font-style: italic;">dir</span>)
+under which the top-level directory of the Pipeline installation
+resides as accessed from Mac OS X systems.&nbsp; For example, if the
+path given to <a href="#--root-dir"><span style="font-weight: bold;">--root-dir</span></a>
+was (/base/apps), then the Mac path might be something like
+(/Network/Servers/myserver/base/apps).&nbsp; This path will vary
+depending on the details of how NFS volumes are mounted at your site.<br>
+<br>
+There is no default value if not specified.&nbsp; If this option is
+specified, the <a href="#--mac-prod-dir"><span
+ style="font-weight: bold;">--mac-prod-dir</span></a> must also be
+specified.<br>
+</div>
+<h4 style="font-weight: normal; margin-left: 40px;"><b><a
+ name="--mac-prod-dir"></a>--mac-prod-dir</b>=<span
+ style="font-style: italic;">dir</span></h4>
+<div style="margin-left: 80px;">The absolute path
+to the root directory
+under which all production data files will reside as accessed from Mac
+OS X systems.&nbsp; For example, if the path given to --prod-dir was
+(/base/prod) , then the Mac path might be something like
+(/Network/Servers/myserver/base/prod).&nbsp; This path will vary
+depending
+on the details of how NFS volumes are mounted at your site.<br>
+<br>
+There is no default value if not specified.&nbsp; If this option is
+specified, the <a href="#--mac-root-dir"><span
+ style="font-weight: bold;">--mac-root-dir</span></a> must also be
+specified.<br>
+<br>
+</div>
+<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
+ name="--mac-home-dir"></a>--mac-home-dir</span>=dir<br>
+<br>
+<div style="margin-left: 40px;">The absolute path to the parent
+directory of all user home
+directories as accessed from Mac OS X systems.<br>
+<br>
+If not specified, this location defaults to (/Users).<br>
+<br>
+</div>
+</div>
 <h3><a name="See_Also"></a>See Also<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Pipeline

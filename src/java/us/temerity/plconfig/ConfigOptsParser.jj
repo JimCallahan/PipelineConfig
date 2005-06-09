@@ -65,7 +65,7 @@ TOKEN :
 | <COPYRIGHT:      	 "--copyright">    		    
 			 						    
   /* global options */				    
-| <ROOT_DIR:       	 "--root-dir">          : PATH_SEP    
+| <ROOT_DIR:       	 "--root-dir">          : PATH_SEP      
 			 		   				    
 | <EVALUATION:     	 "--evaluation">   		    
 | <ANNUAL:         	 "--annual">	   		    
@@ -98,7 +98,10 @@ TOKEN :
 | <LIBRARY_PATH:         "--library-path">      : SEARCH_PATH_SEP 
 
 | <PIPELINE_USER:        "--pipeline-user">     : USERNAME_SEP
-
+   
+| <MAC_ROOT_DIR:       	 "--mac-root-dir">      : PATH_SEP 
+| <MAC_PROD_DIR:         "--mac-prod-dir">      : PATH_SEP
+| <MAC_HOME_DIR:       	 "--mac-home-dir">      : PATH_SEP 
 
   /* seperators */ 
 | <WS1: ([" ","\t"])+> 
@@ -338,7 +341,8 @@ GlobalOpts()
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | 
    ClassPath() | LibraryPath() | 
-   PipelineUser()) 
+   PipelineUser() |
+   MacRootDir() | MacProdDir() | MacHomeDir())
   {}
 }
 
@@ -369,6 +373,7 @@ RootDir()
     pApp.setRootDirectory(new File(t.image));
   }
 }
+
 
 
 void
@@ -666,6 +671,46 @@ PipelineUser()
   <PIPELINE_USER> EQ() t=<USERNAME>
   { 
     pApp.setPipelineUser(t.image);
+  }
+}
+
+
+
+
+void
+MacRootDir() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <MAC_ROOT_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setMacRootDirectory(new File(t.image));
+  }
+}
+
+void
+MacProdDir() :
+{
+  Token t;
+}
+{
+  <MAC_PROD_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setMacProdDirectory(new File(t.image));
+  }
+}
+
+void
+MacHomeDir() :
+{
+  Token t;
+}
+{
+  <MAC_HOME_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setMacHomeDirectory(new File(t.image));
   }
 }
 

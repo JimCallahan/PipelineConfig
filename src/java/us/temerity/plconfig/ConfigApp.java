@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.26 2005/05/16 22:33:40 jim Exp $
+// $Id: ConfigApp.java,v 1.27 2005/06/09 13:49:55 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -89,6 +89,8 @@ class ConfigApp
 
       pProfile.put("PluginHostname",  "localhost");
       pProfile.put("PluginPort",     53141);
+
+      pProfile.put("MacHomeDirectory", "/Users");
     }
   }
 
@@ -113,15 +115,6 @@ class ConfigApp
 
 
   /*----------------------------------------------------------------------------------------*/
-
-  /**
-   * Get the root installation directory.
-   */
-  public File
-  getRootDirectory()
-  {
-    return (File) pProfile.get("RootInstallDirectory");
-  }
 
   /**
    * Set the root installation directory.
@@ -590,6 +583,46 @@ class ConfigApp
   }
   
 
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Set the Mac OS X root installation directory.
+   */
+  public void 
+  setMacRootDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("MacRootInstallDirectory", dir);
+  }
+  
+  /**
+   * Set the Mac OS X root production directory.
+   */
+  public void 
+  setMacProdDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("MacProductionDirectory", dir);
+  }
+
+  /**
+   * Set the Mac OS X root user home directory.
+   */
+  public void 
+  setMacHomeDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("MacHomeDirectory", dir);
+  }
+
+
   
   /*----------------------------------------------------------------------------------------*/
   /*   R U N                                                                                */
@@ -721,7 +754,7 @@ class ConfigApp
 
     /* root installation directory and "config" subdir */ 
     {
-      File root = getRootDirectory();
+      File root = (File) pProfile.get("RootInstallDirectory");
       if(root == null) 
 	throw new ParseException("The --root-dir option is required!");
 
@@ -790,6 +823,20 @@ class ConfigApp
       if(!dir.isAbsolute()) 
 	throw new IllegalConfigException
 	  ("The root production directory (" + dir + ") was not absolute!");
+    }
+
+    /* Mac OS X options */ 
+    {
+      File mroot = (File) pProfile.get("MacRootInstallDirectory");
+      File mprod = (File) pProfile.get("MacProductionDirectory");
+
+      if((mroot != null) && (mprod == null)) 
+	throw new IllegalConfigException
+	  ("The --mac-prod-dir option is required when the --mac-root-dir option is given!");
+	 
+      if((mroot == null) && (mprod != null)) 
+	throw new IllegalConfigException
+	  ("The --mac-root-dir option is required when the --mac-prod-dir option is given!");
     }
 
     /* support JAR files */ 
@@ -1203,6 +1250,7 @@ class ConfigApp
        "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--class-path] [--library-path]\n" +
+       "  [--mac-root-dir=...] [--mac-prod-dir=...] [--mac-home-dir=...]\n" + 
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
