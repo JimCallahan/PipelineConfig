@@ -101,7 +101,8 @@ TOKEN :
    
 | <MAC_ROOT_DIR:       	 "--mac-root-dir">      : PATH_SEP 
 | <MAC_PROD_DIR:         "--mac-prod-dir">      : PATH_SEP
-| <MAC_HOME_DIR:       	 "--mac-home-dir">      : PATH_SEP 
+| <MAC_HOME_DIR:       	 "--mac-home-dir">      : PATH_SEP  
+| <MAC_TEMP_DIR:         "--mac-temp-dir">      : PATH_SEP
 
   /* seperators */ 
 | <WS1: ([" ","\t"])+> 
@@ -342,7 +343,7 @@ GlobalOpts()
    PluginHost() | PluginPort() | 
    ClassPath() | LibraryPath() | 
    PipelineUser() |
-   MacRootDir() | MacProdDir() | MacHomeDir())
+   MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir())
   {}
 }
 
@@ -711,6 +712,18 @@ MacHomeDir() :
   <MAC_HOME_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setMacHomeDirectory(new File(t.image));
+  }
+}
+
+void
+MacTempDir() :
+{
+  Token t;
+}
+{
+  <MAC_TEMP_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setMacTemporaryDirectory(new File(t.image));
   }
 }
 

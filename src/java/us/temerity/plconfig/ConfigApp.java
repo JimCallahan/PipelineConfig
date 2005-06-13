@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.27 2005/06/09 13:49:55 jim Exp $
+// $Id: ConfigApp.java,v 1.28 2005/06/13 13:09:17 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -91,6 +91,7 @@ class ConfigApp
       pProfile.put("PluginPort",     53141);
 
       pProfile.put("MacHomeDirectory", "/Users");
+      pProfile.put("MacHomeDirectory", "/var/tmp");
     }
   }
 
@@ -620,6 +621,18 @@ class ConfigApp
   ) 
   {
     pProfile.put("MacHomeDirectory", dir);
+  }
+
+  /**
+   * Set the root temporary directory.
+   */
+  public void 
+  setMacTemporaryDirectory
+  (
+   File dir
+  ) 
+  {
+    pProfile.put("MacTemporaryDirectory", dir);
   }
 
 
@@ -1250,7 +1263,8 @@ class ConfigApp
        "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--class-path] [--library-path]\n" +
-       "  [--mac-root-dir=...] [--mac-prod-dir=...] [--mac-home-dir=...]\n" + 
+       "  [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
+       "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
