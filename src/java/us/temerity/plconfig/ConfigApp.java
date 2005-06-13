@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.28 2005/06/13 13:09:17 jim Exp $
+// $Id: ConfigApp.java,v 1.29 2005/06/13 13:59:13 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -91,7 +91,7 @@ class ConfigApp
       pProfile.put("PluginPort",     53141);
 
       pProfile.put("MacHomeDirectory", "/Users");
-      pProfile.put("MacHomeDirectory", "/var/tmp");
+      pProfile.put("MacTemporaryDirectory", "/var/tmp");
     }
   }
 
@@ -900,39 +900,6 @@ class ConfigApp
 	  }
 	}
       }	
-
-      {
-	ArrayList<String> jars = new ArrayList<String>();
-	jars.add("jai_core.jar");
-	jars.add("jai_codec.jar");
-	jars.add("mlibwrapper_jai.jar");
-	jars.add("jai_imageio.jar");
-	jars.add("clibwrapper_jiio.jar");
-
-	for(String jar : jars) {
-	  boolean found = false;
-	  for(File dir : paths) {
-	    File path = new File(dir, jar);
-	    if(path.isFile()) {
-	      found = true;
-	      break;
-	    }
-	  }
-
-	  if(!found) {
-	    StringBuffer buf = new StringBuffer();
-	    buf.append("Could not find the Java Advanced Imaging JAR file (" + jar + ") in " +
-		       "either the JRE or any of the directories supplied with the " + 
-		       "--class-path option.\n\n" + 
-		       "Directories Searched:\n");
-
-	    for(File dir : paths) 
-	      buf.append("  " + dir + "\n");
-
-	    throw new IllegalConfigException(buf.toString());
-	  }
-	}
-      }
     }
 
     /* support native libraries */ 
@@ -986,36 +953,6 @@ class ConfigApp
 	  }
 	}
       }	
-
-      {
-	ArrayList<String> jars = new ArrayList<String>();
-	jars.add("libmlib_jai.so");
-	jars.add("libclib_jiio.so");
-
-	for(String jar : jars) {
-	  boolean found = false;
-	  for(File dir : paths) {
-	    File path = new File(dir, jar);
-	    if(path.isFile()) {
-	      found = true;
-	      break;
-	    }
-	  }
-
-	  if(!found) {
-	    StringBuffer buf = new StringBuffer();
-	    buf.append("Could not find the Java Advanced Imaging native library (" + jar + 
-		       ") in either the JRE or any of the directories supplied with the " +
-		       "--library-path option.\n\n" + 
-		       "Directories Searched:\n");
-	    
-	    for(File dir : paths) 
-	      buf.append("  " + dir + "\n");
-
-	    throw new IllegalConfigException(buf.toString());
-	  }
-	}
-      }
     }
 
     /* make sure the network ports don't conflict */ 
