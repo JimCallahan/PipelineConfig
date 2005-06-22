@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.5 2004/09/12 22:37:52 jim Exp $
+// $Id: IdApp.java,v 1.6 2005/06/22 23:06:45 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -156,9 +156,8 @@ class IdApp
 	Enumeration addrs = net.getInetAddresses();
 	while(addrs.hasMoreElements()) {
 	  InetAddress addr = (InetAddress) addrs.nextElement();
-	  String ip = addr.getHostAddress();
-	  if(!ip.equals("127.0.0.1")) 
-	    hostnames.put(ip, addr.getCanonicalHostName());
+	  if((addr instanceof Inet4Address) && !addr.isLoopbackAddress()) 
+	    hostnames.put(addr.getHostAddress(), addr.getCanonicalHostName());
 	}
       }
     }
