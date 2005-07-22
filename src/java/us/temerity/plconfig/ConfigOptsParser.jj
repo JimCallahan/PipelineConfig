@@ -103,6 +103,8 @@ TOKEN :
 | <MAC_PROD_DIR:         "--mac-prod-dir">      : PATH_SEP
 | <MAC_HOME_DIR:       	 "--mac-home-dir">      : PATH_SEP  
 | <MAC_TEMP_DIR:         "--mac-temp-dir">      : PATH_SEP
+   		    
+| <LEGACY_PLUGINS:   	 "--legacy-plugins">	
 
   /* seperators */ 
 | <WS1: ([" ","\t"])+> 
@@ -343,7 +345,8 @@ GlobalOpts()
    PluginHost() | PluginPort() | 
    ClassPath() | LibraryPath() | 
    PipelineUser() |
-   MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir())
+   MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
+   LegacyPlugins()) 
   {}
 }
 
@@ -775,6 +778,20 @@ Giga() :
   <GIGA> 
   {
     return 1073741824L;
+  }
+}
+
+
+void
+LegacyPlugins() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <LEGACY_PLUGINS> 
+  { 
+    pApp.setLegacyPlugins(true);
   }
 }
 

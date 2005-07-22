@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.29 2005/06/13 13:59:13 jim Exp $
+// $Id: ConfigApp.java,v 1.30 2005/07/22 22:18:43 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -92,6 +92,8 @@ class ConfigApp
 
       pProfile.put("MacHomeDirectory", "/Users");
       pProfile.put("MacTemporaryDirectory", "/var/tmp");
+
+      pProfile.put("LegacyPlugins", false);
     }
   }
 
@@ -637,6 +639,22 @@ class ConfigApp
 
 
   
+  /*----------------------------------------------------------------------------------------*/
+ 
+  /**
+   * Set whether to include plugins created before Pipeline (v2.0.0).
+   */ 
+  public void 
+  setLegacyPlugins
+  (
+   boolean tf
+  ) 
+  {
+    pProfile.put("LegacyPlugins", tf);
+  }
+
+
+
   /*----------------------------------------------------------------------------------------*/
   /*   R U N                                                                                */
   /*----------------------------------------------------------------------------------------*/
