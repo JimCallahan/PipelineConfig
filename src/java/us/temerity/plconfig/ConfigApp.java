@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.30 2005/07/22 22:18:43 jim Exp $
+// $Id: ConfigApp.java,v 1.31 2005/10/09 16:28:48 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1217,7 +1217,7 @@ class ConfigApp
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
        "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
-       "  [--class-path] [--library-path]\n" +
+       "  [--class-path] [--library-path] [--legacy-plugins]\n" +
        "  [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
        "\n" +  
