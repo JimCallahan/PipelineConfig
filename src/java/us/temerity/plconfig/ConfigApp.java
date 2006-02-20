@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.32 2006/02/20 20:12:04 jim Exp $
+// $Id: ConfigApp.java,v 1.33 2006/02/20 20:13:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -2159,9 +2159,6 @@ class ConfigApp
 
     /* host IDs */
     validateHostIDs();
-
-    // ..
-
 
     /* home directory */ 
     {

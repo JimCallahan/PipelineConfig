@@ -1,4 +1,4 @@
-// $Id: JHostIDsPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JHostIDsPanel.java,v 1.2 2006/02/20 20:13:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -323,12 +323,6 @@ class JServerHostIDsPanel
 	    ("Unable to run plid(1) on the server (" + host + ") using SSH!");
 	}
       }
-
-      // DEBUG
-      System.out.print("Computed HostIDs:\n");
-      for(String host : hostIDs.keySet()) 
-	System.out.print("  " + host + " = " + hostIDs.get(host) + "\n");
-      // DEBUG
 
       pApp.setHostIDs(hostIDs);
     }
