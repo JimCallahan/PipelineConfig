@@ -2,5 +2,8 @@
 
 cd `pwd`
 exec java @JAVA_RUNTIME_FLAGS@ -cp @datadir@/plconfig-@VERSION@/plconfig.jar \
+          -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=45010 \
           us/temerity/plconfig/ConfigApp "$@"
+
+
 

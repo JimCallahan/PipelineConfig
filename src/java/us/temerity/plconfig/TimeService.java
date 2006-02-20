@@ -1,4 +1,4 @@
-// $Id: TimeService.java,v 1.2 2005/03/10 10:47:02 jim Exp $
+// $Id: TimeService.java,v 1.3 2006/02/20 20:12:04 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -50,8 +50,7 @@ class TimeService
       return decode(packet.getData(), 40);
     }
     catch(Exception ex) {
-      throw new IOException("Unable to get time from (" + hostname + "):\n" + 
-			    "  " + ex.getMessage());
+      throw new IOException("Unable to get the time from (" + hostname + ").");
     }      
   }
     
@@ -74,11 +73,13 @@ class TimeService
 	return getTime(sNtpServers[wk]);
       }
       catch(IOException ex) {
-	buf.append(ex.getMessage());
+	buf.append("  " + ex.getMessage() + "\n");
       }
     }
 
-    throw new IOException(buf.toString());
+    throw new IOException
+      ("While attempting to contact a known NTP server:\n" + 
+       buf.toString());
   }
   
    
@@ -152,39 +153,9 @@ class TimeService
    * The IP addresses of some trusted NTP servers.
    */
   private static final String[] sNtpServers = {
-    "dewey.lib.ci.phoenix.az.us",
-    "clock.develooper.com",
-    "clock.fmt.he.net",
-    "clock.sjc.he.net",
-    "hydrogen.cert.ucr.edu",
-    "ntp1.linuxmedialabs.com",
-    "louie.udel.edu",
-    "ntp-1.cso.uiuc.edu",
-    "ntp-2.cso.uiuc.edu",
-    "gilbreth.ecn.purdue.edu",
-    "harbor.ecn.purdue.edu",
-    "ntp1.kansas.net",
-    "ntp2.kansas.net",
-    "ntp.ourconcord.net",
-    "time.johnstalker.ca",
-    "clock1.unc.edu",
-    "ntp.uhfradio.com",
-    "clock.nyc.he.net",
-    "reva.sixgirls.org",
-    "sundial.columbia.edu",
-    "timex.cs.columbia.edu",
-    "ntp-1.ece.cmu.edu",
-    "ntp-2.ece.cmu.edu",
-    "chrono.cis.sac.accd.edu",
-    "ntppub.tamu.edu",
-    "sundial.cis.sac.accd.edu",
-    "ticker.cis.sac.accd.edu",
-    "ntp-4.vt.edu",
-    "ntp-1.vt.edu",
-    "ntp-3.vt.edu",
-    "ntp-2.vt.edu",
-    "ntp1.cs.wisc.edu",
-    "ntp3.cs.wisc.edu"
+    "0.pool.ntp.org", 
+    "1.pool.ntp.org", 
+    "2.pool.ntp.org"
   };
 
 

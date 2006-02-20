@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.6 2005/06/22 23:06:45 jim Exp $
+// $Id: IdApp.java,v 1.7 2006/02/20 20:12:04 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -23,6 +23,7 @@ import com.sun.crypto.provider.SunJCE;
  */ 
 public
 class IdApp
+  extends BaseApp
 {  
   /*----------------------------------------------------------------------------------------*/
   /*   M A I N                                                                              */
@@ -59,8 +60,8 @@ class IdApp
    String[] args
   )
   {
-    pName = "plid";
-    setPackedArgs(args);
+    super("plid");
+    packageArguments(args);
   }
 
 
@@ -116,7 +117,9 @@ class IdApp
 	}
 	
 	if(pHostIDs == null) {
-	  System.out.print(buf.toString());
+	  LogMgr.getInstance().log
+	    (LogMgr.Kind.Ops, LogMgr.Level.Info,
+	     buf.toString());
 	}
 	else {
 	  FileWriter writer = new FileWriter(pHostIDs, true); 
@@ -131,7 +134,9 @@ class IdApp
       handleParseException(ex);
     }
     catch(Exception ex) {
-      System.out.print("ERROR: " + ex.getMessage() + "\n");
+      LogMgr.getInstance().log
+	(LogMgr.Kind.Sub, LogMgr.Level.Severe,
+	 ex.getMessage());
     }
 
     System.exit(success ? 0 : 1);
@@ -335,6 +340,7 @@ class IdApp
   }
 
 
+
   /*----------------------------------------------------------------------------------------*/
   /*   O P T I O N S                                                                        */
   /*----------------------------------------------------------------------------------------*/
@@ -345,11 +351,10 @@ class IdApp
   public void
   help()
   {
-    System.out.print
-      ("USAGE:\n" +
+    LogMgr.getInstance().log
+      (LogMgr.Kind.Ops, LogMgr.Level.Info,
+       "USAGE:\n" +
        "  plid [options]\n" + 
-       "\n" +
-       "  plid --graphical\n" +
        "\n" + 
        "  plid --help\n" +
        "  plid --html-help\n" +
@@ -358,344 +363,49 @@ class IdApp
        "  plid --copyright\n" + 
        "\n" + 
        "OPTIONS:\n" +
-       "  [--append]\n" +
+       "  [--append=...]\n" +
        "\n" +  
        "Use \"plid --html-help\" to browse the full documentation.\n");
   }
-
-
-  /**
-   * The implementation of the <CODE>--html-help</CODE> command-line option.
-   */ 
-  public void
-  htmlHelp()
-  {
-    try {
-      boolean isRunning = false;
-      {
-	String args[] = {
-	  "mozilla", 
-	  "-remote", 
-	  "ping()"
-	};      
-	
-	Process proc = Runtime.getRuntime().exec(args);
-	
-	int exitCode = -1;
-	try {
-	  exitCode = proc.waitFor();
-	}
-	catch(InterruptedException ex) {
-	  System.out.print(ex.getMessage() + "\n");
-	}
-	
-	isRunning = (exitCode == 0);
-      }
-
-      if(isRunning) {
-	String args[] = {
-	  "mozilla", 
-	  "-remote", 
-	  ("openURL(" + 
-	   "file://" + PackageInfo.sDocsDir + "/" + pName + ".html" + 
-	   ", new-tab)")
-	}; 
-	
-	Process proc = Runtime.getRuntime().exec(args);
-	
-	int exitCode = -1;
-	try {
-	  exitCode = proc.waitFor();
-	}
-	catch(InterruptedException ex) {
-	  System.out.print(ex.getMessage() + "\n");
-	}
-
-	System.exit(exitCode);
-      }
-      else {
-	String args[] = {
-	  "mozilla", 
-	  ("file://" + PackageInfo.sDocsDir + "/" + pName + ".html")
-	};
-	
-	Process proc = Runtime.getRuntime().exec(args);
-
-	int exitCode = -1;
-	try {
-	  exitCode = proc.waitFor();
-	}
-	catch(InterruptedException ex) {
-	  System.out.print(ex.getMessage() + "\n");
-	}
-
-	System.exit(exitCode);
-      }
-    }
-    catch(IOException ex) {
-      System.out.print("ERROR: " + ex.getMessage() + "\n");
-      System.exit(1);
-    }
-  }
-
-  /**
-   * The implementation of the <CODE>--version</CODE> command-line option.
-   */ 
-  public void
-  version()
-  {
-    System.out.print(PackageInfo.sVersion + "\n");
-  }
-
-  /**
-   * The implementation of the <CODE>--release-date</CODE> command-line option.
-   */  
-  public void
-  releaseDate()
-  {
-    System.out.print(PackageInfo.sRelease + "\n");
-  }
     
   /**
-   * The implementation of the <CODE>--copyright</CODE> command-line option.
+   * Generate an explanitory message for the non-literal token.
    */ 
-  public void
-  copyright()
-  {
-    System.out.print(PackageInfo.sCopyright + "\n");
-  }
-    
-
-
-  /*----------------------------------------------------------------------------------------*/
-  /*   P A R S I N G                                                                        */
-  /*----------------------------------------------------------------------------------------*/
-
-  /**
-   * Concatentate all of the command-line arguments into a single <CODE>String</CODE>
-   * suitable for parsing by the command-line parser of the application.
-   * 
-   * @param args 
-   *   The command-line arguments.
-   */ 
-  public void
-  setPackedArgs
+  protected String
+  tokenExplain
   (
-   String[] args 
-  )
-  {
-    StringBuffer buf = new StringBuffer();
-    
-    int wk;
-    for(wk=0; wk<args.length; wk++) {
-      char chars[] = args[wk].toCharArray();
-
-      int eqIdx = -1;
-      boolean hasWs = false;
-
-      int ck;
-      for(ck=0; ck<chars.length; ck++) {
-	if(chars[ck] == '=')
-	  eqIdx = ck+1;
-	else if((chars[ck] == ' ') || (chars[ck] == '\t')) {
-	  hasWs = true;
-	  break;
-	}
-      }
-
-      if(hasWs && (eqIdx != -1) && (eqIdx < args[wk].length()))
-	buf.append(args[wk].substring(0, eqIdx) + 
-		   "\"" + args[wk].substring(eqIdx) + "\" ");
-      else 
-	buf.append(args[wk] + " ");
-    }
-    
-    pPackedArgs = buf.toString();
-  }
-
-
-
-  /*-- PARSING HELPERS ---------------------------------------------------------------------*/
-  
-  /** 
-   * Generate a string containing both the exception message and stack trace. 
-   * 
-   * @param ex 
-   *   The thrown exception.   
-   */ 
-  private String 
-  getFullMessage
-  (
-   Throwable ex
+   int kind,
+   boolean printLiteral
   ) 
   {
-    StringBuffer buf = new StringBuffer();
-     
-    if(ex.getMessage() != null) 
-      buf.append(ex.getMessage() + "\n\n"); 	
-    else if(ex.toString() != null) 
-      buf.append(ex.toString() + "\n\n"); 	
-      
-    buf.append("Stack Trace:\n");
-    StackTraceElement stack[] = ex.getStackTrace();
-    int wk;
-    for(wk=0; wk<stack.length; wk++) 
-      buf.append("  " + stack[wk].toString() + "\n");
+    switch(kind) {
+    case ConfigOptsParserConstants.EOF:
+      return "EOF";
+
+    case ConfigOptsParserConstants.UNKNOWN_OPTION:
+      return "an unknown option";
+
+    case ConfigOptsParserConstants.UNKNOWN_COMMAND:
+      return "an unknown command";
+
+    case ConfigOptsParserConstants.PATH_ARG:
+      return "an file system path";
    
-    return (buf.toString());
-  }
-  
-
-  /**
-   * Log a command-line argument parsing exception.
-   */
-  private void
-  handleParseException
-  (
-   ParseException ex
-  ) 
-  {
-    StringBuffer buf = new StringBuffer();
-    buf.append("Illegal Args: ");
-
-    try {
-      /* build a non-duplicate set of expected token strings */ 
-      TreeSet expected = new TreeSet();
-      {
-	int wk;
-	for(wk=0; wk<ex.expectedTokenSequences.length; wk++) {
-	  String str = ex.tokenImage[ex.expectedTokenSequences[wk][0]];
-	  if(!str.equals("\"\\n\"") && !str.equals("<NL1>"))
-	    expected.add(ex.tokenImage[ex.expectedTokenSequences[wk][0]]);
-	}
-      }
-
-      
-      /* message header */ 
-      Token tok = ex.currentToken.next;
-      String next = ex.tokenImage[tok.kind];
-      if(next.length() > 0) {
-	
-	char[] ary = next.toCharArray();
-	boolean hasKind  = (ary.length>0 && ary[0] == '<' && ary[ary.length-1] == '>');
-	
-	String value = toASCII(tok.image);
-	boolean hasValue = (value.length() > 0);
-	
-	if(hasKind || hasValue) 
-	  buf.append("found ");
-	
-	if(hasKind) 
-	  buf.append(next + ", ");
-	
-	if(hasValue)
-	  buf.append("\"" + value + "\", ");
-      }
-      
-      buf.append("starting at arg " + ex.currentToken.next.beginLine + 
-		 ", character " + ex.currentToken.next.beginColumn + ".\n");
-      
-
-      /* expected token list */ 
-      Iterator iter = expected.iterator();
-      if(expected.size()==1 && iter.hasNext()) {
-	String str = (String) iter.next();
-	if(str.equals("<EOF>")) 
-	  buf.append("  Was NOT expecting any more arguments!");
-	else 
-	  buf.append("  Was expecting: " + str);
-      }
-      else {
-	buf.append("  Was expecting one of:\n");
-	while(iter.hasNext()) {
-	  String str = (String) iter.next();
-	  buf.append("    " + str);
-	  if(iter.hasNext())
-	    buf.append("\n");
-	}
-      }
-    }
-    catch (NullPointerException e) {
-      buf.append(ex.getMessage());
-    }
-
-    /* log the message */ 
-    System.out.print(buf.toString() + "\n");
-  }
- 
-  /**
-   * Convert non-printable characters in the given <CODE>String</CODE> into ASCII literals.
-   */ 
-  private String 
-  toASCII
-  (
-   String str
-  ) 
-  {
-    StringBuffer buf = new StringBuffer();
-
-    char ch;
-    for (int i = 0; i < str.length(); i++) {
-      switch (str.charAt(i)) {
-      case 0 :
-	continue;
-      case '\b':
-	buf.append("\\b");
-	continue;
-      case '\t':
-	buf.append("\\t");
-	continue;
-      case '\n':
-	buf.append("");  /* newlines are used to seperate args... */ 
-	continue;
-      case '\f':
-	buf.append("\\f");
-	continue;
-      case '\r':
-	buf.append("\\r");
-	continue;
-      case '\"':
-	buf.append("\\\"");
-	continue;
-      case '\'':
-	buf.append("\\\'");
-	continue;
-      case '\\':
-	buf.append("\\\\");
-	continue;
-      default:
-	if ((ch = str.charAt(i)) < 0x20 || ch > 0x7e) {
-	  String s = "0000" + Integer.toString(ch, 16);
-	  buf.append("\\u" + s.substring(s.length() - 4, s.length()));
-	} else {
-	  buf.append(ch);
-	}
-	continue;
-      }
-    }
-
-    return (buf.toString());
+    default: 
+      if(printLiteral) 
+	return ConfigOptsParserConstants.tokenImage[kind];
+      else 
+	return null;
+    }      
   }
 
-  
 
 
   /*----------------------------------------------------------------------------------------*/
   /*   I N T E R N A L S                                                                    */
   /*----------------------------------------------------------------------------------------*/
 
-  /**
-   * The name of the application.
-   */ 
-  private String pName;        
-
-  /**
-   * The single concatenated command-line argument string.
-   */
-  private String pPackedArgs;  
-
-
-  /**
+  /*
    * The name of the host IDs file.
    */ 
   private File pHostIDs;

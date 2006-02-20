@@ -10,10 +10,14 @@
 <blockquote><b>plconfig</b> - the Pipeline Configuration Tool<br>
 </blockquote>
 <h3><a name="Synopsis"></a>Synopsis</h3>
-<blockquote><b>plconfig</b> [<a href="#Global_Options"><span
- style="font-style: italic;">options</span></a>]<a href="#--graphical"><span
- style="font-weight: bold;"></span></a><br>
-  <i> </i><br>
+<blockquote><b>plconfig</b> <a href="#--graphical"><span
+ style="font-weight: bold;">--graphical</span></a> [<a
+ href="#Global_Options"><span style="font-style: italic;">options</span></a>]<br>
+  <b>plconfig</b> <a href="#--evaluation"><span
+ style="font-weight: bold;"></span></a><a href="#Required_Options">required-options</a>
+[<a href="plconfig.src.html#Global_Options"><span
+ style="font-style: italic;">options</span></a>]<br>
+  <span style="font-weight: bold;"><a href="#--graphical"></a></span><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--help">--help</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--html-help">--html-help</a><br>
   <b>plconfig</b> <a style="font-weight: bold;" href="#--version">--version</a><br>
@@ -30,34 +34,42 @@ Options</span></a> section for details about the site specific
 parameters which can be configured.<br>
   <h4>Before You Start<br>
   </h4>
-Before running this program, a new user and user group need to be
-created at your site for running Pipeline daemons.&nbsp; By default
-this user
-is called (pipeline), but another name can be specified with the <a
- href="#--pipeline-user"><span style="font-weight: bold;">--pipeline-user</span></a>
-option. The <span style="font-weight: bold;">plconfig</span>(1)
-program must
-be
-run as the (pipeline) user.&nbsp; This user will eventually be used
+Before running this program, a new user and user group will need to be
+created at your site for running Pipeline daemons.&nbsp; Typically both
+the user and group are called (pipeline), but another name can be
+specified with the <a href="#--pipeline-user"><span
+ style="font-weight: bold;">--pipeline-user</span></a>
+and <a href="#--pipeline-group"><span style="font-weight: bold;">--pipeline-group</span></a>
+option.&nbsp; <span style="font-weight: bold;"></span>This user will
+eventually be used
 to run various daemon processes and other privileged programs which
-make up the Pipeline system.&nbsp; The (pipeline) user should be able
+make up the Pipeline system.&nbsp; The Pipeline administrative user
+should be able
 to login to
-all hosts which will run Pipeline programs with an identical user and
-group ID.&nbsp; Once a site profile has been generated
+all hosts which will run Pipeline programs and have identical user and
+group IDs on this hosts.&nbsp; Once a site profile has been generated
 using <span style="font-weight: bold;">plconfig</span>(1), the user
-ID and group ID for this user should not be modified.<code><span
+ID and group ID for this admin user should not be modified.<code><span
  style="font-style: italic;"></span></code><br>
   <h4>Configuring Pipeline</h4>
-The set of options which must be specified are described in
+By default, <span style="font-weight: bold;"></span>an <span
+ style="font-weight: bold;"></span>interactive
+graphical
+configuration wizard
+is displayed which queries the user to supply all site configuration
+settings.&nbsp;&nbsp; However, this UI can be bypassed and all settings
+supplied by command line arguments by using the <a href="#--batch"><span
+ style="font-weight: bold;">--batch</span></a> option.&nbsp; When
+running in batch mode, the minimum set of options which must be
+specified
+are described in
 the <a href="#Required_Options"><span style="font-weight: bold;">Required
-Options</span></a> section.&nbsp; The rest of the options are not
+Batch Mode Options</span></a> section.&nbsp; The rest of the options
+are not
 required and the configuration parameters they control are either
-auto-detected by <span style="font-weight: bold;">plconfig</span>(1)
-or have reasonable default values.&nbsp; The choices for all
-configuration parameters will be printed by <span
- style="font-weight: bold;">plconfig</span>(1) when run.&nbsp; <br>
+auto-detected or have reasonable default values.&nbsp; <br>
   <br>
-When run, <span style="font-weight: bold;">plconfig</span>(1)
+In either mode, <span style="font-weight: bold;">plconfig</span>(1)
 writes (or overwrites) the following three files:<br>
   <span style="font-style: italic;"><br>
   <a name="temerity_software.key"></a></span><span
@@ -105,15 +117,14 @@ the <a href="http://www.temeity.us/company/customer-profile.php"><span
  style="font-weight: bold;">Customer Profile</span></a>.<br>
   <br>
   </div>
-  <span style="font-style: italic;"><a name="plconfig_settings.txt"></a></span><span
- style="font-weight: bold;">plconfig/plconfig-settings.txt</span><br>
+  <span style="font-style: italic;"></span><span
+ style="font-weight: bold;"><a name="settings.glue"></a>plconfig/settings.glue</span><br>
   <br>
-  <div style="margin-left: 40px;">This is a plain text file similar to
-the configuration parameters printed by<span style="font-weight: bold;">
-plconfig</span>(1).&nbsp; This file is not required either to run
-Pipeline or as part of the license application process.&nbsp; Its
-provided solely to document the configuration settings used to
-generating the other two files for your future reference.<br>
+  <div style="margin-left: 40px;">This GLUE format text file contains a
+human readable form of all site configuration settings.&nbsp; This file
+can be used with the <a href="#--reconfig"><span
+ style="font-weight: bold;">--reconfig</span></a> option to reuse the
+settings from a previous configuration.&nbsp; <br>
   <br>
   </div>
   <h4><span style="font-weight: bold;"><a
@@ -198,6 +209,16 @@ RPMs: <br>
  style="font-family: monospace;">-</span><span
  style="font-family: monospace;">050418</span><span
  style="font-family: monospace;">.i686.rpm</span><span
+ style="font-family: monospace;"></span><br>
+  <span style="font-family: monospace;"> </span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;">plwin-</span><span
+ style="font-family: monospace;">studiox-</span><span
+ style="font-family: monospace;">2.0.0</span><span
+ style="font-family: monospace;">-</span><span
+ style="font-family: monospace;">050418</span><span
+ style="font-family: monospace;">.i686.rpm</span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span><span
  style="font-family: monospace;"></span></div>
@@ -234,7 +255,8 @@ files will be installed under the directory specified by the <a
  href="#--queue-dir"><b><b>--queue-dir</b></b></a> option.<br>
   <br>
 The optional "plmac" RPM contains launcher scripts, icons and other
-resources needed run Pipeline client programs on Mac OS X
+resources needed run Pipeline client programs on <a
+ href="http://www.apple.com/macosx">Mac OS X</a>
 systems.&nbsp; See the <a href="#Mac_OS_X_Support">Mac OS X Support</a>
 section below for details.&nbsp; This RPM should
 be installed on the same machine as the "pipeline" RPM.&nbsp; All files
@@ -243,76 +265,127 @@ are installed under the main Pipeline install directory specified by <a
 and are accessed remotely on a network accessable filesystem by Mac
 artist workstations.&nbsp; Pipeline does not need to be installed on
 individual Mac hosts.<br>
-  <h4><a name="System_Prerequisites"></a>System Prerequisites</h4>
-Pipeline requires that the master server, file server and any hosts
-which be part of the Pipeline job execution queue run the Linux (kernel
-version 2.4 or later) operating system.&nbsp; Pipeline was developed
-using a <a href="http://www.redhat.com">Red Hat 9.0</a>
-environment, but should be compatible with other
-flavors of Linux.&nbsp; <a href="http://www.redhat.com/fedora">Fedora
-Core 3</a> and <a href="http://www.redhat.com/software/rhel/">Red Hat
-Enterprise Linux</a> are known to be compatible. <br>
   <br>
-The preferred artist workstation environment is also one of the Linux
-versions mentioned above.&nbsp; The Pipeline graphical client program <span
- style="font-weight: bold;"><a
+Similarly, the optional "plwin" RPM contains the
+resources needed run Pipeline client programs on systems running <a
+ href="http://www.microsoft.com/windowsxp">Windows XP</a>.&nbsp; See
+the <a href="#Windows_XP_Support">Windows XP Support</a>
+section below for details.&nbsp; This RPM should
+be installed on the same machine as the "pipeline" RPM.&nbsp; Again,
+all files
+are installed under the main Pipeline install directory specified by <a
+ href="plconfig.src.html#--root-dir"><span style="font-weight: bold;">--root-dir</span></a>
+and are accessed remotely via the network on workstations running
+Windows XP.<br>
+  <h4>System Prerequisites</h4>
+Pipeline requires that the server daemons which makup the Pipeline back
+end run the Linux (kernel
+version 2.4 or later) operating system.&nbsp; These Linux based server
+daemons include: <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster"><span
+ style="font-weight: bold;">plmaster</span></a>(1), <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr"><span
+ style="font-weight: bold;">plfilemgr</span></a>(1), <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr"><span
+ style="font-weight: bold;">plqueuemgr</span></a>(1) and <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr"><span
+ style="font-weight: bold;">plpluginmgr</span></a>(1).&nbsp; Pipeline
+is known to be compatible with <a href="http://www.redhat.com">Red Hat
+9.0</a>, <a href="http://www.redhat.com/software/rhel/">Red
+Hat
+Enterprise Linux</a>, <a href="http://www.redhat.com/fedora">Fedora
+Core 3 &amp; 4</a> and <a href="http://www.novell.com/linux/suse/">SUSE
+Linux 10.0</a>.&nbsp; Other flavors of Linux should also work, but have
+not been thoroughly tested. <br>
+  <br>
+The preferred artist workstation and render farm node OS is also one of
+the Linux
+versions mentioned above.&nbsp; However, the Pipeline graphical client
+program <span style="font-weight: bold;"><a
  href="http://temerity.us/products/pipeline/docs/man/index.php?target=plui">plui</a></span><span
- style="font-weight: normal;">(1)</span> is also fully supported on <a
- href="http://www.apple.com/macosx">Mac OS X</a> systems. See the <a
- href="#Mac_OS_X_Support">Mac OS X Support</a> section below for
-details.&nbsp; <a
- href="http://www.microsoft.com/windowsxp/pro/default.mspx">Windows XP</a>
-systems are currently not supported, but support is planned in a future
-release.<br>
+ style="font-weight: normal;">(1)</span>, scripting client <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plscript"><span
+ style="font-weight: bold;">plscript</span></a>(1) and distributed job
+server daemon <a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=pljobmgr"><span
+ style="font-weight: bold;">pljobmgr</span></a>(1) are also fully
+supported on Mac
+OS X and Windows XP systems.&nbsp;&nbsp;&nbsp;&nbsp; See the <a
+ href="#Mac_OS_X_Support">Mac
+OS X Support</a>&nbsp; and <a href="#Windows_XP_Support">Windows XP
+Support</a> sections below for
+details. <br>
+  <br>
+Plugins and stand alone programs using the <a
+ href="http://temerity.us/products/pipeline/docs/javadoc/"><span
+ style="font-weight: bold;">Java API</span></a> are completely portable
+and will work with all supported operating systems.<br>
   <br>
 Finally, all Pipeline programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
-tool depends on at least the Java Runtime Environment.<br>
-  <br>
-The
-existence and locations of the following Java
-prerequisites are checked by <span style="font-weight: bold;">plconfig</span>(1)
-when run and can be customized by the <a href="#--class-path"><span
- style="font-weight: bold;">--class-path</span></a> and <a
- href="#--library-path"><span style="font-weight: bold;">--library-path</span></a>
-options:<br>
+tool depends on at least the JRE 5.0 which can be found here:<br>
   <br>
   <div style="margin-left: 40px;"><a
  href="http://java.sun.com/j2se/1.5.0/download.jsp"><span
  style="font-weight: bold;">Java Runtime Environment</span></a><br>
   <span style="font-weight: bold;"></span></div>
-  <div style="margin-left: 80px;">JRE 5.0 Update 3 (or later)<br>
+  <div style="margin-left: 80px;">JRE 5.0 Update 6 (or later)<br>
   </div>
+  <a href="http://java.sun.com/products/jce/"><span
+ style="font-weight: bold;"></span></a><br>
+The graphical client program <span style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plui">plui</a></span>(1)
+also requires the JOGL library which provides OpenGL support for Java
+programs.&nbsp; This library can be found here:<br>
+  <br>
+  <a href="http://java.sun.com/products/jce/"><span
+ style="font-weight: bold;"></span></a>
   <div style="margin-left: 40px;"><a
  href="http://java.sun.com/products/jce/"><span
- style="font-weight: bold;"><br>
-  </span></a> <span style="font-weight: bold;"></span><span
- style="font-weight: bold;"><a href="https://jogl.dev.java.net/">Java
+ style="font-weight: bold;"> </span></a> <span
+ style="font-weight: bold;"></span><span style="font-weight: bold;"><a
+ href="https://jogl.dev.java.net/">Java
 JOGL Library</a><br>
   </span>
-  <div style="margin-left: 40px;">Java OpenGL 1.1b12 (or later)<br>
+  <div style="margin-left: 40px;">Java OpenGL 1.1 <br>
+  <br>
   </div>
+  </div>
+The JOGL jar and native libraries should be installed by manually
+copying the files into the correct locations within the installed
+JRE.&nbsp;&nbsp; The locations for these components in a typical JRE
+installation are:<br>
+&nbsp;&nbsp; <br>
+  <div style="margin-left: 40px;">/usr/java/jre1.5.0_06/<br>
+  <div style="margin-left: 40px;">lib/ext/jogl.jar</div>
+  <div style="margin-left: 40px;">lib/i386/libjogl_cg.so<br>
+lib/i386/libjogl.so<br>
+  </div>
+  </div>
+  <br>
+The JRE and JOGL library will need to be installed before running <span
+ style="font-weight: bold;">plconfig</span>(1).&nbsp;&nbsp; A proper
+installation of these components will be verified as part of the
+configuration process.<br>
+  <br>
+  <div style="margin-left: 40px;">
+  <div style="margin-left: 40px;"> </div>
   </div>
   <h4><a name="Mac_OS_X_Support"></a>Mac OS X Support</h4>
 The Pipeline client programs can be run on Mac OS X systems.&nbsp; If
-you need to use Pipeline on Mac's, you will need to provide some
-additional file system configuration information using the <a
- href="#--mac-root-dir"><span style="font-weight: bold;">--mac-root-dir</span></a>
-and <a href="#--mac-prod-dir"><span style="font-weight: bold;">--mac-prod-dir</span></a>
-options.&nbsp; These options specify the paths to use from Mac hosts to
-access the corresponding network file system directories as specified
-for Linux hosts using the <a href="#--root-dir"><span
- style="font-weight: bold;">--root-dir</span></a> and <a
- href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>
-options.&nbsp; If either of these options is specified, both must be
-given and a Mac OS X specific RPM will be generated as part of the
+you want to use Pipeline on Mac's, you will need to provide some
+additional file system configuration information.&nbsp; See the a <a
+ style="font-weight: bold;" href="#Mac_OS_X_Options">Mac OS X Options</a>
+section for details of
+the options required and their usage.&nbsp; These options will cause a
+Mac OS X specific RPM to be generated as part of the
 Pipeline distribution for your site.<br>
   <br>
 Pipeline on Mac OS X systems also require the J2SE 5.0 and JOGL
 libraries.&nbsp; A special release of the Java Runtime can be obtained
 for Mac OS X systems here: <a style="font-weight: bold;"
- href="http://www.apple.com/downloads/macosx/apple/java2se50release1.html"><span
- class="page_title">J2SE 5.0 Release 1 for Mac OS X</span></a>.&nbsp;&nbsp;
+ href="http://www.apple.com/downloads/macosx/apple/java2se50release3.html"><span
+ class="page_title">J2SE 5.0 Release 3 for Mac OS X</span></a>.&nbsp;&nbsp;
 The JOGL jar and native libraries will need to be installed manually
 under this J2SE 5.0 release in the following locations.<br>
   <br>
@@ -327,8 +400,49 @@ In addition, user and group names as well as UIDs and GIDs need to be
 identical between the Linux and Mac OS X systems at your site.&nbsp;
 This includes the Pipeline administration user specified by the <a
  href="#--pipeline-user"><span style="font-weight: bold;">--pipeline-user</span></a>
-option.<span style="font-weight: bold;"><br>
-  </span>
+option.<br>
+  <br>
+  <h4><span style="font-weight: bold;"><a name="Windows_XP_Support"></a>Windows
+XP Support</span></h4>
+In order to run Pipeline client programs on Windows XP systems, you
+will need to provide additional file system configuration information
+using the <a style="font-weight: bold;" href="#Windows_XP_Options">Windows
+XP Options</a>.&nbsp;
+These options will cause a Windows XP specific RPM to be generated as
+part of the
+Pipeline distribution for your site.<br>
+  <br>
+When using Pipeline on Windows XP systems, you will need to install the
+J2SE 5.0 and JOGL libraries.&nbsp; In a typical Java Runtime
+installation on Windows XP, the JOGL jar and native libraries will need
+to be manually installed in the same location as the Java
+Runtime.&nbsp; The following is the typical location.&nbsp; If
+installed elsewhere you will need to specify the location using the <a
+ href="#--win-java-home"><span style="font-weight: bold;">--win-java-home</span></a>
+option.<br>
+  <div style="margin-left: 40px;"><br>
+C:\Program Files\Java\jre1.5.0_06\<br>
+  <div style="margin-left: 40px;">lib\ext\jogl.jar<br>
+  </div>
+  <div style="margin-left: 40px;">bin\jogl.dll<br>
+bin\jogl_cg.dll<br>
+  <br>
+  </div>
+  </div>
+You will also need to use <a style="font-weight: bold;"
+ href="http://samba.org">Samba</a> or some other SMB capable file
+server (or network appliance) to make the root install directory (<a
+ href="#--win-root-dir"><span style="font-weight: bold;">--win-root-dir</span></a>)
+and root production directory (<a href="#--win-prod-dir"><span
+ style="font-weight: bold;">--win-prod-dir</span></a>) available to
+Windows users.&nbsp; Remote file sharing should be configured so that
+production files and directories owned by a particular UNIX user can
+only be created and modified by the corresponding Windows XP user with
+exactly the same user name.&nbsp; It is especially important that the
+production file repository which is owned by the special Pipeline user
+cannot be modified by any other normal user.<br>
+  <br>
+  <span style="font-weight: bold;"> </span>
   <div style="margin-left: 40px;">
   <div style="margin-left: 40px;"> </div>
   </div>
@@ -362,16 +476,49 @@ software and exits. <br>
 <blockquote>
   <blockquote> </blockquote>
 </blockquote>
-<h3><a name="Global_Options"></a>Global Options</h3>
-<h4 style="margin-left: 40px;"><a name="Required_Options"></a>Required
-Options</h4>
-<h4 style="margin-left: 40px; font-weight: normal;">The following set
-of options must be specified each
-time <span style="font-weight: bold;">plconfig</span>(1) is run. These
-options control the minimal set of configuration parameters required
-for any site.<br>
+<h3><a name="Global_Options"></a>Global Options<br>
+</h3>
+<div style="margin-left: 40px;">
+<h4><span style="font-weight: bold;"></span><a name="Required_Options"></a>Required
+Batch Mode Options<br>
 </h4>
-<div style="margin-left: 40px;"><b><a name="--root-dir"></a>--root-dir</b>=<span
+</div>
+<div style="margin-left: 40px;">The following options must be supplied
+if <span style="font-weight: bold;">plconfig</span>(1) is run in batch
+mode.&nbsp; They may also be supplied when using the default graphical
+configuration wizard to override the default values provided during the
+interactive configuration process.&nbsp; Batch mode is useful in
+combination with <a href="#--reconfig"><span style="font-weight: bold;">--reconfig</span></a>
+to override a few settings from a previous configuration without
+needing to display a user interface.<br>
+<br>
+<span style="font-weight: bold;"><a name="--batch"></a>--batch<br>
+</span>
+<div style="margin-left: 40px;"><br>
+Run in batch mode.&nbsp; No graphical UI will be displayed and the
+following minimal set of options must be supplied along with any
+additional non-required options.<br>
+<br>
+</div>
+<span style="font-weight: bold;"><a name="--evaluation"></a></span><span
+ style="font-weight: bold;">--evaluation</span><span
+ style="font-weight: bold;"></span><span style="font-weight: bold;"></span><br>
+<span style="font-weight: bold;"><a name="--limited"></a>--limited</span>=<span
+ style="font-style: italic;">yyyy-mm</span>-<span
+ style="font-style: italic;">dd</span><span style="font-style: italic;"></span><span
+ style="font-weight: bold;"><br style="font-weight: bold;">
+</span><span style="font-weight: bold;"><a name="--perpetual"></a>--perpetual<br>
+</span>
+<div style="margin-left: 40px;"><br>
+Specifies the time period the Pipeline license will remain valid.&nbsp;
+An evaluation license is valid for 30-days.&nbsp; A limited license is
+valid until the the given expiration data (<span
+ style="font-style: italic;"></span><span style="font-style: italic;">yyyy</span>-mm-dd).&nbsp;
+A perpetual
+license is valid forever.&nbsp; One and
+only one of these options must be given.</div>
+<br>
+<b><a name="--root-dir"></a>--root-dir</b>=<span
  style="font-style: italic;">dir</span></div>
 <h4 style="font-weight: normal; margin-left: 80px;">The path
 to the directory (<span style="font-style: italic;">dir</span>)
@@ -382,48 +529,60 @@ will run Pipeline related programs can access the directory as
 (dir).&nbsp; The top-level directory of the Pipeline installation will
 have a name matching the Pipeline distribution.<span
  style="font-style: italic;"></span></h4>
+<h4 style="margin-left: 40px;"><b><a name="--master-host"></a>--server-host</b><span
+ style="font-weight: normal;">=</span><span
+ style="font-style: italic; font-weight: normal;"><span
+ style="font-style: italic;">host</span></span><br
+ style="font-weight: normal;">
+</h4>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;"><span style="font-weight: normal;">The
+default host name of the machine (<span style="font-style: italic;">host</span>)
+where Pipeline </span><span style="font-weight: normal;">server
+daemons will be run.&nbsp; If all server daemons will be run on a
+single host, then only this option is required to specify the location
+for the <a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plmaster">plmaster</a>(1),
+<a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a>(1),
+<a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a>(1)
+and <a style="font-weight: bold;"
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr">plpluginmgr</a>(1)
+deamons.&nbsp; To configure daemons to run on other server hosts, use
+the <a href="#--master-host"><span style="font-weight: bold;">--master-host</span></a>,
+<a href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>,
+<a href="#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>
+and <a href="#--plugin-host"><span style="font-weight: bold;">--plugin-host</span></a>
+options to override the server specified by this option for the
+respective daemons.</span><span style="font-weight: normal;"></span><br>
+</div>
+<span style="font-weight: normal;"></span></div>
+<span style="font-weight: normal;"><br>
+</span>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;"><span style="font-weight: normal;">Note
+that a host ID for this host must be generate using <a href="plid.html"><span
+ style="font-weight: bold;">plid</span></a>(1)
+and placed in the host IDs file passed to the <a
+ href="plconfig.src.html#--host-ids"><span style="font-weight: bold;">--host-ids</span></a>
+option.<br>
+</span></div>
+<span style="font-weight: normal;"></span></div>
+<span style="font-weight: normal;"></span><span
+ style="font-weight: normal;"></span><br>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
- name="--evaluation"></a>--evaluation</span><br
- style="font-weight: bold;">
-<span style="font-weight: bold;"><a name="--anual"></a>--annual</span><br
- style="font-weight: bold;">
-<span style="font-weight: bold;"><a name="--perpetual"></a>--perpetual<br>
-</span>
-<div style="margin-left: 40px;"><br>
-Specifies the time period the Pipeline license will remain valid.&nbsp;
-An evaluation license is valid for 30-days.&nbsp; An annual license is
-valid
-for one year.&nbsp; A perpetual license is valid forever.&nbsp; One and
-only one of these options must be given.<br>
-</div>
-</div>
-<h4 style="margin-left: 40px;"><a name="Non-Required_Options"></a>Non-Required
-Options</h4>
-<div style="margin-left: 40px;">If run in non-graphical mode, the
-following set of options are not required but may be used to customize
-the configuration parameters for your site which would otherwise be
-auto-detected or given default values.<br>
-<br>
-<span style="font-weight: bold;"><a name="--pipeline-user"></a>--pipeline-user</span>=<span
- style="font-style: italic;">name<br>
-</span>
-<div style="margin-left: 40px;"><br>
-The name of the user which will run Pipeline daemon processes and have
-special permission to perform Pipeline administrative operations.&nbsp;
-<br>
-<br>
-If not specified, the pipeline user will default to (pipeline).<br>
-</div>
-<br>
-<span style="font-weight: bold;"><a name="--host-ids"></a>--host-ids</span>=<span
+ name="--host-ids"></a>--host-ids</span>=<span
  style="font-style: italic;">filename</span><br>
+</div>
 <br>
-<div style="margin-left: 40px;">Specifies the name of the file (<span
+<div style="margin-left: 80px;">Specifies the name of the file (<span
  style="font-style: italic;">filename</span>) containing the host IDs
 for the Pipeline server hosts specified by the <a href="#--master-host"><span
  style="font-weight: bold;">--master-host</span></a>, <a
- href="#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>
-and <a href="#--file-host"><span style="font-weight: bold;">--file-host</span></a>
+ href="plconfig.src.html#--queue-host"><span style="font-weight: bold;">--queue-host</span></a>
+and <a href="plconfig.src.html#--file-host"><span
+ style="font-weight: bold;">--file-host</span></a>
 options.&nbsp; This host ID file is generated by running <a
  href="plid.html"><span style="font-weight: bold;">plid</span></a>(1)
 on each of the server hosts.&nbsp; The file can
@@ -432,10 +591,41 @@ invocation of <a href="plid.html"><span style="font-weight: bold;">plid</span></
 or automatically by using the <a href="plid.html#--append"><span
  style="font-weight: bold;">--append</span></a> option to <a
  href="plid.html"><span style="font-weight: bold;">plid</span></a>(1).<br>
+<br>
 </div>
+<h4 style="margin-left: 40px;"><a name="Non-Required_Options"></a>Non-Required
+Options</h4>
+<div style="margin-left: 40px;">The
+following set of options are not required but may be used to customize
+the configuration parameters for your site which would otherwise be
+auto-detected or given default values.&nbsp; <br>
+<br>
+<span style="font-weight: bold;"><a name="--reconfig"></a>--reconfig</span>=<span
+ style="font-style: italic;">plconfig/settings.glue</span><br>
+<div style="margin-left: 40px;"><br>
+Reuses the configuration settings from a previous invocation of <span
+ style="font-weight: bold;">plconfig</span>(1) to initialize the
+settings for a new configuration.&nbsp; Any options specifed after this
+option will override the settings from the previous
+configuration.&nbsp; <br>
+<br>
 </div>
-<h4 style="margin-left: 40px;"><br>
-</h4>
+<br>
+<span style="font-weight: bold;"><a name="--pipeline-user"></a>--pipeline-user</span>=<span
+ style="font-style: italic;">user-name<br>
+</span><span style="font-weight: bold;"><a name="--pipeline-group"></a>--pipeline-group</span>=<span
+ style="font-style: italic;">group-name</span><br>
+<div style="margin-left: 40px;"><br>
+The names of the user and group used to run Pipeline daemon
+processes.&nbsp; This user will also have
+special permission to perform Pipeline administrative operations.&nbsp;
+<br>
+<br>
+If not specified, both the pipeline user and group will default to
+(pipeline).<br>
+</div>
+<br>
+</div>
 <h4 style="margin-left: 40px;"><b><a name="--home-dir"></a>--home-dir</b><span
  style="font-weight: normal;">=</span><span
  style="font-style: italic; font-weight: normal;">dir</span></h4>
@@ -499,7 +689,8 @@ and placed in the host IDs file passed to the <a href="#--host-ids"><span
  style="font-weight: bold;">--host-ids</span></a> option.<br>
 <br>
 </span><span style="font-weight: normal;">If not specified, the master
-host will default to (localhost).<br>
+host will default to the host specified by the <a href="#--server-host"><span
+ style="font-weight: bold;">--server-host</span></a> option.<br>
 </span></div>
 <h4 style="margin-left: 40px;"><b><a name="--master-port"></a>--master-port</b><span
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
@@ -581,7 +772,10 @@ and placed in the host IDs file passed to the <a href="#--host-ids"><span
 <br>
 </span><span style="font-weight: normal;"></span><span
  style="font-weight: normal;">If not specified, the file host will
-default to (localhost).<br>
+default to </span><span style="font-weight: normal;">the host
+specified by the <a href="#--server-host"><span
+ style="font-weight: bold;">--server-host</span></a> option.</span><span
+ style="font-weight: normal;"><br>
 </span></div>
 <h4 style="margin-left: 40px;"><b><a name="--file-port"></a>--file-port</b><span
  style="font-weight: normal;">=</span><i style="font-weight: normal;">num</i></h4>
@@ -671,7 +865,10 @@ and placed in the host IDs file passed to the <a href="#--host-ids"><span
 <br>
 </span><span style="font-weight: normal;">If not specified, the file
 host will
-default to (localhost).</span></div>
+default to </span><span style="font-weight: normal;"></span><span
+ style="font-weight: normal;">the host specified by the <a
+ href="#--server-host"><span style="font-weight: bold;">--server-host</span></a>
+option.</span></div>
 </div>
 <br>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
@@ -767,7 +964,7 @@ the node directory will default to (/usr/share/pipeline).<br>
 The host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline plugin manager daemon <span
  style="font-weight: bold;"><a
- href="http://temerity.us/products/pipeline/docs/man/index.php?target=plqueuemgr">plqueuemgr</a></span>(1).&nbsp;
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plplugin">plplugin</a></span>(1).&nbsp;
 This daemon is
 responsible for loading plugin
 classes and providing loaded plugins to the other Pipeline programs.<span
@@ -781,69 +978,30 @@ option.<br>
 <br>
 </span><span style="font-weight: normal;">If not specified, the file
 host will
-default to (localhost).</span></div>
+default to </span><span style="font-weight: normal;">to </span><span
+ style="font-weight: normal;"></span><span style="font-weight: normal;">the
+host specified by the <a href="#--server-host"><span
+ style="font-weight: bold;">--server-host</span></a> option.</span></div>
 </div>
 <h4 style="margin-left: 40px;"><span style="font-weight: normal;"><span
  style="font-weight: bold;"><a name="--plugin-port"></a>--plugin-port</span>=<span
  style="font-style: italic;">num</span></span></h4>
-<div style="margin-left: 80px;">The number of the network port (<span
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;">The number of the network port (<span
  style="font-style: italic;">num</span>) listened to by the Pipeline
 plugin server daemon <span style="font-weight: bold;">plpluginmgr</span>(1).&nbsp;
 This daemon is responsible for loading plugin
 classes and providing loaded plugins to the other Pipeline programs.<br>
 <br>
-If not specified, the port number will default to (53141).</div>
+If not specified, the port number will default to (53141).<span
+ style="color: rgb(255, 0, 0);"></span><br
+ style="color: rgb(255, 0, 0);">
+</div>
 <br>
-<br>
-<br>
-<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
- name="--class-path"></a>--class-path</span>=<span
- style="font-style: italic;">path<br>
-</span>
-<div style="margin-left: 40px;"><br>
-An additional set of colon (:) seperated directories (<span
- style="font-style: italic;">path</span>) to search for the JAR files
-for the Java
-prerequisites described in the <a href="#System_Prerequisites"><span
- style="font-weight: bold;">System Prerequisites</span></a><span
- style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>section.&nbsp;
-This (<span style="font-style: italic;">path</span>) is appended to the
-normal class search path for the <span style="font-weight: bold;">Java
-Runtime Environment</span>. Normally this option is not required as the
-JAR
-files for <span style="font-weight: bold;">JAI</span> and <span
- style="font-weight: bold;">JOGL</span> are usually installed in the
-same location as the <span style="font-weight: bold;">JRE</span>.&nbsp;
-This option is provided to support non-standard installations of these
-support packages.<br>
+<br style="color: rgb(255, 0, 0);">
 <br>
 </div>
-<span style="font-weight: bold;"><a name="--library-path"></a>--library-path</span>=<span
- style="font-style: italic;">path</span><span style="font-weight: bold;"><br>
-</span>
-<div style="margin-left: 40px;"><br>
-An additional set of (:) seperated directories (<span
- style="font-style: italic;">path</span>) to search for the native
-shared object libraries for the Java
-prerequisites described in the <a href="#System_Prerequisites"><span
- style="font-weight: bold;">System Prerequisites</span></a><span
- style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>section.&nbsp;
-This path (<span style="font-style: italic;">path</span>) is appended
-to the
-normal libaray search path for the <span style="font-weight: bold;">Java
-Runtime Environment</span>. Normally this option is not required as the
-native libraries for <span style="font-weight: bold;">JAI</span> and <span
- style="font-weight: bold;">JOGL</span> are usually installed in the
-same location as the <span style="font-weight: bold;">JRE</span>.&nbsp;
-This option is provided to support non-standard installations of these
-support packages.<br>
-<br>
-If not specified, the value of the LD_LIBRARY_PATH environmental
-variable is searched instead for native libraries as well as the
-standard <span style="font-weight: bold;">JRE</span> locations.<br>
-<br>
-<br>
-</div>
+<div style="margin-left: 40px;">
 <span style="font-weight: bold;"><a name="--legacy-plugins"></a>--legacy-plugins</span><br>
 <br>
 <div style="margin-left: 40px;">For sites which have previously
@@ -854,13 +1012,24 @@ use this option.<br>
 </div>
 </div>
 <div style="margin-left: 40px;">
-<h4><br>
-</h4>
-<h4>Mac OS X Options</h4>
+<span style="font-weight: bold;"><br>
+</span>
+<h4><a name="Mac_OS_X_Options"></a>Mac OS X Options</h4>
 These options specify the paths to use from Mac OS X hosts to access
 the
 corresponding network file system directories as specified for Linux
 hosts using the non-mac versions of these options.<br>
+<br>
+<span style="font-weight: bold;"><a name="--win-clients"></a>--mac-clients<br>
+</span>
+<div style="margin-left: 40px;"><br>
+Include a support for Mac OS X client programs.&nbsp; If this option is
+specified, you must also supply the Mac OS X specific paths to the root
+install directory (<a href="#--mac-root-dir"><span
+ style="font-weight: bold;">--mac-root-dir</span></a>) and the root
+production directory (<a href="#--mac-prod-dir"><span
+ style="font-weight: bold;">--mac-prod-dir</span></a>).<br>
+</div>
 <br>
 <b><a name="--mac-root-dir"></a>--mac-root-dir</b>=<span
  style="font-style: italic;">dir<br>
@@ -875,10 +1044,9 @@ was (/base/apps), then the Mac path might be something like
 (/Network/Servers/myserver/base/apps).&nbsp; This path will vary
 depending on the details of how NFS volumes are mounted at your site.<br>
 <br>
-There is no default value if not specified.&nbsp; If this option is
-specified, the <a href="#--mac-prod-dir"><span
- style="font-weight: bold;">--mac-prod-dir</span></a> must also be
-specified.<br>
+There is no default value and must be specified if <a
+ href="#--mac-clients"><span style="font-weight: bold;">--mac-clients</span></a>
+is given.<br>
 </div>
 <h4 style="font-weight: normal; margin-left: 40px;"><b><a
  name="--mac-prod-dir"></a>--mac-prod-dir</b>=<span
@@ -892,10 +1060,9 @@ OS X systems.&nbsp; For example, if the path given to --prod-dir was
 depending
 on the details of how NFS volumes are mounted at your site.<br>
 <br>
-There is no default value if not specified.&nbsp; If this option is
-specified, the <a href="#--mac-root-dir"><span
- style="font-weight: bold;">--mac-root-dir</span></a> must also be
-specified.<br>
+There is no default value and must be specified if <a
+ href="plconfig.src.html#--mac-clients"><span style="font-weight: bold;">--mac-clients</span></a>
+is given.<br>
 <br>
 </div>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
@@ -923,7 +1090,139 @@ on a local file system.<br>
 </div>
 <br>
 <div style="margin-left: 80px;">If not specified, the temporary
-directory will default to (/var/tmp).</div>
+directory will default to (/var/tmp).<span style="font-weight: bold;"><br>
+<br>
+</span></div>
+<h4 style="margin-left: 40px;"><a name="Windows_XP_Options"></a>Windows
+XP Options</h4>
+<div style="margin-left: 40px;">These options specify the paths to use
+from Windows XP hosts to access
+the
+corresponding network file system directories as specified for Linux
+hosts using the non-win versions of these options.&nbsp;&nbsp; The
+location of the Java Runtime Environment on the Windows XP hosts must
+also be specified.<br>
+<br>
+Note that the backslash character (\) used to delimit Windows file
+system paths is
+an escape character in UNIX shells.&nbsp; For this reason, all Windows
+directory paths passed to the following options should be specified
+using the forward slash (/) in place of the back slash.&nbsp; This
+means that in order to specify the native Windows path
+(C:\foo\bar) you will need to type (C:/foo/bar).&nbsp; Similarly, a
+native UNC path such as (\\server\share\foo\bar) will need to be
+specified as
+(//server/share/foo/bar).&nbsp; Also, if specifying a directory path
+which contains spaces, make sure
+you quote the entire path argument.<br>
+<br>
+<span style="font-weight: bold;"><a name="--win-clients"></a>--win-clients<br>
+</span>
+<div style="margin-left: 40px;"><br>
+Include a support for Windows XP client programs.&nbsp; If this option
+is specified, you must also supply the Windows specific paths to the
+root install directory (<a href="#--win-root-dir"><span
+ style="font-weight: bold;">--win-root-dir</span></a>), the root
+production directory (<a href="#--win-prod-dir"><span
+ style="font-weight: bold;">--win-prod-dir</span></a>) and the Java
+Runtime location (<span style="font-weight: bold;">--win-java-home</span>).<br>
+</div>
+<br>
+<b><a name="--win-root-dir"></a>--win-root-dir</b>=<span
+ style="font-style: italic;">dir</span><br>
+<span style="font-style: italic;"></span></div>
+<span style="font-style: italic;">
+<br>
+</span>
+<div style="margin-left: 80px;">The path
+to the directory (<span style="font-style: italic;">dir</span>)
+under which the top-level directory of the Pipeline installation
+resides as accessed from Windows XP systems.&nbsp; For example, if the
+path given to <a href="plconfig.src.html#--root-dir"><span
+ style="font-weight: bold;">--root-dir</span></a>
+was (/base/apps), then the Windows path might be something like
+(Z:/base/apps) or (//myserver/base/apps).&nbsp; This path
+will vary
+depending on the details of how network file system volumes are
+accessed at your site.<br>
+<br>
+There is no default value and must be specified if <a
+ href="#--win-clients"><span style="font-weight: bold;">--win-clients</span></a>
+is given.<br>
+</div>
+<h4 style="font-weight: normal; margin-left: 40px;"><b><a
+ name="--win-prod-dir"></a>--win-prod-dir</b>=<span
+ style="font-style: italic;"></span><span style="font-style: italic;">dir</span></h4>
+<div style="margin-left: 80px;">The absolute path
+to the root directory
+under which all production data files will reside as accessed from
+Windows XP systems.&nbsp; For example, if the path given to --prod-dir
+was
+(/base/prod) , then the Windows path might be something like
+(Z:/base/prod) or (//myserver/base/prod).&nbsp; This path
+will vary
+depending
+on the details of how network file system volumes are accessed at your
+site.<br>
+<br>
+There is no default value and must be specified if <a
+ href="#--win-clients"><span style="font-weight: bold;">--win-clients</span></a>
+is given.<br>
+<br>
+</div>
+<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
+ name="--win-home-dir"></a>--win-home-dir</span>=<span
+ style="font-style: italic;"></span><span style="font-style: italic;">dir</span><br>
+<br>
+<div style="margin-left: 40px;">The absolute path to the parent
+directory (<span style="font-style: italic;"></span><span
+ style="font-style: italic;">dir</span>) of all user home
+directories as accessed from Windows XP systems.&nbsp; <br>
+<br>
+If not specified, this location defaults to (<font mstheme=""
+ face="Arial, Arial, Helvetica">C:/Documents and Settings</font><span
+ style="color: rgb(255, 0, 0);"></span>).<br>
+<br>
+</div>
+</div>
+<div style="margin-left: 40px;"><span style="font-weight: bold;"><a
+ name="--temp-dir"></a>--win-temp-dir</span>=<span
+ style="font-style: italic;"></span><span style="font-style: italic;">dir</span><span
+ style="font-style: italic;"></span><br>
+</div>
+<br>
+<div style="margin-left: 80px;">The absolute path to the directory (<span
+ style="font-style: italic;"></span><span style="font-style: italic;">dir</span>)
+used to write various temporary files generated by Pipeline
+programs on Windows XP systems.&nbsp; For optimal performance, this
+directory should reside
+on a local file system.<br>
+</div>
+<br>
+<div style="margin-left: 80px;">If not specified, the temporary
+directory will default to (C:/WINDOWS/Temp<span
+ style="color: rgb(255, 0, 0);"></span>).<br>
+</div>
+<div style="margin-left: 40px;"><br>
+<span style="font-weight: bold;"><a name="--win-java-home"></a>--win-java-home</span>=<span
+ style="font-style: italic;">dir<span style="font-style: italic;"><br>
+</span></span>
+<div style="margin-left: 40px;"><br>
+The path to the root directory of the local Java Runtime Environment
+installed on the Windows XP host.&nbsp;&nbsp; For consitancy, the
+version of the JRE installed on the Windows XP hosts should match the
+version used by Linux hosts and used to run <span
+ style="font-weight: bold;">plconfig</span>(1) itself.&nbsp; Since the
+JRE will be installed in a much different location on Windows XP hosts,
+it needs to be supplied in order for the Pipeline client launcher
+scripts to function properly.<br>
+<br>
+If not specified, the JRE home directory defaults to (C:/Program
+Files/Java/jre1.5.0_06).<br>
+<span style="font-style: italic;"><br>
+</span></div>
+</div>
+<div style="margin-left: 40px;"></div>
 <h3><a name="See_Also"></a>See Also<br>
 </h3>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">Pipeline
@@ -943,7 +1242,7 @@ Software</span><br>
 <div style="margin-left: 40px; font-weight: bold;"><a
  href="#temerity_software.key">temerity-software.key</a><br>
 <a href="#site_profile">site-profile</a><br>
-<a href="#plconfig_settings.txt">plconfig-settings.txt</a><br>
+<a href="#settings.glue">settings.glue</a><br>
 </div>
 <h3><a name="Author"></a>Author<span style="font-weight: bold;"></span></h3>
 <div style="margin-left: 40px;">Created by <span

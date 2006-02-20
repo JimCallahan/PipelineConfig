@@ -157,16 +157,29 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
           TARGET = plconfig.jar
 
          PARSERS = ConfigOptsParser \
-                   IdOptsParser
+                   IdOptsParser \
+                   GlueParser
 
 
       JAVA_PATHS = -d ../../.. -classpath "../../..:$(srcdir)/../../.."
 
-     ALL_SOURCES = $(shell ls $(srcdir)/*.java)
 
            ENUMS = 
 
     ENUM_SOURCES = $(patsubst %,$(srcdir)/%.java,$(ENUMS))
+
+
+     API_SOURCES = $(shell ls $(srcdir)/*.java)
+
+     LAF_SOURCES = $(shell ls $(srcdir)/laf/*.java) 
+
+    GLUE_SOURCES = $(shell ls $(srcdir)/glue/*.java) 
+
+      UI_SOURCES = $(shell ls $(srcdir)/ui/*.java) 
+
+
+     ALL_SOURCES = $(API_SOURCES) $(LAF_SOURCES) $(GLUE_SOURCES) $(UI_SOURCES) 
+
 
     JAVA_SOURCES = $(ENUM_SOURCES) $(filter-out $(ENUM_SOURCES),$(ALL_SOURCES)) \
                    PackageInfo.java Enigma.java \
@@ -182,7 +195,14 @@ all: Makefile PackageInfo.java $(TARGET)
 
 $(TARGET): java-all
 	(cd ../../..; \
-         $(JAR) cvf us/temerity/plconfig/$@ us/temerity/plconfig/*.class)
+         $(JAR) cvf us/temerity/plconfig/$@ \
+                    us/temerity/plconfig/laf/LookAndFeelLoader.class \
+                    us/temerity/plconfig/glue/*.class \
+                    us/temerity/plconfig/ui/*.class \
+                    us/temerity/plconfig/*.class)
+	(bdir=`pwd`; cd $(srcdir)/../../..; \
+         $(JAR) uvf $$bdir/$(TARGET) \
+                    us/temerity/plconfig/laf/*.xml us/temerity/plconfig/laf/*.png)
 
 java-all: $(JAVA_SOURCES)
 	$(JAVA_C) $(JAVA_C_FLAGS) $(JAVA_PATHS) $(JAVA_SOURCES)
@@ -238,6 +258,9 @@ clean-jar:
 
 clean-class:
 	rm -f *.class
+	rm -f laf/*.class
+	rm -f glue/*.class
+	rm -f ui/*.class
 	rm -f java-all
 
 clean-aux:

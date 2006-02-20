@@ -1,4 +1,4 @@
-// $Id: IllegalConfigException.java,v 1.3 2005/03/10 10:47:17 jim Exp $
+// $Id: IllegalConfigException.java,v 1.4 2006/02/20 20:12:04 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -9,6 +9,7 @@ package us.temerity.plconfig;
 /**
  * Indicates that a configuration setting was illegal.
  */
+public
 class IllegalConfigException
   extends Exception 
 {

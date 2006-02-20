@@ -66,13 +66,13 @@ TOKEN :
 			 						    
   /* global options */				    
 | <APPEND:       	 "--append">      : PATH_SEP    
-			 		
+
   /* seperators */ 
-| <WS1: ([" ","\t"])+> 
+| <AE1: (["\0"])+> 
 
   /* errors */ 
-| <UNKNOWN_OPTION:  "-" ("-")? (~[" ","\t","="])*>  : IGNORE_STATE
-| <UNKNOWN_COMMAND: ~["-"," ","\t"] (~[" ","\t"])*> : IGNORE_STATE
+| <UNKNOWN_OPTION:  "-" ("-")? (~["\0","="])*>  : IGNORE_STATE
+| <UNKNOWN_COMMAND: ~["-","\0"] (~["\0"])*>     : IGNORE_STATE
 }
 
 
@@ -98,8 +98,8 @@ TOKEN :
   <PATH_ARG:       ("/")* ("../")* <PATH_ARG_COMP> 
 		     ("/" (".." | (<PATH_ARG_COMP>)+)?)*>      : DEFAULT
 | <#PATH_ARG_COMP: (["a"-"z","A"-"Z","0"-"9","_","-","."])*>
-| <MISSING_PATH:   [" ","\t"]>                                 : IGNORE_STATE
-| <ILLEGAL_PATH:   (~[" ","\t"])+>                             : IGNORE_STATE
+| <MISSING_PATH:   ["\0"]>                                     : IGNORE_STATE
+| <ILLEGAL_PATH:   (~["\0"])+>                                 : IGNORE_STATE
 }
 
 
@@ -122,7 +122,7 @@ Commands()
   throws IllegalConfigException :
 {}   
 {
-  (GlobalOpts() WS())*
+  (GlobalOpts() AE())*
   {}
 }
     
@@ -146,7 +146,7 @@ void
 Help() : 
 {}
 {
-  <HELP> WS()
+  <HELP> AE()
   { 
     pApp.help(); 
   }
@@ -156,7 +156,7 @@ void
 HtmlHelp() : 
 {}
 {
-  <HTML_HELP> WS()
+  <HTML_HELP> AE()
   { 
     pApp.htmlHelp(); 
   }
@@ -166,7 +166,7 @@ void
 Version() :
 {}
 {
-  <VERSION> WS()
+  <VERSION> AE()
   { 
     pApp.version(); 
   }
@@ -176,7 +176,7 @@ void
 ReleaseDate() :
 {}
 {
-  <RELEASE_DATE> WS()
+  <RELEASE_DATE> AE()
   { 
     pApp.releaseDate(); 
   }
@@ -186,7 +186,7 @@ void
 Copyright() :
 {}
 {
-  <COPYRIGHT> WS() 
+  <COPYRIGHT> AE() 
   { 
     pApp.copyright(); 
   }
@@ -226,12 +226,12 @@ Append()
 /*------------------------------------------------------------------------------------------*/
 
 Token
-WS() :
+AE() :
 {
   Token t;
 }
 {
-  (t=<WS1>)
+  (t=<AE1>)
   { 
     return t; 
   }
