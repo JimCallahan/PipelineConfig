@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.33 2006/02/20 20:13:21 jim Exp $
+// $Id: ConfigApp.java,v 1.34 2006/02/22 16:50:20 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -85,26 +85,26 @@ class ConfigApp
       pProfile.put("PipelineUser",  "pipeline");
       pProfile.put("PipelineGroup", "pipeline");
 
-      pProfile.put("TemporaryDirectory", new File("/usr/tmp"));
+      pProfile.put("TemporaryDirectory", "/usr/tmp");
       
       pProfile.put("MasterPort",     53135);
       pProfile.put("MasterHeapSize", 536870912L);      
-      pProfile.put("NodeDirectory",  new File("/usr/share/pipeline"));
+      pProfile.put("NodeDirectory",  "/usr/share/pipeline");
       
       pProfile.put("FilePort",            53136);
       pProfile.put("FileHeapSize",        134217728L);  
-      pProfile.put("ProductionDirectory", new File("/base/prod"));
+      pProfile.put("ProductionDirectory", "/base/prod");
 
       pProfile.put("QueuePort",      53139);
       pProfile.put("QueueHeapSize",  268435456L);  
       pProfile.put("JobPort",        53140);
-      pProfile.put("QueueDirectory", new File("/usr/share/pipeline"));
+      pProfile.put("QueueDirectory", "/usr/share/pipeline");
 
       pProfile.put("PluginPort",     53141);
 
       pProfile.put("MacClients",            false);
-      pProfile.put("MacHomeDirectory",      new File("/Users"));
-      pProfile.put("MacTemporaryDirectory", new File("/var/tmp"));
+      pProfile.put("MacHomeDirectory",      "/Users");
+      pProfile.put("MacTemporaryDirectory", "/var/tmp");
 
       pProfile.put("WinClients",            false);
       pProfile.put("WinHomeDirectory",      "C:/Documents and Settings");
@@ -193,7 +193,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("RootInstallDirectory", 
-		 validateCanonicalDir(dir, "Root Install Directory")); 
+		 validateCanonicalDir(dir, "Root Install Directory").getPath()); 
   }
 
   public void 
@@ -204,7 +204,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("RootInstallDirectory", 
-		 validateCanonicalDir(path, "Root Install Directory")); 
+		 validateCanonicalDir(path, "Root Install Directory").getPath()); 
   }
 
   /** 
@@ -213,7 +213,10 @@ class ConfigApp
   public File
   getRootDirectory()
   {
-    return (File) pProfile.get("RootInstallDirectory");
+    String dir = (String) pProfile.get("RootInstallDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
   
 
@@ -714,7 +717,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("HomeDirectory", 
-		 validateCanonicalDir(dir, "Home Directory")); 
+		 validateCanonicalDir(dir, "Home Directory").getPath()); 
   }
 
   /** 
@@ -723,7 +726,10 @@ class ConfigApp
   public File
   getHomeDirectory()
   {
-    return (File) pProfile.get("HomeDirectory");
+    String dir = (String) pProfile.get("HomeDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -740,7 +746,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("TemporaryDirectory", 
-		 validateCanonicalDir(dir, "Temporary Directory")); 
+		 validateCanonicalDir(dir, "Temporary Directory").getPath()); 
   }
 
   /** 
@@ -749,7 +755,10 @@ class ConfigApp
   public File
   getTemporaryDirectory()
   {
-    return (File) pProfile.get("TemporaryDirectory");
+    String dir = (String) pProfile.get("TemporaryDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -842,7 +851,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("NodeDirectory", 
-		 validateAbsolutePath(dir, "Node Directory")); 
+		 validateAbsolutePath(dir, "Node Directory").getPath()); 
   }
 
   /**
@@ -851,7 +860,10 @@ class ConfigApp
   public File
   getNodeDirectory() 
   {
-    return (File) pProfile.get("NodeDirectory");
+    String dir = (String) pProfile.get("NodeDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -945,7 +957,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("ProductionDirectory",
-		 validateAbsolutePath(dir, "Production Directory")); 
+		 validateAbsolutePath(dir, "Production Directory").getPath()); 
   }
 
   /**
@@ -954,7 +966,10 @@ class ConfigApp
   public File
   getProdDirectory() 
   {
-    return (File) pProfile.get("ProductionDirectory");
+    String dir = (String) pProfile.get("ProductionDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -1074,7 +1089,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("QueueDirectory", 
-		 validateAbsolutePath(dir, "Queue Directory"));
+		 validateAbsolutePath(dir, "Queue Directory").getPath());
   }
  
   /**
@@ -1083,7 +1098,10 @@ class ConfigApp
   public File
   getQueueDirectory() 
   {
-    return (File) pProfile.get("QueueDirectory");
+    String dir = (String) pProfile.get("QueueDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -1178,7 +1196,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("MacRootInstallDirectory", 
-		 validateAbsolutePath(dir, "(Mac OS X) Root Install Directory"));
+		 validateAbsolutePath(dir, "(Mac OS X) Root Install Directory").getPath());
   }
   
   /**
@@ -1187,7 +1205,10 @@ class ConfigApp
   public File
   getMacRootDirectory() 
   {
-    return (File) pProfile.get("MacRootInstallDirectory");
+    String dir = (String) pProfile.get("MacRootInstallDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -1202,7 +1223,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("MacProductionDirectory", 
-		 validateAbsolutePath(dir, "(Mac OS X) Production Directory"));
+		 validateAbsolutePath(dir, "(Mac OS X) Production Directory").getPath());
   }
 
   /**
@@ -1211,7 +1232,10 @@ class ConfigApp
   public File
   getMacProdDirectory() 
   {
-    return (File) pProfile.get("MacProductionDirectory");
+    String dir = (String) pProfile.get("MacProductionDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -1226,7 +1250,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("MacHomeDirectory", 
-		 validateAbsolutePath(dir, "(Mac OS X) Home Directory"));
+		 validateAbsolutePath(dir, "(Mac OS X) Home Directory").getPath());
   }
 
   /**
@@ -1235,7 +1259,10 @@ class ConfigApp
   public File
   getMacHomeDirectory() 
   {
-    return (File) pProfile.get("MacHomeDirectory");
+    String dir = (String) pProfile.get("MacHomeDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
@@ -1250,7 +1277,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("MacTemporaryDirectory", 
-		 validateAbsolutePath(dir, "(Mac OS X) Temporary Directory"));
+		 validateAbsolutePath(dir, "(Mac OS X) Temporary Directory").getPath());
   }
 
   /**
@@ -1259,7 +1286,10 @@ class ConfigApp
   public File
   getMacTemporaryDirectory() 
   {
-    return (File) pProfile.get("MacTemporaryDirectory");
+    String dir = (String) pProfile.get("MacTemporaryDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
 
