@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.35 2006/05/07 05:56:32 jim Exp $
+// $Id: ConfigApp.java,v 1.36 2006/05/07 18:01:10 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -85,6 +85,7 @@ class ConfigApp
       pProfile.put("PipelineUser",  "pipeline");
       pProfile.put("PipelineGroup", "pipeline");
 
+      pProfile.put("HomeDirectory",      "/home");
       pProfile.put("TemporaryDirectory", "/usr/tmp");
       
       pProfile.put("MasterPort",     53135);
@@ -101,6 +102,7 @@ class ConfigApp
       pProfile.put("QueueDirectory", "/usr/share/pipeline");
 
       pProfile.put("PluginPort",     53141);
+
 
       pProfile.put("MacClients",            false);
       pProfile.put("MacHomeDirectory",      "/Users");
