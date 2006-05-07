@@ -1,4 +1,4 @@
-// $Id: JEssentialsPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JEssentialsPanel.java,v 1.2 2006/05/07 17:53:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -273,7 +273,7 @@ class JEssentialsPanel
 	    catch(IllegalConfigException ex) {
 	      now = new Date();
 	    }
-	    date = new Date(now.getTime() + 30758400000L);
+	    date = new Date(now.getTime() + 31536000000L);
 	  }
 
 	  pApp.setLimitedLicense(date);
