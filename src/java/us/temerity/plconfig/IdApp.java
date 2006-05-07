@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.7 2006/02/20 20:12:04 jim Exp $
+// $Id: IdApp.java,v 1.8 2006/05/07 05:57:11 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -299,34 +299,6 @@ class IdApp
 	  }
 	}
       }
-	
-      /* get the PCI amd SCSCI info (if any exists) */ 
-      {
-	String[] files = {
-	  "/proc/pci", 
-	  "/proc/scsi/scsi"
-	};
-	  
-	byte[] buf = new byte[4096];
-	int wk;
-	for(wk=0; wk<files.length; wk++) {
-	  try {
-	    FileInputStream in = new FileInputStream(files[wk]);
-	    
-	    while(true) {
-	      int cnt = in.read(buf);
-	      if(cnt == -1) 
-		break;
-	      
-	      md.update(buf, 0, cnt);
-	    }
-	    
-	    in.close();
-	  }
-	  catch(IOException ex) {
-	  }    
-	}
-      }  
 
       BigInteger hardwareID = new BigInteger(md.digest());
       for(String host : found) 
