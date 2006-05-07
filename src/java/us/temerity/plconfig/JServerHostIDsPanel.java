@@ -1,4 +1,4 @@
-// $Id: JHostIDsPanel.java,v 1.2 2006/02/20 20:13:21 jim Exp $
+// $Id: JServerHostIDsPanel.java,v 1.1 2006/05/07 05:56:32 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -113,6 +113,24 @@ class JServerHostIDsPanel
 	 
 	  btn.addActionListener(this);
 	  btn.setActionCommand("browse");
+
+	  hbox.add(btn);
+	}
+
+	hbox.add(Box.createRigidArea(new Dimension(20, 0)));
+
+	{
+	  JButton btn = new JButton("Clear");
+	  
+	  btn.setName("ValuePanelButton");
+
+	  Dimension size = new Dimension(120, 23);
+	  btn.setMinimumSize(size);
+	  btn.setPreferredSize(size);
+	  btn.setMaximumSize(size); 
+	 
+	  btn.addActionListener(this);
+	  btn.setActionCommand("clear");
 
 	  hbox.add(btn);
 	}
@@ -238,6 +256,8 @@ class JServerHostIDsPanel
       doBrowse();
     else if(cmd.equals("compute")) 
       doCompute();
+    else if(cmd.equals("clear")) 
+      doClear();
   }
 
 
@@ -330,6 +350,16 @@ class JServerHostIDsPanel
       pApp.showErrorDialog(ex);
     }
 
+    updatePanel();
+  }
+
+  /**
+   * Clear all loaded host IDs
+   */ 
+  public void 
+  doClear() 
+  {
+    pApp.clearHostIDs();
     updatePanel();
   }
 

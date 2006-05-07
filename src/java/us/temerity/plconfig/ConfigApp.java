@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.34 2006/02/22 16:50:20 jim Exp $
+// $Id: ConfigApp.java,v 1.35 2006/05/07 05:56:32 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -351,6 +351,15 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
 
   /**
+   * Remove all host IDs.
+   */ 
+  public void 
+  clearHostIDs() 
+  {
+    pProfile.remove("HostIDs");
+  }
+
+  /**
    * Set the table of host IDs.
    */ 
   public void 
@@ -379,56 +388,43 @@ class ConfigApp
     try {
       TreeMap<String,BigInteger> hostIDs = new TreeMap<String,BigInteger>();
 
-      FileReader reader = new FileReader(file);
-      boolean done = false;
-      int line = 1;
-      while(true) {
-	/* read a line */ 
+      String output = null;
+      {
+	FileReader reader = new FileReader(file);
+	
 	StringBuffer buf = new StringBuffer();
+	char cbuf[] = new char[8192];
 	while(true) {
-	  int next = reader.read();
-	  if(next == -1) {
-	    done = true;
-	    break;
-	  }
+	  int num = reader.read(cbuf);
 	  
-	  char c = (char) next;
-	  if(c == '\n') 
+	  if(num == -1)
 	    break;
-	  
-	  buf.append(c);
-	}
-	
-	if(done) 
-	  break;
 
-	String host      = null;
-	BigInteger cksum = null;
+	  buf.append(cbuf, 0, num);
+	}
 	
-	String[] fields = buf.toString().split(" ");
-	int wk, cnt;
-	for(wk=0, cnt=0; wk<fields.length; wk++) {
-	  if(fields[wk].length() > 0) {
-	    if(cnt == 0) {
-	      host = fields[wk];
+	reader.close();
+
+	output = buf.toString();
+      }
+      
+      String lines[] = output.split("\n");
+      int lk;
+      for(lk=0; lk<lines.length; lk++) {
+	String id = null;
+	String parts[] = lines[lk].split(" ");
+	int wk;
+	for(wk=0; wk<parts.length; wk++) {
+	  if(parts[wk].length() > 0) {
+	    if(id == null) {
+	      id = parts[wk];
 	    }
-	    else if(cnt == 1) {
-	      cksum = new BigInteger(fields[wk]);
+	    else {
+	      hostIDs.put(id, new BigInteger(parts[wk]));
+	      id = null;
 	    }
-	    
-	    cnt++;
 	  }
 	}
-	
-	if((host != null) && (cksum != null)) {
-	  hostIDs.put(host, cksum);
-	}
-	else {
-	  throw new IllegalConfigException
-	    ("Syntax Error: on line [" + line + "] of Host IDs file (" + file + ")!");
-	}
-	
-	line++;
       }
       
       if(hostIDs.isEmpty()) 
@@ -438,7 +434,9 @@ class ConfigApp
       pProfile.put("HostIDs", hostIDs);       
     }
     catch(Exception ex) {
-      throw new IllegalConfigException("Illegal Host IDs file (" + file + ")!", ex);
+      throw new IllegalConfigException
+	("Illegal Host IDs file (" + file + ")!\n" + 
+	 "  " + ex.getMessage());
     }
   }
 
