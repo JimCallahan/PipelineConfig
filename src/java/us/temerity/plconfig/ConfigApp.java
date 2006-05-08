@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.36 2006/05/07 18:01:10 jim Exp $
+// $Id: ConfigApp.java,v 1.37 2006/05/08 03:06:15 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -292,15 +292,15 @@ class ConfigApp
     throws IllegalConfigException
   {
     long start = getNetTime();
+    long end = expiration.getTime();
+    if(start >= end) 
+      end = start + 2592000000L;
+
     pProfile.put("LicenseStart", new Date(start));
     pProfile.put("LicenseStartStamp", new Long(start));
     
-    long end = expiration.getTime();
     pProfile.put("LicenseEnd" , new Date(end));
     pProfile.put("LicenseEndStamp" , new Long(end));
-    
-    if(start >= end) 
-      throw new IllegalConfigException("The license expiration date is in the past!");
     
     pProfile.put("LicenseType", "Limited");
   }
