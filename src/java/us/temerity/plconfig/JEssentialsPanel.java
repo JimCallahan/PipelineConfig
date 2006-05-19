@@ -1,4 +1,4 @@
-// $Id: JEssentialsPanel.java,v 1.3 2006/05/07 18:38:45 jim Exp $
+// $Id: JEssentialsPanel.java,v 1.4 2006/05/19 15:08:35 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -274,7 +274,8 @@ class JEssentialsPanel
 	      now = new Date();
 	    }
 
-	    if(pApp.getLicenseType().equals("Limited")) 
+	    String ltype = pApp.getLicenseType();
+	    if((ltype != null) && ltype.equals("Limited")) 
 	      date = pApp.getLicenseEnd();
 
 	    if((date == null) || (date.compareTo(now) < 0)) 
