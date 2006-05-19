@@ -113,7 +113,7 @@ TOKEN :
 | <WIN_PROD_DIR:         "--win-prod-dir">      : WIN_PATH_SEP
 | <WIN_HOME_DIR:       	 "--win-home-dir">      : WIN_PATH_SEP  
 | <WIN_TEMP_DIR:         "--win-temp-dir">      : WIN_PATH_SEP 
-| <WIN_JAVA_HOME:        "--win-java-home">      : WIN_PATH_SEP
+| <WIN_JAVA_HOME:        "--win-java-home">     : WIN_PATH_SEP
    		    
 | <LEGACY_PLUGINS:   	 "--legacy-plugins">	
 
@@ -180,8 +180,8 @@ TOKEN :
 <WIN_PATH_STATE> 
 TOKEN :
 {
-  <WIN_PATH_ARG:       ("\\" | (["a"-"z","A"-"Z"] ":")) "\\" <WIN_PATH_ARG_COMP> 
-	  	         ("\\" <WIN_PATH_ARG_COMP>)*>                 : DEFAULT
+  <WIN_PATH_ARG:       ("/" | (["a"-"z","A"-"Z"] ":")) "/" <WIN_PATH_ARG_COMP> 
+	  	         ("/" <WIN_PATH_ARG_COMP>)*>                 : DEFAULT
 | <#WIN_PATH_ARG_COMP: (["a"-"z","A"-"Z","0"-"9","_","-","."])*>
 | <MISSING_WIN_PATH:   ["\0"]>                                        : IGNORE_STATE
 | <ILLEGAL_WIN_PATH:   (~["\0"])+>                                    : IGNORE_STATE
