@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.8 2006/05/07 05:57:11 jim Exp $
+// $Id: IdApp.java,v 1.9 2006/09/03 14:52:14 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -215,46 +215,27 @@ class IdApp
 	
 	if(str == null)
 	  throw new IOException();
-	
+
 	{
 	  boolean hwNext = false;
 	  boolean ipNext = false;
-
-	  String hw = null;
 
 	  String tok[] = str.split(" ");
 	  int wk; 
 	  for(wk=0; wk<tok.length; wk++) {
 	    if(tok[wk].length() > 0) {
 	      if(hwNext) {
-		String[] hex = tok[wk].split(":");
-		if(hex.length != 6) 
-		  throw new IOException();
-
-		int i;
-		for(i=0; i<hex.length; i++) 
-		  if(hex[i].length() != 2)
-		    throw new IOException();
-		
-		hw = tok[wk];
+		md.update(tok[wk].getBytes());
 		hwNext = false;
 	      }
 	      else if(ipNext) {
 		if(tok[wk].startsWith("addr:")) {
 		  String addr = tok[wk].substring(5);
 		  String hname = hostnames.get(addr);
-		  if(hname != null) {
-		    String s = ("IP=" + addr + " HWaddr=" + hw);
-		    md.update(s.getBytes());
+		  if(hname != null)
 		    found.add(hname);
-		  }
 		}
-		else {
-		  throw new IOException();
-		}
-		
-		hw     = null;
-		ipNext = false;
+		ipNext = false;		
 	      }
 	      else if(tok[wk].equals("HWaddr")) {
 		hwNext = true;
@@ -262,16 +243,12 @@ class IdApp
 	      else if(tok[wk].equals("inet")) {
 		ipNext = true;
 	      }
-	      else {
-		hwNext = false;
-		ipNext = false;
-	      }
 	    }
 	  }
+	  
+	  if(found.isEmpty()) 
+	    throw new IOException();
 	}
-
-	if(found.isEmpty()) 
-	  throw new IOException();
       }
       
       /* get the CPU info */ 
@@ -305,7 +282,8 @@ class IdApp
 	IDs.put(host, hardwareID);
     }
     catch(Exception ex) {
-      throw new IOException("Unable to determine local host ID.");
+      throw new IOException("Unable to determine local host ID." + 
+			    "\n" + getFullMessage(ex));
     }      
 
     return IDs;
