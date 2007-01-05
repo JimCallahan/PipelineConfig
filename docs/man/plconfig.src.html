@@ -324,56 +324,20 @@ and will work with all supported operating systems.<br>
   <br>
 Finally, all Pipeline programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
-tool depends on at least the JRE 5.0 which can be found here:<br>
+tool, which is itself a Java program, depends on at least the JRE 5.0
+which can be found here:<br>
   <br>
   <div style="margin-left: 40px;"><a
  href="http://java.sun.com/j2se/1.5.0/download.jsp"><span
  style="font-weight: bold;">Java Runtime Environment</span></a><br>
   <span style="font-weight: bold;"></span></div>
-  <div style="margin-left: 80px;">JRE 5.0 Update 6 (or later)<br>
+  <div style="margin-left: 80px;">JRE 5.0 Update 9 (or later)<br>
   </div>
-  <a href="http://java.sun.com/products/jce/"><span
- style="font-weight: bold;"></span></a><br>
-The graphical client program <span style="font-weight: bold;"><a
- href="http://temerity.us/products/pipeline/docs/man/index.php?target=plui">plui</a></span>(1)
-also requires the JOGL library which provides OpenGL support for Java
-programs.&nbsp; This library can be found here:<br>
-  <br>
-  <a href="http://java.sun.com/products/jce/"><span
- style="font-weight: bold;"></span></a>
-  <div style="margin-left: 40px;"><a
- href="http://java.sun.com/products/jce/"><span
- style="font-weight: bold;"> </span></a> <span
- style="font-weight: bold;"></span><span style="font-weight: bold;"><a
- href="https://jogl.dev.java.net/">Java
-JOGL Library</a><br>
-  </span>
-  <div style="margin-left: 40px;">Java OpenGL 1.1 <br>
-  <br>
-  </div>
-  </div>
-The JOGL jar and native libraries should be installed by manually
-copying the files into the correct locations within the installed
-JRE.&nbsp;&nbsp; The locations for these components in a typical JRE
-installation are:<br>
-&nbsp;&nbsp; <br>
-  <div style="margin-left: 40px;">/usr/java/jre1.5.0_06/<br>
-  <div style="margin-left: 40px;">lib/ext/jogl.jar</div>
-  <div style="margin-left: 40px;">lib/i386/libjogl_cg.so<br>
-lib/i386/libjogl.so<br>
-  </div>
-  </div>
-  <br>
-The JRE and JOGL library will need to be installed before running <span
- style="font-weight: bold;">plconfig</span>(1).&nbsp;&nbsp; A proper
-installation of these components will be verified as part of the
-configuration process.<br>
-  <br>
   <div style="margin-left: 40px;">
   <div style="margin-left: 40px;"> </div>
   </div>
   <h4><a name="Mac_OS_X_Support"></a>Mac OS X Support</h4>
-The Pipeline client programs can be run on Mac OS X (10.4.5 or later)
+The Pipeline client programs can be run on Mac OS X (10.4.8 or later)
 systems.&nbsp; If
 you want to use Pipeline on Mac's, you will need to provide some
 additional file system configuration information.&nbsp; See the a <a
@@ -383,21 +347,11 @@ the options required and their usage.&nbsp; These options will cause a
 Mac OS X specific RPM to be generated as part of the
 Pipeline distribution for your site.<br>
   <br>
-Pipeline on Mac OS X systems also require the J2SE 5.0 and JOGL
-libraries.&nbsp; A special release of the Java Runtime can be obtained
+Pipeline on Mac OS X systems also require the Java Runtime
+package.&nbsp; A special release of the Java Runtime can be obtained
 for Mac OS X systems here: <a style="font-weight: bold;"
  href="http://www.apple.com/support/downloads/j2se50release4intel.html"><span
  class="page_title">J2SE 5.0 Release 4 for Mac OS X</span></a>.&nbsp;&nbsp;
-The JOGL jar and native libraries will need to be installed manually
-under this J2SE 5.0 release in the following locations.<br>
-  <br>
-  <div style="margin-left: 40px;">/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/<br>
-  <div style="margin-left: 40px;">Home/lib/ext/jogl.jar<br>
-Libraries/libjogl.jnilib<br>
-Libraries/libjogl_cg.jnilib<br>
-  </div>
-  </div>
-  <br>
 In addition, user and group names as well as UIDs and GIDs need to be
 identical between the Linux and Mac OS X systems at your site.&nbsp;
 This includes the Pipeline administration user specified by the <a
@@ -415,22 +369,13 @@ part of the
 Pipeline distribution for your site.<br>
   <br>
 When using Pipeline on Windows XP systems, you will need to install the
-J2SE 5.0 and JOGL libraries.&nbsp; In a typical Java Runtime
-installation on Windows XP, the JOGL jar and native libraries will need
-to be manually installed in the same location as the Java
-Runtime.&nbsp; The following is the typical location.&nbsp; If
+Java Runtime (JRE 5.0).&nbsp; In a typical Java Runtime
+installation the installed filed are located under (C:\Program
+Files\Java\jre1.5.0_09).&nbsp; If
 installed elsewhere you will need to specify the location using the <a
  href="#--win-java-home"><span style="font-weight: bold;">--win-java-home</span></a>
 option.<br>
-  <div style="margin-left: 40px;"><br>
-C:\Program Files\Java\jre1.5.0_06\<br>
-  <div style="margin-left: 40px;">lib\ext\jogl.jar<br>
-  </div>
-  <div style="margin-left: 40px;">bin\jogl.dll<br>
-bin\jogl_cg.dll<br>
   <br>
-  </div>
-  </div>
 You will also need to use <a style="font-weight: bold;"
  href="http://samba.org">Samba</a> or some other SMB capable file
 server (or network appliance) to make the root install directory (<a

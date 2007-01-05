@@ -1,4 +1,4 @@
-// $Id: UIFactory.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: UIFactory.java,v 1.2 2007/01/05 21:37:55 jim Exp $
 
 package us.temerity.plconfig.ui;
 
@@ -18,7 +18,6 @@ import javax.swing.text.*;
 import javax.swing.plaf.basic.*;
 import javax.swing.plaf.synth.*;
 
-import net.java.games.jogl.*;
 
 /*------------------------------------------------------------------------------------------*/
 /*   U I   F A C T O R Y                                                                    */

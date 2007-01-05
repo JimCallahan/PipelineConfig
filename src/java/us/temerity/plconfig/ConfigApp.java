@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.37 2006/05/08 03:06:15 jim Exp $
+// $Id: ConfigApp.java,v 1.38 2007/01/05 21:37:55 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1566,97 +1566,6 @@ class ConfigApp
   }
 
 
-  /*----------------------------------------------------------------------------------------*/
-
-  /**
-   * Get the JOGL jar location.
-   */ 
-  public File
-  getJoglJar() 
-  {
-    String jre = getJavaHome(); 
-    if(jre == null) 
-      return null;
-
-    return (new File(jre, "lib/ext/jogl.jar"));    
-  } 
-
-  /**
-   * Get the JOGL library location.
-   */ 
-  public File
-  getJoglLib() 
-  {
-    String jre = getJavaHome(); 
-    if(jre == null) 
-      return null;
-
-    return (new File(jre, "lib/i386/libjogl.so"));
-  } 
-  
-  /**
-   * Get the JOGL Cg library location.
-   */ 
-  public File
-  getJoglCgLib() 
-  {
-    String jre = getJavaHome(); 
-    if(jre == null) 
-      return null;
-
-    return (new File(jre, "lib/i386/libjogl_cg.so"));
-  } 
-
-  /**
-   * Validate the JOGL components. 
-   */  
-  public void 
-  validateJogl()
-    throws IllegalConfigException
-  {
-    /* jar file */ 
-    {
-      File jar = getJoglJar();
-      if(jar == null) 
-	throw new IllegalConfigException
-	  ("Unable to determine the location of the Java Runtime Environment!");
-    
-      if(!jar.isFile()) 
-	throw new IllegalConfigException
-	  ("Could not find the JOGL JAR file (" + jar.getName() + ") in the proper " + 
-	   "install location (" + jar.getParent() + ") within current Java Runtime " + 
-	   "Environment.");
-    }	
-    
-    /* support native libraries */ 
-    {
-      File lib = getJoglLib();
-      if(lib == null) 
-	throw new IllegalConfigException
-	  ("Unable to determine the location of the Java Runtime Environment!");
-    
-      if(!lib.isFile()) 
-	throw new IllegalConfigException
-	  ("Could not find the JOGL native library (" + lib.getName() + ") in the proper " + 
-	   "install location (" + lib.getParent() + ") within current Java Runtime " + 
-	   "Environment.");
-    }
-
-    /* support native libraries */ 
-    {
-      File lib = getJoglCgLib();
-      if(lib == null) 
-	throw new IllegalConfigException
-	  ("Unable to determine the location of the Java Runtime Environment!");
-    
-      if(!lib.isFile()) 
-	throw new IllegalConfigException
-	  ("Could not find the JOGL native library (" + lib.getName() + ") in the proper " + 
-	   "install location (" + lib.getParent() + ") within current Java Runtime " + 
-	   "Environment.");
-    }	
-  }
-
 
   /*----------------------------------------------------------------------------------------*/
   /*   G E N E R A L   V A L I D A T O R S                                                  */
@@ -2071,9 +1980,6 @@ class ConfigApp
 
     /* validate the Java runtime */ 
     validateJavaRuntime(); 
-
-    /* validate JOGL components */ 
-    validateJogl(); 
 
     
     /* SERVER CONFIGURATION */ 
@@ -3029,7 +2935,7 @@ class ConfigApp
 		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
 		{
-		  JLabel label = new JLabel("JRE/JOGL Support", pNoneIcon, JLabel.LEFT); 
+		  JLabel label = new JLabel("Java Runtime Support", pNoneIcon, JLabel.LEFT); 
 		  pPanelLabels.add(label);
 		  vbox.add(label);
 		}

@@ -1,4 +1,4 @@
-// $Id: JRuntimePanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JRuntimePanel.java,v 1.2 2007/01/05 21:37:55 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -35,7 +35,7 @@ class JRuntimePanel
    ConfigApp app
   ) 
   {
-    super(app, "JRE/JOGL Support:"); 
+    super(app, "Java Runtime Support:"); 
 
     /* initialize UI components */ 
     {
@@ -74,27 +74,6 @@ class JRuntimePanel
 	pClassVersionField = 
 	  UIFactory.createTitledTextField(tpanel, "Class Version:", sTSize, 
 					  vpanel, "-", sVSize);
-	
-	UIFactory.addVerticalSpacer(tpanel, vpanel, 24);
-
-	pJoglJarField = 
-	  UIFactory.createTitledTextField(tpanel, "JOGL Jar:", sTSize, 
-					  vpanel, "-", sVSize);
-	pJoglJarField.setHorizontalAlignment(JLabel.LEFT);
-	
-	UIFactory.addVerticalSpacer(tpanel, vpanel, 12);
-
-	pJoglLibField = 
-	  UIFactory.createTitledTextField(tpanel, "JOGL Lib:", sTSize, 
-					  vpanel, "-", sVSize);
-	pJoglLibField.setHorizontalAlignment(JLabel.LEFT);
-	
-	UIFactory.addVerticalSpacer(tpanel, vpanel, 3);
-
-	pJoglCgLibField = 
-	  UIFactory.createTitledTextField(tpanel, "JOGL Cg Lib:", sTSize, 
-					  vpanel, "-", sVSize);
-	pJoglCgLibField.setHorizontalAlignment(JLabel.LEFT);
 
 	panel.add((JComponent) comps[2]); 
 	panel.setMaximumSize(panel.getPreferredSize());
@@ -112,14 +91,7 @@ class JRuntimePanel
 	 "above. To insure that this is the case, we recommend running plconfig(1) on the " +
 	 "host where you intend to the Master server deamon plmaster(1).\n" + 
 	 "\n" +
-	 "J2SE 5.0 can be downloaded from: http://java.sun.com/j2se/1.5.0/download.jsp\n" +
-	 "\n" + 
-	 "The JOGL library provides OpenGL support for Java applications.  JOGL is " + 
-	 "composed of a set of Java classes distributed as a Jar archive and two native " + 
-	 "libraries.  This section will validate that these JOGL components are properly " +
-	 "installed in the above locations.\n" +
-	 "\n" + 
-	 "JOGL can be downloaded from:  https://jogl.dev.java.net"); 
+	 "J2SE 5.0 can be downloaded from: http://java.sun.com/j2se/1.5.0/download.jsp\n");
     }
   }
 
@@ -134,7 +106,7 @@ class JRuntimePanel
   public String
   getPanelTitle()
   {
-    return "JRE/JOGL Support"; 
+    return "Java Runtime Support"; 
   }
 
   /**
@@ -148,10 +120,6 @@ class JRuntimePanel
     pJavaNameField.setText(pApp.getJavaName());
     pJavaVersionField.setText(pApp.getJavaVersion());
     pClassVersionField.setText(pApp.getJavaClassVersion());
-
-    pJoglJarField.setText(pApp.getJoglJar().toString());
-    pJoglLibField.setText(pApp.getJoglLib().toString());
-    pJoglCgLibField.setText(pApp.getJoglCgLib().toString());
   }
   
   /**
@@ -165,7 +133,6 @@ class JRuntimePanel
     throws IllegalConfigException
   {
     pApp.validateJavaRuntime(); 
-    pApp.validateJogl(); 
   }
 
 
@@ -190,11 +157,6 @@ class JRuntimePanel
   private JTextField  pJavaNameField;
   private JTextField  pJavaVersionField;
   private JTextField  pClassVersionField;
-
-  private JTextField  pJoglJarField;
-  private JTextField  pJoglLibField;
-  private JTextField  pJoglCgLibField;
-
 
 }
 
