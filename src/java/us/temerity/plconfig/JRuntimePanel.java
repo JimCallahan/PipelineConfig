@@ -1,4 +1,4 @@
-// $Id: JRuntimePanel.java,v 1.2 2007/01/05 21:37:55 jim Exp $
+// $Id: JRuntimePanel.java,v 1.3 2007/02/17 14:06:19 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -35,7 +35,7 @@ class JRuntimePanel
    ConfigApp app
   ) 
   {
-    super(app, "Java Runtime Support:"); 
+    super(app, "Java Runtime:"); 
 
     /* initialize UI components */ 
     {
@@ -85,13 +85,19 @@ class JRuntimePanel
       add(Box.createVerticalGlue());
 
       addNotes
-	("Information about the Java Runtime Environment (J2SE 5.0) used to to run this " + 
-	 "configuration tool.  It is assumed that you intend to run all Pipeline server " + 
-	 "daemons and clients programs in an identical Java environment as displayed " + 
-	 "above. To insure that this is the case, we recommend running plconfig(1) on the " +
-	 "host where you intend to the Master server deamon plmaster(1).\n" + 
+	("Information about the Java Runtime Environment (JRE) used to run the server " + 
+         "daemons which make up the back-end of Pipeline.  The JRE information is " + 
+         "inferred from the version of Java used to run this tool.  We recommend that " + 
+         "you run plconfig(1) on the host where you intend to run the Master server " + 
+         "to insure that you have a compatible and properly functioning JRE installed.\n" +
 	 "\n" +
-	 "J2SE 5.0 can be downloaded from: http://java.sun.com/j2se/1.5.0/download.jsp\n");
+         "We recommend one of these server implementations:\n" + 
+         "\n" + 
+         "Sun Microsystems - JDK 5.0 - Update 11\n" + 
+         "  http://java.sun.com/javase/downloads/index_jdk5.jsp\n" + 
+         "\n" + 
+         "BEA - JRockit 5.0 - R27.1\n" + 
+         "  http://www.bea.com/framework.jsp?CNT=index.htm&FP=/content/products/jrockit\n"); 
     }
   }
 
@@ -106,7 +112,7 @@ class JRuntimePanel
   public String
   getPanelTitle()
   {
-    return "Java Runtime Support"; 
+    return "Java Runtime"; 
   }
 
   /**

@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.38 2007/01/05 21:37:55 jim Exp $
+// $Id: ConfigApp.java,v 1.39 2007/02/17 14:06:19 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -25,8 +25,6 @@ import javax.swing.text.*;
 import javax.swing.plaf.basic.*;
 import javax.swing.plaf.synth.*;
 
-import com.sun.crypto.provider.SunJCE;
- 
 
 /*------------------------------------------------------------------------------------------*/
 /*   C O N F I G   A P P                                                                    */
@@ -103,7 +101,6 @@ class ConfigApp
 
       pProfile.put("PluginPort",     53141);
 
-
       pProfile.put("MacClients",            false);
       pProfile.put("MacHomeDirectory",      "/Users");
       pProfile.put("MacTemporaryDirectory", "/var/tmp");
@@ -111,7 +108,7 @@ class ConfigApp
       pProfile.put("WinClients",            false);
       pProfile.put("WinHomeDirectory",      "C:/Documents and Settings");
       pProfile.put("WinTemporaryDirectory", "C:/WINDOWS/Temp");
-      pProfile.put("WinJavaHome",           "C:/Program Files/Java/jre1.5.0_06");
+      pProfile.put("WinJavaHome",           "C:/Program Files/Java/jdk1.5.0_11/jre");
 
       pProfile.put("LegacyPlugins", false);
 
@@ -765,6 +762,35 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
 
   /**
+   * Set the Unix client Java home directory.
+   */
+  public void 
+  setUnixJavaHome
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("UnixJavaHome", 
+		 validateCanonicalDir(dir, "(Unix) Java Home Directory").getPath()); 
+  }
+
+  /** 
+   * Get the root temporary directory.
+   */ 
+  public File
+  getUnixJavaHome()
+  {
+    String dir = (String) pProfile.get("UnixJavaHome");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
    * Set the hostname which runs plmaster(1).
    */
   public void 
@@ -1314,6 +1340,32 @@ class ConfigApp
   getWinClients()
   {
     return (Boolean) pProfile.get("WinClients");
+  }
+
+  
+  /**
+   * Set the Windows default Domain.
+   */ 
+  public void 
+  setWinDefaultDomain
+  (
+   String domain
+  ) 
+    throws IllegalConfigException
+  {
+    if((domain == null) || (domain.length() == 0)) 
+      throw new IllegalConfigException
+        ("No Default Windows Domain was specified!");
+    pProfile.put("WinDefaultDomain", domain);
+  }
+
+  /** 
+   * Get the Windows default Domain.
+   */ 
+  public String
+  getWinDefaultDomain()
+  {
+    return (String) pProfile.get("WinDefaultDomain");
   }
 
 
@@ -2139,6 +2191,11 @@ class ConfigApp
 
     /* Windows XP options */ 
     if(getWinClients()) {
+      String domain = getWinDefaultDomain();
+      if(domain == null) 
+	throw new IllegalConfigException
+	  ("The --win-domain option is required when the --win-clients option is given!");
+
       String wroot = getWinRootDirectory();
       if(wroot == null)
 	throw new IllegalConfigException
@@ -2416,6 +2473,8 @@ class ConfigApp
 	setHomeDirectory(new File((String) value));
       else if(title.equals("TemporaryDirectory"))
 	setTemporaryDirectory(new File((String) value));
+      else if(title.equals("UnixJavaHome"))
+	setUnixJavaHome(new File((String) value));
 
       else if(title.equals("MacClients"))
 	setMacClients((Boolean) value); 
@@ -2430,6 +2489,8 @@ class ConfigApp
 
       else if(title.equals("WinClients"))
 	setWinClients((Boolean) value);
+      else if(title.equals("WinDefaultDomain"))
+	setWinDefaultDomain((String) value);
       else if(title.equals("WinRootInstallDirectory"))
 	setWinRootDirectory((String) value);
       else if(title.equals("WinProductionDirectory"))
@@ -2580,6 +2641,9 @@ class ConfigApp
     
     case ConfigOptsParserConstants.USERNAME:
       return "a user/group name";
+
+    case ConfigOptsParserConstants.DOMAIN: 
+      return "a Windows Domain name";
 
     case ConfigOptsParserConstants.BYTE_SIZE:
       return "a byte size";
@@ -2932,14 +2996,6 @@ class ConfigApp
 		  vbox.add(label);
 		}
 
-		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
-
-		{
-		  JLabel label = new JLabel("Java Runtime Support", pNoneIcon, JLabel.LEFT); 
-		  pPanelLabels.add(label);
-		  vbox.add(label);
-		}
-
 		hbox.add(vbox);
 	      }
 	      
@@ -2974,6 +3030,14 @@ class ConfigApp
 
 		{
 		  JLabel label = new JLabel("Essentials", pNoneIcon, JLabel.LEFT); 
+		  pPanelLabels.add(label);
+		  vbox.add(label);
+		}
+
+		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		{
+		  JLabel label = new JLabel("Java Runtime", pNoneIcon, JLabel.LEFT); 
 		  pPanelLabels.add(label);
 		  vbox.add(label);
 		}
@@ -3121,9 +3185,9 @@ class ConfigApp
 	    {
 	      pPanels.add(new JAdminUserPanel(pApp));
 	      pPanels.add(new JSystemInfoPanel(pApp));
-	      pPanels.add(new JRuntimePanel(pApp));
 
 	      pPanels.add(new JEssentialsPanel(pApp));
+	      pPanels.add(new JRuntimePanel(pApp));
 	      pPanels.add(new JMasterManagerPanel(pApp));
 	      pPanels.add(new JFileManagerPanel(pApp));
 	      pPanels.add(new JQueueManagerPanel(pApp));

@@ -1,4 +1,4 @@
-// $Id: KeyGenApp.java,v 1.4 2004/03/22 23:38:52 jim Exp $
+// $Id: KeyGenApp.java,v 1.5 2007/02/17 14:06:19 jim Exp $
 
 import java.io.*;
 import java.math.*;
@@ -8,7 +8,6 @@ import java.security.interfaces.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import javax.crypto.interfaces.*;
-import com.sun.crypto.provider.SunJCE;
 
 
 /*------------------------------------------------------------------------------------------*/

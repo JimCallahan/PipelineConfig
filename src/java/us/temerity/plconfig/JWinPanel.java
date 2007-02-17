@@ -1,4 +1,4 @@
-// $Id: JWinPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JWinPanel.java,v 1.2 2007/02/17 14:06:19 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -46,7 +46,7 @@ class JWinPanel
 	{
 	  Box vbox = new Box(BoxLayout.Y_AXIS);
 
-	  vbox.add(UIFactory.createPanelLabel("Windows Clients:")); 
+	  vbox.add(UIFactory.createPanelLabel("Windows Clients/Servers:")); 
 
 	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 	  
@@ -76,8 +76,15 @@ class JWinPanel
 
 	{
 	  Box vbox = new Box(BoxLayout.Y_AXIS);
+          
+          vbox.add(UIFactory.createPanelLabel("Default Windows Domain:"));
+      
+          vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 60)));
+          pDefaultDomainField = UIFactory.createIdentifierField("", sHSize, JTextField.LEFT);
+          vbox.add(pDefaultDomainField);
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
 
 	  pProdDirComp = new JWindowsDirComp("Production Directory", sHSize);
 	  vbox.add(pProdDirComp);
@@ -103,9 +110,10 @@ class JWinPanel
       
       addNotes
 	("If you will be using Pipeline on Windows XP hosts, you need to enable the " + 
-	 "Windows Clients.  Due to differences between Linux and Windows XP file naming " + 
-	 "conventions, standard paths and how network file systems are accessed, the " + 
-	 "paths required by Pipeline must be seperately configured for Windows systems.\n" + 
+	 "Windows Clients/Servers.  Due to differences between Linux and Windows XP file " +
+         "naming conventions, standard paths and how network file systems are accessed, " + 
+         "the paths required by Pipeline must be seperately configured for Windows " +
+         "systems.\n" + 
 	 "\n" + 
 	 "All Windows directory paths passed to the following options should be specified " + 
 	 "using the forward slash (/) in place of the back slash (\\).  This means that " + 
@@ -114,6 +122,13 @@ class JWinPanel
 	 "(\\\\server\\share\\foo\\bar) will need to be specified as " + 
 	 "(//server/share/foo/bar).\n" + 
 	 "\n" + 
+         "The Default Windows Domain is used by Pipeline as a default value when querying " + 
+         "users for Windows authentication information.  When using Pipeline with Windows " + 
+         "based render farms, users must provide authentication credentials which include " + 
+         "their Domain/User and Password.  You should set this to the Windows Domain most " + 
+         "frequently used at your site as a convenience for users.  Users may override " + 
+         "this setting on a per-user basis.\n" + 
+         "\n" +
 	 "The Root Install Directory and Production Directory should map to the same " + 
 	 "network file system directories seen from Windows XP systems as the " +
 	 "corresponing Linux paths specified earlier.  For example, a Linux path such " + 
@@ -127,10 +142,9 @@ class JWinPanel
 	 "The Java Home Directory is the path to the root directory of the local Java " +
 	 "Runtime Environment (JRE) installed on Windows XP hosts at your site.  For " + 
 	 "consitancy, the version of the JRE installed on the Windows XP hosts should " + 
-	 "match the version used by Linux hosts and used to run this configuration tool.  " + 
-	 "Since the JRE will be installed in a much different location on Windows XP " + 
-	 "hosts, it needs to be supplied in order for the Pipeline client launcher " + 
-	 "scripts to function properly.");
+	 "match the version used by Linux hosts.  Since the JRE will be installed in a " + 
+         "much different location on Windows XP hosts, it needs to be supplied in order " + 
+         "for the Pipeline client launcher scripts to function properly.");
     }
   }
 
@@ -171,6 +185,7 @@ class JWinPanel
     boolean enabled = pClientsField.getValue(); 
     pApp.setWinClients(enabled);
     if(enabled) {
+      pApp.setWinDefaultDomain(pDefaultDomainField.getText());
       pApp.setWinRootDirectory(pRootDirComp.validateDir(pApp)); 
       pApp.setWinProdDirectory(pProdDirComp.validateDir(pApp)); 
       pApp.setWinHomeDirectory(pHomeDirComp.validateDir(pApp)); 
@@ -212,6 +227,7 @@ class JWinPanel
   {
     boolean enabled = pClientsField.getValue(); 
     
+    pDefaultDomainField.setEnabled(enabled);
     pRootDirComp.setEnabled(enabled);
     pProdDirComp.setEnabled(enabled);
     pHomeDirComp.setEnabled(enabled);
@@ -220,6 +236,8 @@ class JWinPanel
     
     if(!enabled)
       return; 
+
+    pDefaultDomainField.setText(pApp.getWinDefaultDomain());
 
     {
       String dir = pApp.getWinRootDirectory();
@@ -273,6 +291,7 @@ class JWinPanel
   /**
    * The Windows XP fields. 
    */ 
+  private JIdentifierField pDefaultDomainField; 
   private JBooleanField    pClientsField; 
   private JWindowsDirComp  pRootDirComp; 
   private JWindowsDirComp  pProdDirComp; 

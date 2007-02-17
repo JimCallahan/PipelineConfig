@@ -76,9 +76,10 @@ TOKEN :
 | <HOST_IDS:         	 "--host-ids">          : PATH_SEP
    
 | <RECONFIG:         	 "--reconfig">          : PATH_SEP
-
+  
 | <HOME_DIR:       	 "--home-dir">          : PATH_SEP    
 | <TEMP_DIR:             "--temp-dir">          : PATH_SEP
+| <UNIX_JAVA_HOME:       "--unix-java-home">    : PATH_SEP  
 
 | <MASTER_HOST:          "--master-host">       : HOSTNAME_SEP
 | <MASTER_PORT:          "--master-port">       : INTEGER_SEP
@@ -109,6 +110,7 @@ TOKEN :
 | <MAC_TEMP_DIR:         "--mac-temp-dir">      : PATH_SEP
    		    
 | <WIN_CLIENTS:       	 "--win-clients">  
+| <WIN_DOMAIN:           "--win-domain">        : DOMAIN_SEP
 | <WIN_ROOT_DIR:       	 "--win-root-dir">      : WIN_PATH_SEP 
 | <WIN_PROD_DIR:         "--win-prod-dir">      : WIN_PATH_SEP
 | <WIN_HOME_DIR:       	 "--win-home-dir">      : WIN_PATH_SEP  
@@ -298,6 +300,24 @@ TOKEN :
 }
 
 
+/* domain arguments */ 
+<DOMAIN_SEP> 
+TOKEN :
+{
+  <EQ9:                  "=">   : DOMAIN_STATE
+| <MISSING_DOMAIN_ARG: ~["="]>  : IGNORE_STATE
+}
+
+<DOMAIN_STATE> 
+TOKEN :
+{
+  <DOMAIN:         ("." | (["a"-"z","A"-"Z","0"-"9"])+)>   : DEFAULT
+| <MISSING_DOMAIN: ["\0"]>                           : IGNORE_STATE
+| <ILLEGAL_DOMAIN: (~["\0"])+>                       : IGNORE_STATE
+}
+
+
+
 /*------------------------------------------------------------------------------------------*/
 /*   T O P   L E V E L                                                                      */
 /*------------------------------------------------------------------------------------------*/
@@ -399,14 +419,15 @@ GlobalOpts()
 {}
 {
   (Batch() | Evaluation() | Limited() | Perpetual() | RootDir() | ServerHost() | HostIDs() | 
-   Reconfig() | HomeDir() | TempDir() | 
+   Reconfig() | HomeDir() | TempDir() | UnixJavaHome() | 
    MasterHost() | MasterPort() | MasterHeapSize() | NodeDir() | 
    FileHost() | FilePort() | FileHeapSize() | ProdDir() | 
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | 
    PipelineUser() | PipelineGroup() |
    MacClients() | MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
-   WinClients() | WinRootDir() | WinProdDir() | WinHomeDir() | WinTempDir() | WinJavaHome() |
+   WinClients() | WinDomain() | WinRootDir() | WinProdDir() | WinHomeDir() | 
+   WinTempDir() | WinJavaHome() |
    LegacyPlugins()) 
   {}
 }
@@ -652,6 +673,19 @@ TempDir()
   <TEMP_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setTemporaryDirectory(new File(t.image));
+  }
+}
+
+void
+UnixJavaHome()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <UNIX_JAVA_HOME> EQ() t=<PATH_ARG>
+  { 
+    pApp.setUnixJavaHome(new File(t.image));
   }
 }
 
@@ -971,6 +1005,19 @@ WinClients() :
 }
 
 void
+WinDomain() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <WIN_DOMAIN> EQ() t=<DOMAIN>
+  { 
+    pApp.setWinDefaultDomain(t.image);
+  }
+}
+
+void
 WinRootDir()
   throws IllegalConfigException :
 {
@@ -1138,7 +1185,7 @@ EQ() :
   Token t;
 }
 {
-  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5> | t=<EQ6> | t=<EQ7> | t=<EQ8>)
+  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5> | t=<EQ6> | t=<EQ7> | t=<EQ8> | t=<EQ9>)
   { 
     return t; 
   }

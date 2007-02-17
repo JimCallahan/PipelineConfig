@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in.in,v 1.4 2005/05/17 13:21:36 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.5 2007/02/17 14:06:19 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -10,7 +10,7 @@ import java.security.interfaces.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import javax.crypto.interfaces.*;
-import com.sun.crypto.provider.SunJCE;
+
 
 /*------------------------------------------------------------------------------------------*/
 /*   C U S T O M E R   P R O F I L E   A P P                                                */

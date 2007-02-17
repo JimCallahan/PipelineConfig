@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.9 2006/09/03 14:52:14 jim Exp $
+// $Id: IdApp.java,v 1.10 2007/02/17 14:06:19 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -12,7 +12,7 @@ import java.security.interfaces.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import javax.crypto.interfaces.*;
-import com.sun.crypto.provider.SunJCE;
+
 
 /*------------------------------------------------------------------------------------------*/
 /*   I D   A P P                                                                            */
