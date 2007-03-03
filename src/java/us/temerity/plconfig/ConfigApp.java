@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.39 2007/02/17 14:06:19 jim Exp $
+// $Id: ConfigApp.java,v 1.40 2007/03/03 22:19:21 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -271,11 +271,11 @@ class ConfigApp
     pProfile.put("LicenseStart", new Date(start));
     pProfile.put("LicenseStartStamp", new Long(start));
     
-    long end = start + 2592000000L;
+    long end = start + 5184000000L;
     pProfile.put("LicenseEnd" , new Date(end));
     pProfile.put("LicenseEndStamp" , new Long(end));
     
-    pProfile.put("LicenseType", "30-Day Evaluation");
+    pProfile.put("LicenseType", "60-Day Evaluation");
   }
 
   /** 
@@ -623,9 +623,8 @@ class ConfigApp
       throw new IllegalConfigException
 	("The Pipeline Admin Group was illegal!");
 
-    int idx = -1;
     try {
-      String args[] = { "groups", user };       
+      String args[] = { "id", "--name", "--group", user };       
       Process proc = Runtime.getRuntime().exec(args);
       
       InputStream in = proc.getInputStream();
@@ -636,26 +635,18 @@ class ConfigApp
       if(num == -1) 
 	throw new IOException();
 
-      boolean isUser = System.getProperty("user.name").equals(user);
+      String gname = new String(buf, 0, num-1);
 
-      String line = new String(buf);
-      String fields[] = line.split("[ \t\n]");
-      int wk;
-      for(wk=0; wk<fields.length; wk++) {
-	if(fields[wk].length() > 0) {
-	  idx++;
-	  if(isUser || (idx > 1)) {
-	    if(group.equals(fields[wk]))
-	      break;
-	  }
-	}
-      }
-      
-      if(!isUser) 
-	idx -= 2;
+      if(!gname.equals(group)) 
+        throw new IllegalConfigException
+          ("The supplied Pipeline Group (" + group + ") is not the primary group " + 
+           "(" + gname + ") of the Pipeline Admin User (" + user + ")!"); 
 
-      if((idx < 0) || (proc.waitFor() != 0))
+      if(proc.waitFor() != 0)
 	throw new IOException();
+    }
+    catch(IllegalConfigException ex) {
+      throw ex;
     }
     catch(Exception ex) {
       throw new IllegalConfigException
@@ -664,7 +655,7 @@ class ConfigApp
 
     int gid = -1;
     try {
-      String args[] = { "id", "--groups", user };
+      String args[] = { "id", "--group", user };
       Process proc = Runtime.getRuntime().exec(args);
 
       InputStream in = proc.getInputStream();
@@ -675,20 +666,9 @@ class ConfigApp
       if(num == -1) 
 	throw new IOException();
       
-      String line = new String(buf);
-      String fields[] = line.split("[ \t\n]");
-      int wk, i;
-      for(wk=0, i=0; wk<fields.length; wk++) {
-	if(fields[wk].length() > 0) {
-	  if(i == idx) {
-	    gid = Integer.valueOf(fields[wk]);
-	    break;
-	  }	    
-	  i++;
-	}
-      }
+      gid = Integer.valueOf(new String(buf, 0, num-1));
 
-      if((gid == -1) || (proc.waitFor() != 0))
+      if(proc.waitFor() != 0) 
 	throw new IOException();
     }
     catch(Exception ex) {
@@ -2414,7 +2394,7 @@ class ConfigApp
 
       else if(title.equals("LicenseType")) {
 	String ltype = (String) value;
-	if(ltype.equals("30-Day Evaluation")) 
+	if(ltype.equals("60-Day Evaluation")) 
 	  setEvaluationLicense();
 	else if(ltype.equals("Limited")) 
 	  setLimitedLicense(new Date((Long) profile.get("LicenseEndStamp")));
