@@ -1,4 +1,4 @@
-// $Id: JEssentialsPanel.java,v 1.4 2006/05/19 15:08:35 jim Exp $
+// $Id: JEssentialsPanel.java,v 1.5 2007/03/03 22:19:34 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -53,7 +53,7 @@ class JEssentialsPanel
 	  {
 	    ArrayList<String> values = new ArrayList<String>();
 	    values.add("-");
-	    values.add("30-Day Evaluation");
+	    values.add("60-Day Evaluation");
 	    values.add("Limited"); 
 	    values.add("Perpetual");
 	    
@@ -106,8 +106,8 @@ class JEssentialsPanel
       add(Box.createVerticalGlue());
       
       addNotes
-	("You must choose the type of license for your site.  A 30-Day Evaluation " +
-	 "license expires 30 days from now, while a Limited license expires at the date " + 
+	("You must choose the type of license for your site.  A 60-Day Evaluation " +
+	 "license expires 60 days from now, while a Limited license expires at the date " + 
 	 "specified.  Finally, a Perpetual license will never expire.\n\n" + 
 	 "You must also specify the location where Pipeline will be installed at your " + 
 	 "site as the Root Install Directory.  This directory should be on a network " + 
@@ -140,7 +140,7 @@ class JEssentialsPanel
       pLicenseTypeField.setSelectedIndex(0);
       pLicenseEndField.setDate(null);       
     }
-    else if(ltype.equals("30-Day Evaluation")) {
+    else if(ltype.equals("60-Day Evaluation")) {
       pLicenseTypeField.setSelectedIndex(1);
       pLicenseEndField.setDate(pApp.getLicenseEnd());
     }
