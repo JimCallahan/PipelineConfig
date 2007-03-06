@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.40 2007/03/03 22:19:21 jim Exp $
+// $Id: ConfigApp.java,v 1.41 2007/03/06 04:28:38 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -87,7 +87,7 @@ class ConfigApp
       pProfile.put("TemporaryDirectory", "/usr/tmp");
       
       pProfile.put("MasterPort",     53135);
-      pProfile.put("MasterHeapSize", 536870912L);      
+      pProfile.put("MasterHeapSize", 134217728L); 
       pProfile.put("NodeDirectory",  "/usr/share/pipeline");
       
       pProfile.put("FilePort",            53136);
@@ -95,7 +95,7 @@ class ConfigApp
       pProfile.put("ProductionDirectory", "/base/prod");
 
       pProfile.put("QueuePort",      53139);
-      pProfile.put("QueueHeapSize",  268435456L);  
+      pProfile.put("QueueHeapSize",  134217728L); 
       pProfile.put("JobPort",        53140);
       pProfile.put("QueueDirectory", "/usr/share/pipeline");
 
@@ -623,8 +623,9 @@ class ConfigApp
       throw new IllegalConfigException
 	("The Pipeline Admin Group was illegal!");
 
+    boolean found = false;
     try {
-      String args[] = { "id", "--name", "--group", user };       
+      String args[] = { "id", "--name", "--groups", user };
       Process proc = Runtime.getRuntime().exec(args);
       
       InputStream in = proc.getInputStream();
@@ -635,27 +636,35 @@ class ConfigApp
       if(num == -1) 
 	throw new IOException();
 
-      String gname = new String(buf, 0, num-1);
+      String line = new String(buf);
+      String fields[] = line.split("[ \t\n]");
 
-      if(!gname.equals(group)) 
-        throw new IllegalConfigException
-          ("The supplied Pipeline Group (" + group + ") is not the primary group " + 
-           "(" + gname + ") of the Pipeline Admin User (" + user + ")!"); 
+      int wk;
+      for(wk=0; wk<fields.length; wk++) {
+	if(fields[wk].length() > 0) {
+          if(group.equals(fields[wk])) {
+            found = true;
+            break;
+          }
+        }
+      }
 
       if(proc.waitFor() != 0)
 	throw new IOException();
-    }
-    catch(IllegalConfigException ex) {
-      throw ex;
     }
     catch(Exception ex) {
       throw new IllegalConfigException
 	("Unable to determine if the Pipeline Admin Group (" + group + ") is valid!"); 
     }
-
+    
+    if(!found) 
+      throw new IllegalConfigException
+	("The Pipeline Admin User (" + user + ") does not belong to the given Pipeline " + 
+         "Admin Group (" + group + ")!");
+    
     int gid = -1;
     try {
-      String args[] = { "id", "--group", user };
+      String args[] = { "sg", group, "id --group " + user };
       Process proc = Runtime.getRuntime().exec(args);
 
       InputStream in = proc.getInputStream();
