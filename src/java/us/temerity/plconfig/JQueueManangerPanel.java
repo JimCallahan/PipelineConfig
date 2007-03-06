@@ -1,4 +1,4 @@
-// $Id: JQueueManangerPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JQueueManangerPanel.java,v 1.2 2007/03/06 04:28:57 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -89,9 +89,10 @@ class JQueueManagerPanel
 	 "these jobs to both the Master Manager and Pipeline client programs.  You must " +
 	 "specify the host where the Queue Manager will run and the network ports listened " +
 	 "to be both the Queue and Job Manager daemons.  You may also specify a size of " + 
-	 "the Java Runtime heap.  The heap size should be at least (256M), but may need to " +
+	 "the Java Runtime heap.  The heap size should be at least (128M), but may need to " +
 	 "be larger depending on the size of your facility and the available memory on the " +
-	 "host which will run the Queue Manager.\n" +
+	 "host which will run the Queue Manager.  For optimal performance, as much memory " + 
+         "as possible should be dedicated to this daemon.\n" +
 	 "\n" + 
 	 "The Queue Directory is where the Queue Manager daemon stores the persistent " + 
 	 "copies of jobs and other queue related database information.  This directory " + 

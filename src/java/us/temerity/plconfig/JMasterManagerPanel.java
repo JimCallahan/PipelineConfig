@@ -1,4 +1,4 @@
-// $Id: JMasterManagerPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JMasterManagerPanel.java,v 1.2 2007/03/06 04:28:57 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -86,7 +86,7 @@ class JMasterManagerPanel
 	 "daemon will be run, the network port on which it will listen and the maxmimum " + 
 	 "size of the Java Runtime heap.  The Master Hostname must be reachable by all " + 
 	 "hosts at your site which will run Pipeline client programs.   The heap size " + 
-	 "should be at least (512M), but for optimal performance should be set as large " + 
+	 "should be at least (128M), but for optimal performance should be set as large " + 
 	 "as possible based on the amount of memory the host which will run the Master " + 
 	 "Manager can dedicate to this daemon.\n" +
 	 "\n" + 

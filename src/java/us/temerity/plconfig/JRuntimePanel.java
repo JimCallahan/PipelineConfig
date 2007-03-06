@@ -1,4 +1,4 @@
-// $Id: JRuntimePanel.java,v 1.3 2007/02/17 14:06:19 jim Exp $
+// $Id: JRuntimePanel.java,v 1.4 2007/03/06 04:28:57 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -91,13 +91,10 @@ class JRuntimePanel
          "you run plconfig(1) on the host where you intend to run the Master server " + 
          "to insure that you have a compatible and properly functioning JRE installed.\n" +
 	 "\n" +
-         "We recommend one of these server implementations:\n" + 
+         "We recommend the following server implementation:\n" + 
          "\n" + 
          "Sun Microsystems - JDK 5.0 - Update 11\n" + 
-         "  http://java.sun.com/javase/downloads/index_jdk5.jsp\n" + 
-         "\n" + 
-         "BEA - JRockit 5.0 - R27.1\n" + 
-         "  http://www.bea.com/framework.jsp?CNT=index.htm&FP=/content/products/jrockit\n"); 
+         "  http://java.sun.com/javase/downloads/index_jdk5.jsp");
     }
   }
 
