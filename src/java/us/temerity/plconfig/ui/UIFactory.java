@@ -1,4 +1,4 @@
-// $Id: UIFactory.java,v 1.2 2007/01/05 21:37:55 jim Exp $
+// $Id: UIFactory.java,v 1.3 2007/03/21 20:51:46 jim Exp $
 
 package us.temerity.plconfig.ui;
 
@@ -347,6 +347,39 @@ class UIFactory
     field.setEditable(true);
     
     field.setText(text);
+    
+    return field;
+  }
+
+  /**
+   * Create a new password field. <P> 
+   * 
+   * See {@link JLabel#setHorizontalAlignment JLabel.setHorizontalAlignment} for valid
+   * values for the <CODE>align</CODE> argument.
+   * 
+   * @param width
+   *   The minimum and preferred width.
+   * 
+   * @param align
+   *   The horizontal alignment.
+   */ 
+  public static JPasswordField
+  createPasswordField
+  (
+   int width,
+   int align
+  )
+  {
+    JPasswordField field = new JPasswordField();
+    field.setName("PasswordField");
+
+    Dimension size = new Dimension(width, 19);
+    field.setMinimumSize(size);
+    field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 19));
+    field.setPreferredSize(size);
+    
+    field.setHorizontalAlignment(align);
+    field.setEditable(true);
     
     return field;
   }

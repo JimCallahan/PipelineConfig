@@ -1,4 +1,4 @@
-// $Id: JMacPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JMacPanel.java,v 1.2 2007/03/21 20:51:46 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -46,17 +46,17 @@ class JMacPanel
 	{
 	  Box vbox = new Box(BoxLayout.Y_AXIS);
 
-	  vbox.add(UIFactory.createPanelLabel("Mac Clients:")); 
+	  vbox.add(UIFactory.createPanelLabel("Mac Support:")); 
 
 	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 	  
 	  {
-	    pClientsField = UIFactory.createBooleanField(sHSize);
+	    pSupportField = UIFactory.createBooleanField(sHSize);
 	    
-	    pClientsField.addActionListener(this);
-	    pClientsField.setActionCommand("clients-changed");
+	    pSupportField.addActionListener(this);
+	    pSupportField.setActionCommand("support-changed");
 	    
-	    vbox.add(pClientsField); 
+	    vbox.add(pSupportField); 
 	  }
 
 	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -98,7 +98,7 @@ class JMacPanel
       
       addNotes
 	("If you will be using Pipeline on Mac OS X hosts, you need to enable the Mac OS X" + 
-	 "Clients.  Due to differences between Linux and Darwin (Mac OS X) standard paths " + 
+	 "Support.  Due to differences between Linux and Darwin (Mac OS X) standard paths " + 
 	 "and in how network file systems are accessed, the paths required by Pipeline " + 
 	 "must be seperately configured for Mac OS X systems.\n" + 
 	 "\n" + 
@@ -134,8 +134,8 @@ class JMacPanel
   public void 
   updatePanel() 
   { 
-    pClientsField.setValue(pApp.getMacClients());
-    doClientsChanged();
+    pSupportField.setValue(pApp.getMacSupport());
+    doSupportChanged();
   }
   
   /**
@@ -148,8 +148,8 @@ class JMacPanel
   updateProfile() 
     throws IllegalConfigException
   {
-    boolean enabled = pClientsField.getValue(); 
-    pApp.setMacClients(enabled);
+    boolean enabled = pSupportField.getValue(); 
+    pApp.setMacSupport(enabled);
     if(enabled) {
       pApp.setMacRootDirectory(pRootDirComp.validateDir(pApp)); 
       pApp.setMacProdDirectory(pProdDirComp.validateDir(pApp)); 
@@ -176,8 +176,8 @@ class JMacPanel
   ) 
   {
     String cmd = e.getActionCommand();
-    if(cmd.equals("clients-changed")) 
-      doClientsChanged();
+    if(cmd.equals("support-changed")) 
+      doSupportChanged();
   }
 
 
@@ -187,9 +187,9 @@ class JMacPanel
   /*----------------------------------------------------------------------------------------*/
 
   private void
-  doClientsChanged() 
+  doSupportChanged() 
   {
-    boolean enabled = pClientsField.getValue(); 
+    boolean enabled = pSupportField.getValue(); 
     
     pRootDirComp.setEnabled(enabled);
     pProdDirComp.setEnabled(enabled);
@@ -244,7 +244,7 @@ class JMacPanel
   /**
    * The Mac OS X fields. 
    */ 
-  private JBooleanField     pClientsField; 
+  private JBooleanField     pSupportField; 
   private JAbsoluteDirComp  pRootDirComp; 
   private JAbsoluteDirComp  pProdDirComp; 
   private JAbsoluteDirComp  pHomeDirComp; 

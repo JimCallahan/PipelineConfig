@@ -1,4 +1,4 @@
-// $Id: JWinPanel.java,v 1.2 2007/02/17 14:06:19 jim Exp $
+// $Id: JWinPanel.java,v 1.3 2007/03/21 20:51:46 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -46,17 +46,17 @@ class JWinPanel
 	{
 	  Box vbox = new Box(BoxLayout.Y_AXIS);
 
-	  vbox.add(UIFactory.createPanelLabel("Windows Clients/Servers:")); 
+	  vbox.add(UIFactory.createPanelLabel("Windows Support:")); 
 
 	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 	  
 	  {
-	    pClientsField = UIFactory.createBooleanField(sHSize);
+	    pSupportField = UIFactory.createBooleanField(sHSize);
 	    
-	    pClientsField.addActionListener(this);
-	    pClientsField.setActionCommand("clients-changed");
+	    pSupportField.addActionListener(this);
+	    pSupportField.setActionCommand("support-changed");
 	    
-	    vbox.add(pClientsField); 
+	    vbox.add(pSupportField); 
 	  }
 
 	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -77,14 +77,7 @@ class JWinPanel
 	{
 	  Box vbox = new Box(BoxLayout.Y_AXIS);
           
-          vbox.add(UIFactory.createPanelLabel("Default Windows Domain:"));
-      
-          vbox.add(Box.createRigidArea(new Dimension(0, 3)));
-
-          pDefaultDomainField = UIFactory.createIdentifierField("", sHSize, JTextField.LEFT);
-          vbox.add(pDefaultDomainField);
-
-	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 60)));
 
 	  pProdDirComp = new JWindowsDirComp("Production Directory", sHSize);
 	  vbox.add(pProdDirComp);
@@ -109,11 +102,11 @@ class JWinPanel
       add(Box.createVerticalGlue());
       
       addNotes
-	("If you will be using Pipeline on Windows XP hosts, you need to enable the " + 
-	 "Windows Clients/Servers.  Due to differences between Linux and Windows XP file " +
-         "naming conventions, standard paths and how network file systems are accessed, " + 
-         "the paths required by Pipeline must be seperately configured for Windows " +
-         "systems.\n" + 
+	("If you will be using Pipeline on Windows XP Professional hosts, you need to " + 
+         "enable the Windows Support.  Due to differences between Linux and Windows XP " +
+         "file naming conventions, standard paths and how network file systems are " +
+         "accessed, the paths required by Pipeline must be seperately configured for " + 
+         "Windows systems.\n" + 
 	 "\n" + 
 	 "All Windows directory paths passed to the following options should be specified " + 
 	 "using the forward slash (/) in place of the back slash (\\).  This means that " + 
@@ -122,13 +115,6 @@ class JWinPanel
 	 "(\\\\server\\share\\foo\\bar) will need to be specified as " + 
 	 "(//server/share/foo/bar).\n" + 
 	 "\n" + 
-         "The Default Windows Domain is used by Pipeline as a default value when querying " + 
-         "users for Windows authentication information.  When using Pipeline with Windows " + 
-         "based render farms, users must provide authentication credentials which include " + 
-         "their Domain/User and Password.  You should set this to the Windows Domain most " + 
-         "frequently used at your site as a convenience for users.  Users may override " + 
-         "this setting on a per-user basis.\n" + 
-         "\n" +
 	 "The Root Install Directory and Production Directory should map to the same " + 
 	 "network file system directories seen from Windows XP systems as the " +
 	 "corresponing Linux paths specified earlier.  For example, a Linux path such " + 
@@ -148,6 +134,7 @@ class JWinPanel
     }
   }
 
+  
 
   /*----------------------------------------------------------------------------------------*/
   /*   P A N E L   O P S                                                                    */
@@ -168,8 +155,8 @@ class JWinPanel
   public void 
   updatePanel() 
   { 
-    pClientsField.setValue(pApp.getWinClients());
-    doClientsChanged();
+    pSupportField.setValue(pApp.getWinSupport());
+    doSupportChanged();
   }
   
   /**
@@ -182,10 +169,9 @@ class JWinPanel
   updateProfile() 
     throws IllegalConfigException
   {
-    boolean enabled = pClientsField.getValue(); 
-    pApp.setWinClients(enabled);
+    boolean enabled = pSupportField.getValue(); 
+    pApp.setWinSupport(enabled);
     if(enabled) {
-      pApp.setWinDefaultDomain(pDefaultDomainField.getText());
       pApp.setWinRootDirectory(pRootDirComp.validateDir(pApp)); 
       pApp.setWinProdDirectory(pProdDirComp.validateDir(pApp)); 
       pApp.setWinHomeDirectory(pHomeDirComp.validateDir(pApp)); 
@@ -212,8 +198,8 @@ class JWinPanel
   ) 
   {
     String cmd = e.getActionCommand();
-    if(cmd.equals("clients-changed")) 
-      doClientsChanged();
+    if(cmd.equals("support-changed")) 
+      doSupportChanged();
   }
 
 
@@ -223,11 +209,10 @@ class JWinPanel
   /*----------------------------------------------------------------------------------------*/
 
   private void
-  doClientsChanged() 
+  doSupportChanged() 
   {
-    boolean enabled = pClientsField.getValue(); 
+    boolean enabled = pSupportField.getValue(); 
     
-    pDefaultDomainField.setEnabled(enabled);
     pRootDirComp.setEnabled(enabled);
     pProdDirComp.setEnabled(enabled);
     pHomeDirComp.setEnabled(enabled);
@@ -236,8 +221,6 @@ class JWinPanel
     
     if(!enabled)
       return; 
-
-    pDefaultDomainField.setText(pApp.getWinDefaultDomain());
 
     {
       String dir = pApp.getWinRootDirectory();
@@ -275,6 +258,7 @@ class JWinPanel
     }
   }
 
+  
 
   /*----------------------------------------------------------------------------------------*/
   /*   S T A T I C   I N T E R N A L S                                                      */
@@ -282,7 +266,7 @@ class JWinPanel
 
   private static final long serialVersionUID = 4991144157867908121L;
    
-
+  
 
   /*----------------------------------------------------------------------------------------*/
   /*   I N T E R N A L S                                                                    */
@@ -291,13 +275,13 @@ class JWinPanel
   /**
    * The Windows XP fields. 
    */ 
-  private JIdentifierField pDefaultDomainField; 
-  private JBooleanField    pClientsField; 
+  private JBooleanField    pSupportField; 
   private JWindowsDirComp  pRootDirComp; 
   private JWindowsDirComp  pProdDirComp; 
   private JWindowsDirComp  pHomeDirComp; 
   private JWindowsDirComp  pTempDirComp; 
   private JWindowsDirComp  pJavaHomeDirComp; 
+
 }
 
 

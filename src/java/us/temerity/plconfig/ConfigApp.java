@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.41 2007/03/06 04:28:38 jim Exp $
+// $Id: ConfigApp.java,v 1.42 2007/03/21 20:51:46 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -101,14 +101,16 @@ class ConfigApp
 
       pProfile.put("PluginPort",     53141);
 
-      pProfile.put("MacClients",            false);
+      pProfile.put("MacSupport",            false);
       pProfile.put("MacHomeDirectory",      "/Users");
       pProfile.put("MacTemporaryDirectory", "/var/tmp");
 
-      pProfile.put("WinClients",            false);
+      pProfile.put("WinSupport",            false);
       pProfile.put("WinHomeDirectory",      "C:/Documents and Settings");
       pProfile.put("WinTemporaryDirectory", "C:/WINDOWS/Temp");
       pProfile.put("WinJavaHome",           "C:/Program Files/Java/jdk1.5.0_11/jre");
+
+      pProfile.put("WinServer", false);
 
       pProfile.put("LegacyPlugins", false);
 
@@ -623,7 +625,7 @@ class ConfigApp
       throw new IllegalConfigException
 	("The Pipeline Admin Group was illegal!");
 
-    boolean found = false;
+    int idx = -1;
     try {
       String args[] = { "id", "--name", "--groups", user };
       Process proc = Runtime.getRuntime().exec(args);
@@ -639,13 +641,15 @@ class ConfigApp
       String line = new String(buf);
       String fields[] = line.split("[ \t\n]");
 
-      int wk;
-      for(wk=0; wk<fields.length; wk++) {
+      int wk, cnt;
+      for(wk=0, cnt=0; wk<fields.length; wk++) {
 	if(fields[wk].length() > 0) {
           if(group.equals(fields[wk])) {
-            found = true;
+            idx = cnt;
             break;
           }
+
+          cnt++;
         }
       }
 
@@ -657,14 +661,19 @@ class ConfigApp
 	("Unable to determine if the Pipeline Admin Group (" + group + ") is valid!"); 
     }
     
-    if(!found) 
+    if(idx == -1) 
       throw new IllegalConfigException
 	("The Pipeline Admin User (" + user + ") does not belong to the given Pipeline " + 
          "Admin Group (" + group + ")!");
     
+    if(idx != 0) 
+      throw new IllegalConfigException
+	("The Pipeline Admin Group (" + group + ") is not the primary group of the the " +
+         "Pipeline Admin User (" + user + ")!");
+    
     int gid = -1;
     try {
-      String args[] = { "sg", group, "id --group " + user };
+      String args[] = { "id", "--groups", user };
       Process proc = Runtime.getRuntime().exec(args);
 
       InputStream in = proc.getInputStream();
@@ -675,15 +684,27 @@ class ConfigApp
       if(num == -1) 
 	throw new IOException();
       
-      gid = Integer.valueOf(new String(buf, 0, num-1));
+      String line = new String(buf);
+      String fields[] = line.split("[ \t\n]");
+
+      int wk, cnt;
+      for(wk=0, cnt=0; wk<fields.length; wk++) {
+	if(fields[wk].length() > 0) {
+          if(cnt == idx) {
+            gid = Integer.valueOf(fields[wk]);
+            break;
+          }
+
+          cnt++;
+        }
+      }
 
       if(proc.waitFor() != 0) 
 	throw new IOException();
     }
     catch(Exception ex) {
       throw new IllegalConfigException
-	("The Pipeline Admin User (" + user + ") does not belong to the group " + 
-	 "(" + group + ")!");
+	("Unable to determine the GID for the Pipeline Admin Group (" + group + ")!");
     }
 
     return gid;    
@@ -1178,24 +1199,24 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
 
   /**
-   * Set whether to support Mac OS X clients.
+   * Set whether to support Mac OS X.
    */
   public void 
-  setMacClients
+  setMacSupport
   (
    boolean tf
   ) 
   {
-    pProfile.put("MacClients", tf);
+    pProfile.put("MacSupport", tf);
   }
   
   /**
-   * Get whether to support Mac OS X clients.
+   * Get whether to support Mac OS X.
    */ 
   public boolean
-  getMacClients()
+  getMacSupport()
   {
-    return (Boolean) pProfile.get("MacClients");
+    return (Boolean) pProfile.get("MacSupport");
   }
 
 
@@ -1311,50 +1332,24 @@ class ConfigApp
   /*----------------------------------------------------------------------------------------*/
 
   /**
-   * Set whether to support Windows XP clients.
+   * Set whether to support Windows XP.
    */
   public void 
-  setWinClients
+  setWinSupport
   (
    boolean tf
   ) 
   {
-    pProfile.put("WinClients", tf);
+    pProfile.put("WinSupport", tf);
   }
   
   /**
-   * Get whether to support Windows XP clients.
+   * Get whether to support Windows XP.
    */ 
   public boolean
-  getWinClients()
+  getWinSupport()
   {
-    return (Boolean) pProfile.get("WinClients");
-  }
-
-  
-  /**
-   * Set the Windows default Domain.
-   */ 
-  public void 
-  setWinDefaultDomain
-  (
-   String domain
-  ) 
-    throws IllegalConfigException
-  {
-    if((domain == null) || (domain.length() == 0)) 
-      throw new IllegalConfigException
-        ("No Default Windows Domain was specified!");
-    pProfile.put("WinDefaultDomain", domain);
-  }
-
-  /** 
-   * Get the Windows default Domain.
-   */ 
-  public String
-  getWinDefaultDomain()
-  {
-    return (String) pProfile.get("WinDefaultDomain");
+    return (Boolean) pProfile.get("WinSupport");
   }
 
 
@@ -1475,6 +1470,82 @@ class ConfigApp
   getWinJavaHome() 
   {
     return (String) pProfile.get("WinJavaHome");
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Set whether to support Windows XP Servers.
+   */
+  public void 
+  setWinServer
+  (
+   boolean tf
+  ) 
+  {
+    pProfile.put("WinServer", tf);
+  }
+  
+  /**
+   * Get whether to support Windows XP Servers.
+   */ 
+  public boolean
+  getWinServer()
+  {
+    return (Boolean) pProfile.get("WinServer");
+  }
+
+
+  /**
+   * Set the Windows Domain.
+   */ 
+  public void 
+  setWinDomain
+  (
+   String domain
+  ) 
+    throws IllegalConfigException
+  {
+    if((domain == null) || (domain.length() == 0)) 
+      throw new IllegalConfigException
+        ("No Windows Domain was specified!");
+    pProfile.put("WinDomain", domain);
+  }
+
+  /** 
+   * Get the Windows Domain.
+   */ 
+  public String
+  getWinDomain()
+  {
+    return (String) pProfile.get("WinDomain");
+  }
+
+
+  /**
+   * Set the Windows Password.
+   */ 
+  public void 
+  setWinPassword
+  (
+   String password
+  ) 
+    throws IllegalConfigException
+  {
+    if((password == null) || (password.length() == 0)) 
+      throw new IllegalConfigException
+        ("No Windows Password was specified!");
+    pProfile.put("WinPassword", password);
+  }
+
+  /** 
+   * Get the Windows Password.
+   */ 
+  public String
+  getWinPassword()
+  {
+    return (String) pProfile.get("WinPassword");
   }
 
 
@@ -2166,34 +2237,29 @@ class ConfigApp
     }
 
     /* Mac OS X options */ 
-    if(getMacClients()) {
+    if(getMacSupport()) {
       File mroot = getMacRootDirectory(); 
       if(mroot == null)
 	throw new IllegalConfigException
-	  ("The --mac-root-dir option is required when the --mac-clients option is given!");
+	  ("The --mac-root-dir option is required when the --mac-support option is given!");
 
       File mprod = getMacProdDirectory(); 
       if(mprod == null)
 	throw new IllegalConfigException
-	  ("The --mac-prod-dir option is required when the --mac-clients option is given!");
+	  ("The --mac-prod-dir option is required when the --mac-support option is given!");
     }
 
     /* Windows XP options */ 
-    if(getWinClients()) {
-      String domain = getWinDefaultDomain();
-      if(domain == null) 
-	throw new IllegalConfigException
-	  ("The --win-domain option is required when the --win-clients option is given!");
-
+    if(getWinSupport()) {
       String wroot = getWinRootDirectory();
       if(wroot == null)
 	throw new IllegalConfigException
-	  ("The --win-root-dir option is required when the --win-clients option is given!");
+	  ("The --win-root-dir option is required when the --win-support option is given!");
 
       String wprod = getWinProdDirectory();
       if(wprod == null)
 	throw new IllegalConfigException
-	  ("The --win-prod-dir option is required when the --win-clients option is given!");
+	  ("The --win-prod-dir option is required when the --win-support option is given!");
     }
   }
   
@@ -2279,6 +2345,9 @@ class ConfigApp
       writeEncodedData(new File(cdir, "site-profile"), 
 		       pair.getPublic().getEncoded(), cipher.doFinal(raw));
     }
+
+    /* remove the Windows Password from the profile so it won't be visible in plaintext */ 
+    pProfile.remove("WinPassword");
 
     /* print the configuration parameters */ 
     ArrayList<String> configText = new ArrayList<String>();
@@ -2465,8 +2534,8 @@ class ConfigApp
       else if(title.equals("UnixJavaHome"))
 	setUnixJavaHome(new File((String) value));
 
-      else if(title.equals("MacClients"))
-	setMacClients((Boolean) value); 
+      else if(title.equals("MacSupport"))
+	setMacSupport((Boolean) value); 
       else if(title.equals("MacRootInstallDirectory"))
 	setMacRootDirectory(new File((String) value));
       else if(title.equals("MacProductionDirectory"))
@@ -2476,10 +2545,8 @@ class ConfigApp
       else if(title.equals("MacTemporaryDirectory"))
 	setMacTemporaryDirectory(new File((String) value));
 
-      else if(title.equals("WinClients"))
-	setWinClients((Boolean) value);
-      else if(title.equals("WinDefaultDomain"))
-	setWinDefaultDomain((String) value);
+      else if(title.equals("WinSupport"))
+	setWinSupport((Boolean) value);
       else if(title.equals("WinRootInstallDirectory"))
 	setWinRootDirectory((String) value);
       else if(title.equals("WinProductionDirectory"))
@@ -2490,6 +2557,11 @@ class ConfigApp
 	setWinTemporaryDirectory((String) value);
       else if(title.equals("WinJavaHome"))
 	setWinJavaHome((String) value);
+
+      else if(title.equals("WinServer"))
+	setWinServer((Boolean) value);
+      else if(title.equals("WinDomain"))
+	setWinDomain((String) value);
     }
   }
 
@@ -2585,10 +2657,10 @@ class ConfigApp
        "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--legacy-plugins]\n" +
-       "  [--mac-clients] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
+       "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
-       "  [--win-clients] [--win-root-dir=...] [--win-prod-dir=...]\n" + 
-       "  [--win-home-dir=...] [--win-temp-dir=...] [--win-java-home=...]\n" + 
+       "  [--win-support] [--win-root-dir=...] [--win-prod-dir=...]\n" + 
+       "  [--win-home-dir=...] [--win-temp-dir=...] [--win-java-home=...]\n" +
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
@@ -2630,9 +2702,6 @@ class ConfigApp
     
     case ConfigOptsParserConstants.USERNAME:
       return "a user/group name";
-
-    case ConfigOptsParserConstants.DOMAIN: 
-      return "a Windows Domain name";
 
     case ConfigOptsParserConstants.BYTE_SIZE:
       return "a byte size";
@@ -3125,6 +3194,14 @@ class ConfigApp
 		  vbox.add(label);
 		}
 
+		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		{
+		  JLabel label = new JLabel("Windows Server", pNoneIcon, JLabel.LEFT); 
+		  pPanelLabels.add(label);
+		  vbox.add(label);
+		}
+
 		hbox.add(vbox);
 	      }
 	      
@@ -3186,6 +3263,7 @@ class ConfigApp
 	      pPanels.add(new JUnixPanel(pApp));
 	      pPanels.add(new JMacPanel(pApp));
 	      pPanels.add(new JWinPanel(pApp));
+	      pPanels.add(new JWinServerPanel(pApp));
 	    
 	      for(JBaseConfigPanel cpanel : pPanels) 
 		pCardPanel.add(cpanel, cpanel.getPanelTitle());
