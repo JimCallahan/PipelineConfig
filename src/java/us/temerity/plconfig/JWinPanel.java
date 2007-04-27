@@ -1,4 +1,4 @@
-// $Id: JWinPanel.java,v 1.3 2007/03/21 20:51:46 jim Exp $
+// $Id: JWinPanel.java,v 1.4 2007/04/27 21:07:55 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -121,9 +121,18 @@ class JWinPanel
 	 "as (/base/prod) might might mapped to something like (Z:/base/prod) or " + 
 	 "(//myserver/base/prod) on a Windows XP system.\n" +
 	 "\n" + 
-	 "The Home Directory is not required to be shared between Linux and Windows XP " +
-	 "systems and might even reside on a local file system.  The Temporary Directory " + 
-	 "should reside on a local file system for optimal performance.\n" + 
+	 "The Home Directory should specify the network file share where the users home " + 
+         "directory will be mapped.  We recommend using a UNC path for this like " + 
+         "(//myserver/homes) to avoid problems some application have with drive letter " + 
+         "mappings in this context.  Pipeline uses the Home Directory primarily to " + 
+         "construct the dynamic value for the Windows APPDATA environmental variable by " + 
+         "simply appending (Application Data) to the Home Directory specified.  Note that " + 
+         "the generated APPDATA value does not include the name of the user, which means " + 
+         "that the share specified by Home Directory should already be pointing at a " + 
+         "user-specific location during user logon.\n" +
+         "\n" + 
+         "The Temporary Directory should reside on a local file system for optimal " + 
+         "performance.\n" + 
 	 "\n" + 
 	 "The Java Home Directory is the path to the root directory of the local Java " +
 	 "Runtime Environment (JRE) installed on Windows XP hosts at your site.  For " + 

@@ -1144,10 +1144,16 @@ is given.<br>
  name="--win-home-dir"></a>--win-home-dir</span>=<span
  style="font-style: italic;"></span><span style="font-style: italic;">dir</span><br>
 <br>
-<div style="margin-left: 40px;">The absolute path to the parent
-directory (<span style="font-style: italic;"></span><span
- style="font-style: italic;">dir</span>) of all user home
-directories as accessed from Windows XP systems.&nbsp; <br>
+<div style="margin-left: 40px;">The network file share (dir) where a
+user's home directory will be mapped.&nbsp; We recommend using a UNC
+path for this like (//myserver/homes) to avoid problems some
+application have with drive letter mappings in this context.&nbsp;
+Pipeline uses the Home Directory primarily to construct the dynamic
+value for the Windows APPDATA environmental variable by simply
+appending (Application Data) to the Home Directory specified.&nbsp;
+Note that the generated APPDATA value does not include the name of the
+user, which means that the share specified by Home Directory should
+already be pointing at a user-specific location during user logon.<br>
 <br>
 If not specified, this location defaults to (<font mstheme=""
  face="Arial, Arial, Helvetica">C:/Documents and Settings</font><span
