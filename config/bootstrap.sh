@@ -3,7 +3,7 @@
 rm -rf i686-pc-linux-gnu-dbg i686-pc-linux-gnu-opt
 mkdir  i686-pc-linux-gnu-dbg i686-pc-linux-gnu-opt
 
-plsrcdir=$HOME/code/src/plconfig
+plsrcdir=$HOME/code-dimetrodon/src/plconfig
 
 pushd $plsrcdir
   sh autogen.sh
@@ -16,7 +16,7 @@ pushd i686-pc-linux-gnu-dbg
     --prefix=/usr \
     --datadir=/usr/share \
     --with-pipeline=$plsrcdir/../pipeline \
-    --with-temerity=$plsrcdir/../temerity
+    --with-temerity=$HOME/code/src/temerity
 popd
 
 pushd i686-pc-linux-gnu-opt
@@ -26,5 +26,5 @@ pushd i686-pc-linux-gnu-opt
     --prefix=/usr \
     --datadir=/usr/share \
     --with-pipeline=$plsrcdir/../pipeline \
-    --with-temerity=$plsrcdir/../temerity
+    --with-temerity=$HOME/code/src/temerity
 popd
