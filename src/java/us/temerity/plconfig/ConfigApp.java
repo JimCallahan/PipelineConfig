@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.42 2007/03/21 20:51:46 jim Exp $
+// $Id: ConfigApp.java,v 1.43 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -105,10 +105,12 @@ class ConfigApp
       pProfile.put("MacHomeDirectory",      "/Users");
       pProfile.put("MacTemporaryDirectory", "/var/tmp");
 
-      pProfile.put("WinSupport",            false);
-      pProfile.put("WinHomeDirectory",      "C:/Documents and Settings");
-      pProfile.put("WinTemporaryDirectory", "C:/WINDOWS/Temp");
-      pProfile.put("WinJavaHome",           "C:/Program Files/Java/jdk1.5.0_11/jre");
+      pProfile.put("WinSupport",               false);
+      pProfile.put("WinTemporaryDirectory",    "C:/WINDOWS/Temp");
+      pProfile.put("WinJavaHome",              "C:/Program Files/Java/jdk1.5.0_11/jre");
+      pProfile.put("WinUserProfileDirectory",  "C:/Documents and Settings");
+      pProfile.put("WinUserProfileNeedsUser",  true);
+      pProfile.put("WinAppDataNeedsUser",      true);
 
       pProfile.put("WinServer", false);
 
@@ -1402,26 +1404,94 @@ class ConfigApp
 
 
   /**
-   * Set the Windows XP root user home directory.
+   * Set the Windows XP user profile directory. 
    */
   public void 
-  setWinHomeDirectory
+  setWinUserProfileDirectory
   (
    String dir
   ) 
     throws IllegalConfigException
   {
-    pProfile.put("WinHomeDirectory", 
-		 validateWindowsPath(dir, "(Windows XP) Home Directory"));
+    pProfile.put("WinUserProfileDirectory", 
+		 validateWindowsPath(dir, "Windows User Profile Directory"));
   }
 
   /**
-   * Get the Windows XP root user home directory.
+   * Get the Windows XP user profile directory. 
    */ 
   public String
-  getWinHomeDirectory() 
+  getWinUserProfileDirectory() 
   {
-    return (String) pProfile.get("WinHomeDirectory");
+    return (String) pProfile.get("WinUserProfileDirectory");
+  }
+
+
+  /**
+   * Set whether the username needs to be appended to the user profile directory.
+   */
+  public void 
+  setWinUserProfileNeedsUser
+  (
+   boolean tf
+  ) 
+  {
+    pProfile.put("WinUserProfileNeedsUser", tf);
+  }
+  
+  /**
+   * Get whether the username needs to be appended to the user profile directory.
+   */ 
+  public Boolean
+  getWinUserProfileNeedsUser()
+  {
+    return (Boolean) pProfile.get("WinUserProfileNeedsUser");
+  }
+
+
+  /**
+   * Set the Windows XP user application data directory. 
+   */
+  public void 
+  setWinAppDataDirectory
+  (
+   String dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("WinAppDataDirectory", 
+		 validateWindowsPath(dir, "Windows Application Data Directory"));
+  }
+
+  /**
+   * Get the Windows XP application data directory. 
+   */ 
+  public String
+  getWinAppDataDirectory() 
+  {
+    return (String) pProfile.get("WinAppDataDirectory");
+  }
+
+
+  /**
+   * Set whether the username needs to be appended to the application data directory.
+   */
+  public void 
+  setWinAppDataNeedsUser
+  (
+   boolean tf
+  ) 
+  {
+    pProfile.put("WinAppDataNeedsUser", tf);
+  }
+  
+  /**
+   * Get whether the username needs to be appended to the application data directory.
+   */ 
+  public Boolean
+  getWinAppDataNeedsUser()
+  {
+    return (Boolean) pProfile.get("WinAppDataNeedsUser");
   }
 
 
@@ -1703,9 +1773,37 @@ class ConfigApp
   ) 
     throws IllegalConfigException
   {
-    if((path == null) || (path.length() == 0))
-      throw new IllegalConfigException
-	("No path was specified for the " + title + "!");
+    return validateWindowsPath(path, title, false);
+  }
+
+  /**
+   * Validate that the given string contains an absolute Windows file system path.
+   * 
+   * @param path
+   *   The file system path to test.
+   * 
+   * @param title
+   *   The name of the parameter to include in exception messages.
+   * 
+   * @return 
+   *   The file system path.
+   */ 
+  public String
+  validateWindowsPath
+  (
+   String path, 
+   String title, 
+   boolean isNullOk
+  ) 
+    throws IllegalConfigException
+  {
+    if((path == null) || (path.length() == 0)) {
+      if(isNullOk) 
+        return null;
+      else 
+        throw new IllegalConfigException
+          ("No path was specified for the " + title + "!");
+    }
     
     boolean isUNC = false;
     boolean isRoot = false;
@@ -2551,12 +2649,20 @@ class ConfigApp
 	setWinRootDirectory((String) value);
       else if(title.equals("WinProductionDirectory"))
 	setWinProdDirectory((String) value);
-      else if(title.equals("WinHomeDirectory"))
-	setWinHomeDirectory((String) value);
-      else if(title.equals("WinTemporaryDirectory"))
-	setWinTemporaryDirectory((String) value);
       else if(title.equals("WinJavaHome"))
 	setWinJavaHome((String) value);
+      else if(title.equals("WinTemporaryDirectory"))
+	setWinTemporaryDirectory((String) value);
+
+      else if(title.equals("WinUserProfileDirectory"))
+	setWinUserProfileDirectory((String) value);
+      else if(title.equals("WinUserProfileNeedsUser"))
+	setWinUserProfileNeedsUser((Boolean) value);
+
+      else if(title.equals("WinAppDataDirectory"))
+	setWinAppDataDirectory((String) value);
+      else if(title.equals("WinAppDataNeedsUser"))
+	setWinAppDataNeedsUser((Boolean) value);
 
       else if(title.equals("WinServer"))
 	setWinServer((Boolean) value);
@@ -2660,7 +2766,9 @@ class ConfigApp
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
        "  [--win-support] [--win-root-dir=...] [--win-prod-dir=...]\n" + 
-       "  [--win-home-dir=...] [--win-temp-dir=...] [--win-java-home=...]\n" +
+       "  [--win-temp-dir=...] [--win-java-home=...]\n" +
+       "  [--win-user-profile-dir=...] [--win-user-profile-no-username]\n" + 
+       "  [--win-app-data-dir=...] [--win-app-data-no-username]\n" + 
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }

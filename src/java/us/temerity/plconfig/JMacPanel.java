@@ -1,4 +1,4 @@
-// $Id: JMacPanel.java,v 1.2 2007/03/21 20:51:46 jim Exp $
+// $Id: JMacPanel.java,v 1.3 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -97,10 +97,10 @@ class JMacPanel
       add(Box.createVerticalGlue());
       
       addNotes
-	("If you will be using Pipeline on Mac OS X hosts, you need to enable the Mac OS X" + 
-	 "Support.  Due to differences between Linux and Darwin (Mac OS X) standard paths " + 
-	 "and in how network file systems are accessed, the paths required by Pipeline " + 
-	 "must be seperately configured for Mac OS X systems.\n" + 
+	("If you will be using Pipeline on Mac OS X hosts, you need to enable the Mac OS " + 
+         "X Support.  Due to differences between Linux and Darwin (Mac OS X) standard " + 
+         "paths and in how network file systems are accessed, the paths required by " + 
+         "Pipeline must be seperately configured for Mac OS X systems.\n" + 
 	 "\n" + 
 	 "The Root Install Directory and Production Directory should map to the same " + 
 	 "network file system directories seen from Mac OS X systems as the corresponing " + 

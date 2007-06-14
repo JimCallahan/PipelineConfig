@@ -1,4 +1,4 @@
-// $Id: JWindowsDirComp.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JWindowsDirComp.java,v 1.2 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -37,9 +37,24 @@ class JWindowsDirComp
    int width
   ) 
   {
+    this(title, width, false);
+  }
+
+  /** 
+   * Construct a new panel.
+   */ 
+  public
+  JWindowsDirComp
+  (
+   String title, 
+   int width, 
+   boolean isNullOk
+  ) 
+  {
     super();
    
     pTitle = title;
+    pIsNullOk = isNullOk;
 
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
 
@@ -73,7 +88,7 @@ class JWindowsDirComp
   ) 
   {
     String dir = "C:/";
-    if(path != null) 
+    if((path != null) || pIsNullOk)
       dir = path; 
     
     pField.setText(dir);  
@@ -89,7 +104,7 @@ class JWindowsDirComp
   ) 
     throws IllegalConfigException
   {
-    return app.validateWindowsPath(pField.getText(), pTitle);
+    return app.validateWindowsPath(pField.getText(), pTitle, pIsNullOk);
   }
 
 
@@ -157,6 +172,11 @@ class JWindowsDirComp
    * The directory path field. 
    */ 
   private JTextField  pField; 
+
+  /**
+   * Whether it is valid to not specify any path.
+   */ 
+  private boolean  pIsNullOk; 
 
 }
 

@@ -112,10 +112,14 @@ TOKEN :
 | <WIN_SUPPORT:       	 "--win-support">  
 | <WIN_ROOT_DIR:       	 "--win-root-dir">      : WIN_PATH_SEP 
 | <WIN_PROD_DIR:         "--win-prod-dir">      : WIN_PATH_SEP
-| <WIN_HOME_DIR:       	 "--win-home-dir">      : WIN_PATH_SEP  
 | <WIN_TEMP_DIR:         "--win-temp-dir">      : WIN_PATH_SEP 
 | <WIN_JAVA_HOME:        "--win-java-home">     : WIN_PATH_SEP
-   		    
+
+| <WIN_USER_PROFILE_DIR:          "--win-user-profile-dir"> : WIN_PATH_SEP  
+| <WIN_USER_PROFILE_NO_USERNAME:  "--win-user-profile-no-username">  
+| <WIN_APP_DATA_DIR:              "--win-app-data-dir">     : WIN_PATH_SEP  
+| <WIN_APP_DATA_NO_USERNAME:      "--win-app-data-no-unsername">  
+
 | <LEGACY_PLUGINS:   	 "--legacy-plugins">	
 
   /* seperators */ 
@@ -408,8 +412,9 @@ GlobalOpts()
    PluginHost() | PluginPort() | 
    PipelineUser() | PipelineGroup() |
    MacSupport() | MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
-   WinSupport() | WinRootDir() | WinProdDir() | WinHomeDir() | 
-   WinTempDir() | WinJavaHome() |
+   WinSupport() | WinRootDir() | WinProdDir() | WinTempDir() | WinJavaHome() |
+   WinUserProfileDir() | WinUserProfileNoUsername() |
+   WinAppDataDir() | WinAppDataNoUsername() |
    LegacyPlugins()) 
   {}
 }
@@ -1013,15 +1018,52 @@ WinProdDir()
 }
 
 void
-WinHomeDir()
+WinUserProfileDir()
   throws IllegalConfigException :
 {
   Token t;
 }
 {
-  <WIN_HOME_DIR> EQ() t=<WIN_PATH_ARG>
+  <WIN_USER_PROFILE_DIR> EQ() t=<WIN_PATH_ARG>
   { 
-    pApp.setWinHomeDirectory(t.image);
+    pApp.setWinUserProfileDirectory(t.image);
+  }
+}
+
+void
+WinUserProfileNoUsername() :
+{
+  Token t;
+}
+{
+  <WIN_USER_PROFILE_NO_USERNAME> 
+  { 
+    pApp.setWinUserProfileNeedsUser(false);
+  }
+}
+
+void
+WinAppDataDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <WIN_APP_DATA_DIR> EQ() t=<WIN_PATH_ARG>
+  { 
+    pApp.setWinAppDataDirectory(t.image);
+  }
+}
+
+void
+WinAppDataNoUsername() :
+{
+  Token t;
+}
+{
+  <WIN_APP_DATA_NO_USERNAME> 
+  { 
+    pApp.setWinAppDataNeedsUser(false);
   }
 }
 

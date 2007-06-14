@@ -1,4 +1,4 @@
-// $Id: JWinPanel.java,v 1.4 2007/04/27 21:07:55 jim Exp $
+// $Id: JWinPanel.java,v 1.5 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -66,8 +66,18 @@ class JWinPanel
       
 	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
 
-	  pHomeDirComp = new JWindowsDirComp("Home Directory", sHSize);
-	  vbox.add(pHomeDirComp);
+          pJavaHomeDirComp = new JWindowsDirComp("Java Home Directory", sHSize);
+          vbox.add(pJavaHomeDirComp);
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+ 	  pUserProfileDirComp = new JWindowsDirComp("User Profile Directory", sHSize);
+ 	  vbox.add(pUserProfileDirComp);
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+ 	  pAppDataDirComp = new JWindowsDirComp("Application Data Directory", sHSize, true);
+ 	  vbox.add(pAppDataDirComp);
 
 	  hbox.add(vbox);
 	}
@@ -87,16 +97,29 @@ class JWinPanel
 	  pTempDirComp = new JWindowsDirComp("Temporary Directory", sHSize);
 	  vbox.add(pTempDirComp);
 
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+	  vbox.add(UIFactory.createPanelLabel("User Profile Needs Username:"));
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+          pUserProfileNeedsUserField = UIFactory.createBooleanField(sHSize);
+          vbox.add(pUserProfileNeedsUserField);
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+	  vbox.add(UIFactory.createPanelLabel("Application Data Needs Username:"));
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+          pAppDataNeedsUserField = UIFactory.createBooleanField(sHSize);
+          vbox.add(pAppDataNeedsUserField);
+
 	  hbox.add(vbox);
 	}
 
 	add(hbox);
       }
-
-      add(Box.createRigidArea(new Dimension(0, 20)));
-
-      pJavaHomeDirComp = new JWindowsDirComp("Java Home Directory", sSize);
-      add(pJavaHomeDirComp);
 
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
@@ -121,25 +144,46 @@ class JWinPanel
 	 "as (/base/prod) might might mapped to something like (Z:/base/prod) or " + 
 	 "(//myserver/base/prod) on a Windows XP system.\n" +
 	 "\n" + 
-	 "The Home Directory should specify the network file share where the users home " + 
-         "directory will be mapped.  We recommend using a UNC path for this like " + 
-         "(//myserver/homes) to avoid problems some application have with drive letter " + 
-         "mappings in this context.  Pipeline uses the Home Directory primarily to " + 
-         "construct the dynamic value for the Windows APPDATA environmental variable by " + 
-         "simply appending (Application Data) to the Home Directory specified.  Note that " + 
-         "the generated APPDATA value does not include the name of the user, which means " + 
-         "that the share specified by Home Directory should already be pointing at a " + 
-         "user-specific location during user logon.\n" +
-         "\n" + 
-         "The Temporary Directory should reside on a local file system for optimal " + 
-         "performance.\n" + 
-	 "\n" + 
 	 "The Java Home Directory is the path to the root directory of the local Java " +
 	 "Runtime Environment (JRE) installed on Windows XP hosts at your site.  For " + 
 	 "consitancy, the version of the JRE installed on the Windows XP hosts should " + 
 	 "match the version used by Linux hosts.  Since the JRE will be installed in a " + 
          "much different location on Windows XP hosts, it needs to be supplied in order " + 
-         "for the Pipeline client launcher scripts to function properly.");
+         "for the Pipeline client launcher scripts to function properly.\n" +
+         "\n" +
+         "The Temporary Directory should reside on a local file system for optimal " + 
+         "performance.\n" + 
+	 "\n" + 
+         "The User Profile Directory should specify the location of the Windows user " + 
+         "profile hive.  Depending on the value of User Profile Needs Username, this " + 
+         "path may or may not need to have the specific user name appended to it in order " + 
+         "to specify the actual directory where the user's profile lives.  Depending on " + 
+         "site configuration, the user profile directory may be either local or on a " + 
+         "network share.  In either case, it will contain at least the following well " + 
+         "known Windows user directories:\n" +
+         "\n" + 
+         "  Application Data\n" + 
+         "  Desktop\n" + 
+         "  Favorites\n" +
+         "  My Documents\n" + 
+         "  Start Menu\n" +
+         "\n" + 
+         "Some site configurations may use a home share (UNC path) which does not " +
+         "contain the user's name, but is set by Windows to point to the specific users " + 
+         "profile directory on the network file server.  In cases like this, we recommend " + 
+         "using a UNC path like (//myserver/homes) to avoid problems some application have " +
+         "with drive letter mappings in this context and set User Profile Needs Username " + 
+         "to \"no\".\n" + 
+         "\n" +
+         "In most cases the Windows \"Application Data\" directory is located simply " + 
+         "under the user profile directory and need not be specified.  However, some sites " +
+         "may wish to store this application specific data on a network share unrelated " + 
+         "to the user profile.  In cases like this, the Application Data Directory will " + 
+         "specify alternative directory containing the \"Applicata Data\" directory for " + 
+         "users.  Like the User Profile Directory, the specified directory may be " + 
+         "configured at the site to automatically already point to a current user specific " +
+         "share or require that the username be appended to the specified path.  The " +
+         "Application Data Needs Username parameter controls this behavior.");
     }
   }
 
@@ -183,9 +227,12 @@ class JWinPanel
     if(enabled) {
       pApp.setWinRootDirectory(pRootDirComp.validateDir(pApp)); 
       pApp.setWinProdDirectory(pProdDirComp.validateDir(pApp)); 
-      pApp.setWinHomeDirectory(pHomeDirComp.validateDir(pApp)); 
-      pApp.setWinTemporaryDirectory(pTempDirComp.validateDir(pApp)); 
       pApp.setWinJavaHome(pJavaHomeDirComp.validateDir(pApp)); 
+      pApp.setWinTemporaryDirectory(pTempDirComp.validateDir(pApp)); 
+      pApp.setWinUserProfileDirectory(pUserProfileDirComp.validateDir(pApp)); 
+      pApp.setWinUserProfileNeedsUser(pUserProfileNeedsUserField.getValue());
+      pApp.setWinAppDataDirectory(pAppDataDirComp.validateDir(pApp)); 
+      pApp.setWinAppDataNeedsUser(pAppDataNeedsUserField.getValue());      
     }
   }
 
@@ -224,10 +271,13 @@ class JWinPanel
     
     pRootDirComp.setEnabled(enabled);
     pProdDirComp.setEnabled(enabled);
-    pHomeDirComp.setEnabled(enabled);
     pTempDirComp.setEnabled(enabled);
     pJavaHomeDirComp.setEnabled(enabled);
-    
+    pUserProfileDirComp.setEnabled(enabled);
+    pUserProfileNeedsUserField.setEnabled(enabled);
+    pAppDataDirComp.setEnabled(enabled);
+    pAppDataNeedsUserField.setEnabled(enabled);
+
     if(!enabled)
       return; 
 
@@ -246,13 +296,6 @@ class JWinPanel
     }
     
     {
-      String dir = pApp.getWinHomeDirectory();
-      if(dir == null) 
-	dir = ("C:/Documents and Settings");
-      pHomeDirComp.setDir(dir);
-    }
-	
-    {
       String dir = pApp.getWinTemporaryDirectory();
       if(dir == null) 
 	dir = ("C:/WINDOWS/Temp"); 
@@ -264,6 +307,25 @@ class JWinPanel
       if(dir == null) 
 	dir = ("C:/Program Files/Java/jre1.5.0_06");
       pJavaHomeDirComp.setDir(dir);
+    }
+
+    {
+      String dir = pApp.getWinUserProfileDirectory();
+      if(dir == null) 
+	dir = ("C:/Documents and Settings"); 
+      pUserProfileDirComp.setDir(dir);	  
+    }
+    
+    {
+      Boolean tf = pApp.getWinUserProfileNeedsUser();
+      pUserProfileNeedsUserField.setValue((tf != null) && tf);
+    }
+
+    pAppDataDirComp.setDir(pApp.getWinAppDataDirectory());
+
+    {
+      Boolean tf = pApp.getWinUserProfileNeedsUser();
+      pAppDataNeedsUserField.setValue((tf != null) && tf);
     }
   }
 
@@ -287,9 +349,12 @@ class JWinPanel
   private JBooleanField    pSupportField; 
   private JWindowsDirComp  pRootDirComp; 
   private JWindowsDirComp  pProdDirComp; 
-  private JWindowsDirComp  pHomeDirComp; 
   private JWindowsDirComp  pTempDirComp; 
   private JWindowsDirComp  pJavaHomeDirComp; 
+  private JWindowsDirComp  pUserProfileDirComp;
+  private JBooleanField    pUserProfileNeedsUserField;  
+  private JWindowsDirComp  pAppDataDirComp;
+  private JBooleanField    pAppDataNeedsUserField;
 
 }
 

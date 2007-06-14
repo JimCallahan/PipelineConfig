@@ -1,4 +1,4 @@
-// $Id: JPasswordComp.java,v 1.1 2007/03/21 20:51:46 jim Exp $
+// $Id: JPasswordComp.java,v 1.2 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -142,7 +142,7 @@ class JPasswordComp
   /*   S T A T I C   I N T E R N A L S                                                      */
   /*----------------------------------------------------------------------------------------*/
 
-  //private static final long serialVersionUID = 
+  private static final long serialVersionUID = -8171477379365432933L;
   
 
 

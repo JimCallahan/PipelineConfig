@@ -1,4 +1,4 @@
-// $Id: JWinServerPanel.java,v 1.1 2007/03/21 20:51:46 jim Exp $
+// $Id: JWinServerPanel.java,v 1.2 2007/06/14 12:57:07 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -93,7 +93,7 @@ class JWinServerPanel
 	("If you will be using the Pipeline Job Manager on Windows XP Professional hosts " + 
          "to execute jobs on behalf of the Pipeline queue, you need to enable Windows " + 
          "Job Manager.  This will include a standard Windows installer (MSI) for the Job " + 
-         "Manager Windows Service as part of the Pipeline distribution RPM.  When this " + 
+         "Manager Windows Service as part of the Pipeline distribution.  When this " + 
          "service is installed, the Pipeline Admin User, Windows Domain and Windows " + 
          "Password provided will be used to install the service on each Windows XP host " + 
          "joining the queue.  If no Windows Password is supplied, it will need to be " + 
@@ -203,7 +203,7 @@ class JWinServerPanel
   /*   S T A T I C   I N T E R N A L S                                                      */
   /*----------------------------------------------------------------------------------------*/
 
-  //private static final long serialVersionUID = 
+  private static final long serialVersionUID = -8630375089080047190L;
    
 
 

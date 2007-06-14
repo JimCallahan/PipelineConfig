@@ -1141,28 +1141,67 @@ is given.<br>
 <br>
 </div>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
- name="--win-home-dir"></a>--win-home-dir</span>=<span
- style="font-style: italic;"></span><span style="font-style: italic;">dir</span><br>
+ name="--win-home-dir"></a>--win-user-profile-dir</span>=<span
+ style="font-style: italic;"></span><span style="font-style: italic;">dir<br>
+</span><span style="font-weight: bold;"><a
+ name="--win-user-profile-needs-username"></a>--win-user-profile-no-username</span><span
+ style="font-style: italic;"><br>
+</span><br>
+<div style="margin-left: 40px;">The location of directory containing
+the Windows user profile hive.&nbsp; Unless the
+--win-user-profile-no-username<span style="font-weight: bold;"> </span>option
+is used, this path needs to have the specific user name appended to it
+in order to specify the actual directory where the user's profile
+lives.&nbsp; Depending on site configuration, the user profile
+directory may be either local or on a network share.&nbsp; In either
+case, it should contain at least the following well known Windows user
+directories:<br>
 <br>
-<div style="margin-left: 40px;">The network file share (dir) where a
-user's home directory will be mapped.&nbsp; We recommend using a UNC
-path for this like (//myserver/homes) to avoid problems some
-application have with drive letter mappings in this context.&nbsp;
-Pipeline uses the Home Directory primarily to construct the dynamic
-value for the Windows APPDATA environmental variable by simply
-appending (Application Data) to the Home Directory specified.&nbsp;
-Note that the generated APPDATA value does not include the name of the
-user, which means that the share specified by Home Directory should
-already be pointing at a user-specific location during user logon.<br>
+<div style="margin-left: 40px;">Application Data<br>
+Desktop<br>
+Favorites<br>
+My Documents<br>
+Start Menu<br>
+</div>
 <br>
-If not specified, this location defaults to (<font mstheme=""
- face="Arial, Arial, Helvetica">C:/Documents and Settings</font><span
- style="color: rgb(255, 0, 0);"></span>).<br>
+Some site configurations may use a home share (UNC path) which does not
+contain the user's name, but is set by Windows to point to the specific
+users profile directory on the network file server.&nbsp; In cases like
+this, we recommend using a UNC path like (//myserver/homes) to avoid
+problems some application have with drive letter mappings in this
+context and use the --win-user-profile-no-username<span
+ style="font-weight: bold;"></span> option.<br>
+<br>
+If not specified, the user profile location defaults to (<font
+ mstheme="" face="Arial, Arial, Helvetica">C:/Documents and Settings</font><span
+ style="color: rgb(255, 0, 0);"></span>) which will require an appended
+username.<br>
 <br>
 </div>
 </div>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
- name="--temp-dir"></a>--win-temp-dir</span>=<span
+ name="--win-app-data-dir"></a>--win-app-data-dir</span>=<span
+ style="font-style: italic;">dir</span><span style="font-weight: bold;"><br>
+<a name="--win-app-data-no-username"></a>--win-app-data-no-username<br>
+</span>
+<div style="margin-left: 40px;"><br>
+In most cases the Windows "Application Data" directory is located
+simply under the user profile directory and need not be
+specified.&nbsp; However, some sites may wish to store this application
+specific data on a network share unrelated to the user profile.&nbsp;
+In cases like this, the path (dir) specified with --win-app-data-dir
+will specify alternative directory containing the "Applicata Data"
+directory for users.&nbsp; The specified directory may be configured at
+the site to automatically already point to a current user specific
+share or require that the username be appended to the specified
+path.&nbsp; Unless the --win-app-data-no-username option is specified,
+the specific username will need to be appended to the path specified by
+--win-app-data-dir in order to construct the actual directory path.<br>
+<br>
+If not specified, the application data directory defaults to the same
+as the user profile directory. </div>
+<span style="font-weight: bold;"><br>
+<a name="--temp-dir"></a>--win-temp-dir</span>=<span
  style="font-style: italic;"></span><span style="font-style: italic;">dir</span><span
  style="font-style: italic;"></span><br>
 </div>
