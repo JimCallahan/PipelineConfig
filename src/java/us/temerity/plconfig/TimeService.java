@@ -1,4 +1,4 @@
-// $Id: TimeService.java,v 1.4 2007/06/20 23:07:56 jim Exp $
+// $Id: TimeService.java,v 1.5 2007/06/20 23:10:28 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -153,23 +153,23 @@ class TimeService
    * The IP addresses of some trusted (Stratum One) NTP servers.
    */
   private static final String[] sNtpServers = {
-    76.169.239.34,           // t2.timegps.net
-    76.168.30.201,           // t4.timegps.net
-    76.169.237.141,          // t3.timegps.net
+    "76.169.239.34",           // t2.timegps.net
+    "76.168.30.201",           // t4.timegps.net
+    "76.169.237.141",          // t3.timegps.net
     
-    129.6.15.28,             // time-a.nist.gov
-    129.6.15.29,             // time-b.nist.gov
+    "129.6.15.28",             // time-a.nist.gov
+    "129.6.15.29",             // time-b.nist.gov
     
-    131.188.3.221,           // ntp1.fau.de
-    131.188.3.223,           // ntp3.fau.de
+    "131.188.3.221",           // ntp1.fau.de
+    "131.188.3.223",           // ntp3.fau.de
     
-    193.79.237.14,           // ntp1.nl.net
-    193.79.237.30,           // ntp2.nl.net
+    "193.79.237.14",           // ntp1.nl.net
+    "193.79.237.30",           // ntp2.nl.net
     
-    133.243.238.243,         // ntp.nict.jp
+    "133.243.238.243",         // ntp.nict.jp
     
-    128.250.36.3,            // ntp1.cs.mu.OZ.AU
-    128.250.36.2,            // ntp0.cs.mu.OZ.AU
+    "128.250.36.3",            // ntp1.cs.mu.OZ.AU
+    "128.250.36.2",            // ntp0.cs.mu.OZ.AU
   };
 
 }
