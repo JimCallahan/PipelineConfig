@@ -1,4 +1,4 @@
-// $Id: TimeService.java,v 1.5 2007/06/20 23:10:28 jim Exp $
+// $Id: TimeService.java,v 1.6 2007/06/21 03:22:33 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -153,6 +153,10 @@ class TimeService
    * The IP addresses of some trusted (Stratum One) NTP servers.
    */
   private static final String[] sNtpServers = {
+    "204.152.184.72",          // clock.isc.org
+    "128.9.176.30",            // timekeeper.isi.edu
+    "216.218.254.202",         // time.heypete.com
+
     "76.169.239.34",           // t2.timegps.net
     "76.168.30.201",           // t4.timegps.net
     "76.169.237.141",          // t3.timegps.net
