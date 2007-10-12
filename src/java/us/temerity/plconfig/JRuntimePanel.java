@@ -1,4 +1,4 @@
-// $Id: JRuntimePanel.java,v 1.4 2007/03/06 04:28:57 jim Exp $
+// $Id: JRuntimePanel.java,v 1.5 2007/10/12 21:20:38 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -93,7 +93,7 @@ class JRuntimePanel
 	 "\n" +
          "We recommend the following server implementation:\n" + 
          "\n" + 
-         "Sun Microsystems - JDK 5.0 - Update 11\n" + 
+         "Sun Microsystems - JDK 5.0 - Update 13\n" + 
          "  http://java.sun.com/javase/downloads/index_jdk5.jsp");
     }
   }

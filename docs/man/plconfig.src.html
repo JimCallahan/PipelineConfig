@@ -297,13 +297,18 @@ Hat
 Enterprise Linux</a>, <a href="http://www.redhat.com/fedora">Fedora
 Core 3 &amp; 4</a>, <a href="http://www.centos.org/">CentOS</a> and <a
  href="http://www.novell.com/linux/suse/">SUSE
-Linux 10.0</a>.&nbsp; Other distributions of Linux should also work
+Linux 10.1</a>.&nbsp; Other distributions of Linux should also work
 fine, but have
-not been as thoroughly tested in production.&nbsp; The hardware
+not been as thoroughly tested in production.&nbsp; Pipeline currently
+requires glibc-2.4.&nbsp; Some newer releases of Linux using glibc-2.5
+are not compatible with Pipeline at this time unless a glibc-2.4
+compatibility library exists for the Linux distrobution.&nbsp; This
+requirement will be relaxed in future releases.&nbsp; The hardware
 requirements for Pipeline servers are similar to a typical render farm
-node: x86 2-Proc (possibly dual core), 2GB+ RAM, Gigibit
+node: x86 2-Proc (dual/quad core), 3GB+ RAM, Gigibit
 Ethernet.&nbsp; The server running <span style="font-weight: bold;">plmaster</span>(1)
-should also have a modest sized local RAID disk to store the Pipeline
+should also have a modest sized local RAID disk (for redundency
+purposes) to store the Pipeline
 node database.<br>
   <br>
 The preferred artist workstation and render farm machine OS is also one
@@ -335,9 +340,7 @@ on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
 tool, which is itself a Java program, depends on a Java Runtime
 Environment.&nbsp; Pipeline has been well tested with the <a
  href="http://java.sun.com/j2se/1.5.0/download.jsp"><span
- style="font-weight: bold;">JDK 5.0 Update 12</span></a><a
- style="font-weight: bold;"
- href="http://www.bea.com/framework.jsp?CNT=index.htm&amp;FP=/content/products/jrockit"></a>
+ style="font-weight: bold;">JDK 5.0 Update 13</span></a>
 implementation.&nbsp; You can set the JRE used by Unix clients with the
   <a href="#--unix-java-home"><span style="font-weight: bold;">--unix-java-home</span></a>
 option or using the interactive
@@ -382,9 +385,9 @@ part of the
 Pipeline distribution for your site.<br>
   <br>
 When using Pipeline on Windows XP systems, you will need to install the
-Java Runtime (JDK 5.0 Update 12).&nbsp; In a typical Java Runtime
+Java Runtime (JDK 5.0 Update 13).&nbsp; In a typical Java Runtime
 installation the installed files are located under (C:\Program
-Files\Java\jdk1.5.0_11\jre).&nbsp; If
+Files\Java\jdk1.5.0_13\jre).&nbsp; If
 installed elsewhere you will need to specify the location using the <a
  href="#--win-java-home"><span style="font-weight: bold;">--win-java-home</span></a>
 option.&nbsp; <br>
@@ -624,7 +627,7 @@ use this option to set a different JRE to be used for Pipelint client
 programs than is used to run the back-end server daemons.&nbsp; For
 instance, you could use a high performance server optimized
 implementation like BEA JRockit for the servers and Sun's JDK 5.0
-Update 12 for clients.<br>
+Update 13 for clients.<br>
 <br>
 If not specified, the JRE home directory defaults to the version of
 Java used to run this configuration tool.<br>
@@ -1233,7 +1236,7 @@ it needs to be supplied in order for the Pipeline client launcher
 scripts to function properly.<br>
 <br>
 If not specified, the JRE home directory defaults to (C:/Program
-Files/Java/jdk1.5.0_11/jre).<br>
+Files/Java/jdk1.5.0_13/jre).<br>
 <span style="font-style: italic;"><br>
 </span></div>
 </div>

@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.43 2007/06/14 12:57:07 jim Exp $
+// $Id: ConfigApp.java,v 1.44 2007/10/12 21:20:38 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -107,7 +107,7 @@ class ConfigApp
 
       pProfile.put("WinSupport",               false);
       pProfile.put("WinTemporaryDirectory",    "C:/WINDOWS/Temp");
-      pProfile.put("WinJavaHome",              "C:/Program Files/Java/jdk1.5.0_11/jre");
+      pProfile.put("WinJavaHome",              "C:/Program Files/Java/jdk1.5.0_13/jre");
       pProfile.put("WinUserProfileDirectory",  "C:/Documents and Settings");
       pProfile.put("WinUserProfileNeedsUser",  true);
       pProfile.put("WinAppDataNeedsUser",      true);
