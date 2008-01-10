@@ -1,4 +1,4 @@
-// $Id: JEssentialsPanel.java,v 1.5 2007/03/03 22:19:34 jim Exp $
+// $Id: JEssentialsPanel.java,v 1.6 2008/01/10 01:30:39 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -99,7 +99,7 @@ class JEssentialsPanel
 
       add(Box.createRigidArea(new Dimension(0, 50)));
 
-      pRootDirComp = new JCanonicalDirComp("Root Install Directory", sSize);
+      pRootDirComp = new JAbsoluteDirComp("Root Install Directory", sSize);
       add(pRootDirComp);
       
       add(Box.createRigidArea(new Dimension(0, 20)));
@@ -319,7 +319,7 @@ class JEssentialsPanel
    */ 
   private JCollectionField   pLicenseTypeField; 
   private JDateField         pLicenseEndField; 
-  private JCanonicalDirComp  pRootDirComp; 
+  private JAbsoluteDirComp   pRootDirComp; 
 
 }
 

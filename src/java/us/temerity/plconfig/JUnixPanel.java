@@ -1,4 +1,4 @@
-// $Id: JUnixPanel.java,v 1.3 2007/03/06 04:28:57 jim Exp $
+// $Id: JUnixPanel.java,v 1.4 2008/01/10 01:30:39 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -39,17 +39,17 @@ class JUnixPanel
     
     /* initialize UI components */ 
     {
-      pHomeDirComp = new JCanonicalDirComp("Home Directory", sSize);
+      pHomeDirComp = new JAbsoluteDirComp("Home Directory", sSize);
       add(pHomeDirComp);
       
       add(Box.createRigidArea(new Dimension(0, 20)));
 
-      pTempDirComp = new JCanonicalDirComp("Temporary Directory", sSize);
+      pTempDirComp = new JAbsoluteDirComp("Temporary Directory", sSize);
       add(pTempDirComp);
       
       add(Box.createRigidArea(new Dimension(0, 20)));
 
-      pJavaHomeDirComp = new JCanonicalDirComp("Java Home Directory", sSize);
+      pJavaHomeDirComp = new JAbsoluteDirComp("Java Home Directory", sSize);
       add(pJavaHomeDirComp);
 
       add(Box.createRigidArea(new Dimension(0, 20)));
@@ -159,9 +159,9 @@ class JUnixPanel
   /**
    * The UNIX fields. 
    */ 
-  private JCanonicalDirComp  pHomeDirComp; 
-  private JCanonicalDirComp  pTempDirComp; 
-  private JCanonicalDirComp  pJavaHomeDirComp; 
+  private JAbsoluteDirComp  pHomeDirComp; 
+  private JAbsoluteDirComp  pTempDirComp; 
+  private JAbsoluteDirComp  pJavaHomeDirComp; 
 
 }
 
