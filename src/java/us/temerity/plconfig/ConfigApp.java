@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.44 2007/10/12 21:20:38 jim Exp $
+// $Id: ConfigApp.java,v 1.45 2008/01/10 01:01:45 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -196,7 +196,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("RootInstallDirectory", 
-		 validateCanonicalDir(dir, "Root Install Directory").getPath()); 
+		 validateAbsolutePath(dir, "Root Install Directory").getPath()); 
   }
 
   public void 
@@ -207,7 +207,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("RootInstallDirectory", 
-		 validateCanonicalDir(path, "Root Install Directory").getPath()); 
+		 validateAbsolutePath(path, "Root Install Directory").getPath()); 
   }
 
   /** 
@@ -726,7 +726,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("HomeDirectory", 
-		 validateCanonicalDir(dir, "Home Directory").getPath()); 
+		 validateAbsolutePath(dir, "Home Directory").getPath()); 
   }
 
   /** 
@@ -755,7 +755,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("TemporaryDirectory", 
-		 validateCanonicalDir(dir, "Temporary Directory").getPath()); 
+		 validateAbsolutePath(dir, "Temporary Directory").getPath()); 
   }
 
   /** 
@@ -784,7 +784,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("UnixJavaHome", 
-		 validateCanonicalDir(dir, "(Unix) Java Home Directory").getPath()); 
+		 validateAbsolutePath(dir, "(Unix) Java Home Directory").getPath()); 
   }
 
   /** 
@@ -2205,7 +2205,7 @@ class ConfigApp
       if(dir == null) 
 	throw new IllegalConfigException("The --root-dir option is required!");
 
-      validateCanonicalDir(dir, "Root Install Directory"); 
+      validateAbsolutePath(dir, "Root Install Directory"); 
     }
     
     /* master manager */ 
