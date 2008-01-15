@@ -5,11 +5,25 @@ mkdir  debug opt
 
 plsrcdir=$HOME/code-dimetrodon/src/plconfig
 
+echo "---------------------------------------------------------------------------------------"
+echo "  AUTOGEN: $HOSTNAME"
+echo "---------------------------------------------------------------------------------------"
+
 pushd $plsrcdir
   sh autogen.sh
 popd
 
+
+echo 
+echo "---------------------------------------------------------------------------------------"
+echo "  CONFIGURING (debug): $HOSTNAME"
+echo "---------------------------------------------------------------------------------------"
+
+
 pushd debug
+  time \
+  JAVA_HOME=/usr/java/jdk1.5.0_14 \
+  PATH="$JAVA_HOME/bin:$PATH" \
   $plsrcdir/configure \
     --disable-opt \
     --with-compiler=GNU \
@@ -19,7 +33,16 @@ pushd debug
     --with-temerity=$HOME/code/src/temerity
 popd
 
+
+echo 
+echo "---------------------------------------------------------------------------------------"
+echo "  CONFIGURING (opt): $HOSTNAME"
+echo "---------------------------------------------------------------------------------------"
+
 pushd opt
+  time \
+  JAVA_HOME=/usr/java/jdk1.5.0_14 \
+  PATH="$JAVA_HOME/bin:$PATH" \
   $plsrcdir/configure \
     --enable-opt \
     --with-compiler=GNU \
