@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.10 2007/02/17 14:06:19 jim Exp $
+// $Id: IdApp.java,v 1.11 2008/04/26 03:30:08 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -152,134 +152,81 @@ class IdApp
   generateIDs() 
     throws IOException 
   {
-    /* the names of this host indexed by IP address */ 
-    TreeMap<String,String> hostnames = new TreeMap<String,String>();
+    /* the name of this host */ 
+    String hostname = null;
     try {
-      Enumeration nets = NetworkInterface.getNetworkInterfaces();  
-      while(nets.hasMoreElements()) {
-	NetworkInterface net = (NetworkInterface) nets.nextElement();
-	Enumeration addrs = net.getInetAddresses();
-	while(addrs.hasMoreElements()) {
-	  InetAddress addr = (InetAddress) addrs.nextElement();
-	  if((addr instanceof Inet4Address) && !addr.isLoopbackAddress()) 
-	    hostnames.put(addr.getHostAddress(), addr.getCanonicalHostName());
-	}
-      }
+      InetAddress addr = InetAddress.getLocalHost();
+      if((addr instanceof Inet4Address) && !addr.isLoopbackAddress()) 
+        hostname = addr.getCanonicalHostName();
     }
     catch(Exception ex) {
       throw new IOException 
 	("Could not determine the name of this machine!");
     }
 
-    if(hostnames.isEmpty()) 
+    if(hostname == null) 
       throw new IOException 
-	("Could not determine the name of this machine!");
+        ("Could not determine the name of this machine!");
 
     /* determine the hardware IDs */ 
     TreeMap<String,BigInteger> IDs = new TreeMap<String,BigInteger>();
     try {
       MessageDigest md = MessageDigest.getInstance("MD5");
-      
-      /* get the network card MAC addresses */ 
-      TreeSet<String> found = new TreeSet<String>();
+
+      /* get OS release/version info */ 
       {
-	String str = null;
-	try {
-	  String args[] = new String[1];
-	  args[0] = "/sbin/ifconfig";
-	  
-	  String env[] = new String[0];
-	  
-	  Process proc = Runtime.getRuntime().exec(args, env);
-	  
-	  StringBuffer buf = new StringBuffer();
-	  InputStreamReader in = new InputStreamReader(proc.getInputStream());
-	  char cs[] = new char[1024];
-	  while(true) {
-	    int cnt = in.read(cs);
-	    if(cnt == -1) 
-	      break;
-	    
-	    buf.append(cs, 0, cnt);
-	  }
-
-	  int exitCode = proc.waitFor();
-	  if(exitCode != 0)
-	    throw new IOException();
-
-	  str = buf.toString();
-	}
-	catch(Exception ex) {
-	  throw new IOException();
-	}      
-	
-	if(str == null)
-	  throw new IOException();
-
-	{
-	  boolean hwNext = false;
-	  boolean ipNext = false;
-
-	  String tok[] = str.split(" ");
-	  int wk; 
-	  for(wk=0; wk<tok.length; wk++) {
-	    if(tok[wk].length() > 0) {
-	      if(hwNext) {
-		md.update(tok[wk].getBytes());
-		hwNext = false;
-	      }
-	      else if(ipNext) {
-		if(tok[wk].startsWith("addr:")) {
-		  String addr = tok[wk].substring(5);
-		  String hname = hostnames.get(addr);
-		  if(hname != null)
-		    found.add(hname);
-		}
-		ipNext = false;		
-	      }
-	      else if(tok[wk].equals("HWaddr")) {
-		hwNext = true;
-	      }
-	      else if(tok[wk].equals("inet")) {
-		ipNext = true;
-	      }
-	    }
-	  }
-	  
-	  if(found.isEmpty()) 
-	    throw new IOException();
-	}
-      }
-      
-      /* get the CPU info */ 
-      {
-	char[] cs = new char[4096];
 	StringBuffer buf = new StringBuffer();
 
+	FileReader in = new FileReader("/proc/version");
+        try {
+          char[] cs = new char[4096];
+          while(true) {
+            int cnt = in.read(cs);
+            if(cnt == -1) 
+              break;
+            
+            buf.append(cs);
+          }
+        }
+        finally {
+          in.close();
+        }
+
+        md.update(buf.toString().getBytes());
+      }
+
+      /* get the CPU info */ 
+      {
 	FileReader in = new FileReader("/proc/cpuinfo");
-	while(true) {
-	  int cnt = in.read(cs);
-	  if(cnt == -1) 
-	    break;
-	  
-	  int wk;
-	  for(wk=0; wk<cnt; wk++) {
-	    if(cs[wk] == '\n') {
-	      String line = buf.toString();
-	      if(!line.startsWith("cpu MHz") && !line.startsWith("bogomips")) 
-		md.update(line.getBytes());
-	      buf = new StringBuffer();
-	    }
-	    else {
-	      buf.append(cs[wk]);
-	    }
-	  }
-	}
+        try {
+          StringBuffer buf = new StringBuffer();
+          char[] cs = new char[4096];
+          while(true) {
+            int cnt = in.read(cs);
+            if(cnt == -1) 
+              break;
+            
+            int wk;
+            for(wk=0; wk<cnt; wk++) {
+              if(cs[wk] == '\n') {
+                String line = buf.toString();
+                if(!line.startsWith("cpu MHz") && !line.startsWith("bogomips")) 
+                  md.update(line.getBytes());
+                buf = new StringBuffer();
+              }
+              else {
+                buf.append(cs[wk]);
+              }
+            }
+          }
+        }
+        finally {
+          in.close();
+        }
       }
 
       BigInteger hardwareID = new BigInteger(md.digest());
-      for(String host : found) 
-	IDs.put(host, hardwareID);
+      IDs.put(hostname, hardwareID);
     }
     catch(Exception ex) {
       throw new IOException("Unable to determine local host ID." + 
