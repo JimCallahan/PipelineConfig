@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.46 2008/01/15 23:45:21 jim Exp $
+// $Id: ConfigApp.java,v 1.47 2008/05/06 01:46:55 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1742,9 +1742,9 @@ class ConfigApp
     throws IllegalConfigException
   {
     String version = getJavaClassVersion();
-    if((version == null) || !version.equals("49.0"))
+    if((version == null) || !version.equals("50.0"))
       throw new IllegalConfigException
-	("The Class Version for the current Java Runtime must be (49.0)!");
+	("The Class Version for the current Java Runtime must be (50.0)!");
   }
 
 
