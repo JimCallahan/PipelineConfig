@@ -22,7 +22,7 @@ echo "--------------------------------------------------------------------------
 
 pushd debug
   time \
-  JAVA_HOME=/usr/java/jdk1.5.0_14 \
+  JAVA_HOME=/usr/java/jdk1.6.0_06 \
   PATH="$JAVA_HOME/bin:$PATH" \
   $plsrcdir/configure \
     --disable-opt \
@@ -41,7 +41,7 @@ echo "--------------------------------------------------------------------------
 
 pushd opt
   time \
-  JAVA_HOME=/usr/java/jdk1.5.0_14 \
+  JAVA_HOME=/usr/java/jdk1.6.0_06 \
   PATH="$JAVA_HOME/bin:$PATH" \
   $plsrcdir/configure \
     --enable-opt \
