@@ -519,7 +519,7 @@
                     method="buttonBackground"	
                     sourceInsets="24 24 4 4"/>
     </state>
-    <insets top="8" bottom="8" right="0" left="17"/> 
+    <insets top="8" bottom="8" right="16" left="16"/> 
     <property key="Button.textShiftOffset" type="integer" value="1"/>  
   </style>
   <bind style="LeftButton" type="name" key="LeftButton"/>
@@ -544,7 +544,7 @@
                     method="buttonBackground"	
                     sourceInsets="24 5 4 23"/>
     </state>
-    <insets top="8" bottom="8" right="0" left="17"/> 
+    <insets top="8" bottom="8" right="16" left="16"/> 
     <property key="Button.textShiftOffset" type="integer" value="1"/>  
   </style>
   <bind style="RightButton" type="name" key="RightButton"/>
