@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.47 2008/05/06 01:46:55 jim Exp $
+// $Id: ConfigApp.java,v 1.48 2008/05/20 21:42:14 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -2755,8 +2755,8 @@ class ConfigApp
        "OPTIONS:\n" +
        "  [--batch] [--evaluation | --limited=... | --perpetual]\n" +
        "  [--root-dir=...] [--server-host=...] [--host-ids=...]\n" + 
-       "  [--pipeline-user=...] [--pipeline-group=...]\n" + 
-       "  [--home-dir=...] [--temp-dir=...]\n" + 
+       "  [--reconfig=...] [--pipeline-user=...] [--pipeline-group=...]\n" + 
+       "  [--home-dir=...] [--temp-dir=...] [--unix-java-home=...]\n" + 
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
