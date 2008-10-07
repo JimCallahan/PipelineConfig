@@ -3,7 +3,7 @@
 rm -rf debug opt
 mkdir  debug opt
 
-plsrcdir=$HOME/code-dimetrodon/src/plconfig
+plsrcdir=$HOME/code-trex/src/plconfig
 
 echo "---------------------------------------------------------------------------------------"
 echo "  AUTOGEN: $HOSTNAME"
