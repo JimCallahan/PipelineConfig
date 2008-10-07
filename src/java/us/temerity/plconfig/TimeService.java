@@ -1,4 +1,4 @@
-// $Id: TimeService.java,v 1.6 2007/06/21 03:22:33 jim Exp $
+// $Id: TimeService.java,v 1.7 2008/10/07 08:09:38 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -105,7 +105,7 @@ class TimeService
     for(wk=0; wk<8; wk++) {
       double base = Math.pow(2, (3-wk)*8);
       buf[idx+wk] = (byte) (dstamp / base);
-      dstamp = dstamp - (double) (ubyteToShort(buf[idx+wk]) * base);
+      dstamp = dstamp - (ubyteToShort(buf[idx+wk]) * base);
     }
 		
     buf[idx+7] = (byte) (Math.random()*255.0);
