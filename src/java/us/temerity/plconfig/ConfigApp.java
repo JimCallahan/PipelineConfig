@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.48 2008/05/20 21:42:14 jim Exp $
+// $Id: ConfigApp.java,v 1.49 2008/10/09 00:56:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -93,6 +93,7 @@ class ConfigApp
       pProfile.put("FilePort",            53136);
       pProfile.put("FileHeapSize",        134217728L);  
       pProfile.put("ProductionDirectory", "/base/prod");
+      pProfile.put("FileStatDirectory",   "/base/prod");
 
       pProfile.put("QueuePort",      53139);
       pProfile.put("QueueHeapSize",  134217728L); 
@@ -1005,6 +1006,33 @@ class ConfigApp
   getProdDirectory() 
   {
     String dir = (String) pProfile.get("ProductionDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
+  }
+
+
+  /**
+   * Set the root production directory.
+   */
+  public void 
+  setStatDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("FileStatDirectory",
+		 validateAbsolutePath(dir, "File Status Directory").getPath()); 
+  }
+
+  /**
+   * Get the root production directory.
+   */ 
+  public File
+  getStatDirectory() 
+  {
+    String dir = (String) pProfile.get("FileStatDirectory");
     if(dir != null) 
       return new File(dir);
     return null; 
@@ -2235,8 +2263,11 @@ class ConfigApp
       Long size = getFileHeapSize();
       validateHeapSize(size, "File Heap Size");
       
-      File dir = getProdDirectory();
-      validateAbsolutePath(dir, "Production Directory"); 
+      File pdir = getProdDirectory();
+      validateAbsolutePath(pdir, "Production Directory"); 
+
+      File sdir = getStatDirectory();
+      validateAbsolutePath(sdir, "File Status Directory"); 
     }
 
     /* queue/job manager */ 
@@ -2598,6 +2629,8 @@ class ConfigApp
 	setFileHeapSize((Long) value);
       else if(title.equals("ProductionDirectory"))
 	setProdDirectory(new File((String) value));
+      else if(title.equals("FileStatDirectory"))
+	setStatDirectory(new File((String) value));
 
       else if(title.equals("QueueHostname"))
 	setQueueHostname((String) value);

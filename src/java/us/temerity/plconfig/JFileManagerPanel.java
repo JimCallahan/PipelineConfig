@@ -1,4 +1,4 @@
-// $Id: JFileManagerPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JFileManagerPanel.java,v 1.2 2008/10/09 00:56:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -78,6 +78,11 @@ class JFileManagerPanel
       add(pProdDirComp);
       
       add(Box.createRigidArea(new Dimension(0, 20)));
+
+      pStatDirComp = new JAbsoluteDirComp("File Status Directory", sSize);
+      add(pStatDirComp);
+      
+      add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
       addNotes
@@ -94,7 +99,17 @@ class JFileManagerPanel
 	 "The Production Directory is the absolute path to the root directory under " + 
 	 "which all production data files will reside.  This directory should reside on " + 
 	 "a network accessible file system such that all machines which will run Pipeline " + 
-	 "related programs can access the directory using this path.");
+	 "related programs can access the directory using this path.\n" + 
+         "\n" + 
+         "The File Status Directory is an alternative mount point for the Production " + 
+         "Directory used exclusively for file status operations.  If not specified, it " + 
+         "defaults to the same as the Production Directory.  The purpose of having an " + 
+         "alternative mount point is so that the machine running the File Manager can " + 
+         "use two network cards and separate networks to communicate with the network " + 
+         "file server.  One network, specified by the File Status Directory mount, will " + 
+         "carry only file status operations which are critical for the interactive " + 
+         "performance of node status updates by users.  The other network, specified " + 
+         "by the Production Directory mount, will carry all other file server traffic.");
     }
   }
 
@@ -129,7 +144,15 @@ class JFileManagerPanel
 
     pHeapSizeComp.setHeapSize(pApp.getFileHeapSize());
     pPortComp.setPort(pApp.getFilePort());
-    pProdDirComp.setDir(pApp.getProdDirectory());
+
+    File pdir = pApp.getProdDirectory();
+    pProdDirComp.setDir(pdir); 
+    
+    File sdir = pApp.getStatDirectory();
+    if(sdir != null) 
+      pStatDirComp.setDir(sdir);
+    else 
+      pStatDirComp.setDir(pdir);
   }
   
   /**
@@ -150,8 +173,9 @@ class JFileManagerPanel
       pApp.checkPortConflict(port, "File Port", pApp.getMasterPort(), "Master Port");
       pApp.setFilePort(port);
     }
-
+    
     pApp.setProdDirectory(pProdDirComp.validateDir(pApp)); 
+    pApp.setStatDirectory(pStatDirComp.validateDir(pApp)); 
   }
 
 
@@ -175,6 +199,7 @@ class JFileManagerPanel
   private JPortComp         pPortComp;
   private JHeapSizeComp     pHeapSizeComp;
   private JAbsoluteDirComp  pProdDirComp;
+  private JAbsoluteDirComp  pStatDirComp;
   
 }
 

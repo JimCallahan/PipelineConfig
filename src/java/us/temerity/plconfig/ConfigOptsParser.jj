@@ -90,6 +90,7 @@ TOKEN :
 | <FILE_PORT:            "--file-port">         : INTEGER_SEP
 | <FILE_HEAP_SIZE:       "--file-heap-size">    : BYTE_SIZE_SEP
 | <PROD_DIR:             "--prod-dir">          : PATH_SEP
+| <STAT_DIR:             "--stat-dir">          : PATH_SEP
 
 | <QUEUE_HOST:           "--queue-host">        : HOSTNAME_SEP
 | <QUEUE_PORT:           "--queue-port">        : INTEGER_SEP
@@ -407,7 +408,7 @@ GlobalOpts()
   (Batch() | Evaluation() | Limited() | Perpetual() | RootDir() | ServerHost() | HostIDs() | 
    Reconfig() | HomeDir() | TempDir() | UnixJavaHome() | 
    MasterHost() | MasterPort() | MasterHeapSize() | NodeDir() | 
-   FileHost() | FilePort() | FileHeapSize() | ProdDir() | 
+   FileHost() | FilePort() | FileHeapSize()  |ProdDir() | StatDir() | 
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | 
    PipelineUser() | PipelineGroup() |
@@ -781,6 +782,19 @@ ProdDir()
   <PROD_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setProdDirectory(new File(t.image));
+  }
+}
+
+void
+StatDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <STAT_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setStatDirectory(new File(t.image));
   }
 }
 
