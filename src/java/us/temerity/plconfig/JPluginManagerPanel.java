@@ -1,4 +1,4 @@
-// $Id: JPluginManagerPanel.java,v 1.2 2008/10/20 16:44:05 jim Exp $
+// $Id: JPluginManagerPanel.java,v 1.3 2008/10/20 17:05:49 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -77,7 +77,7 @@ class JPluginManagerPanel
 	  pPortComp = new JPortComp("Plugin Port", sHSize);
 	  vbox.add(pPortComp);
 	  
-	  vbox.add(Box.createRigidArea(new Dimension(0, 80)));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 160)));
 
 	  hbox.add(vbox);
 	}	
