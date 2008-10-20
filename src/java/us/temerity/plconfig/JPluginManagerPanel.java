@@ -1,4 +1,4 @@
-// $Id: JPluginManagerPanel.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JPluginManagerPanel.java,v 1.2 2008/10/20 16:44:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -57,6 +57,15 @@ class JPluginManagerPanel
 	  pLegacyField = UIFactory.createBooleanField(sHSize);
 	  vbox.add(pLegacyField); 
 
+	  vbox.add(Box.createRigidArea(new Dimension(0, 40)));
+	  
+	  vbox.add(UIFactory.createPanelLabel("Local Vendor:"));
+
+	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+	  pVendorField = UIFactory.createIdentifierField(null, sHSize, JTextField.LEFT);
+	  vbox.add(pVendorField); 
+
 	  hbox.add(vbox);
 	}
 
@@ -90,7 +99,18 @@ class JPluginManagerPanel
 	 "releases.  Sites which have only installed Pipeline 2.0.0 or later releases " + 
 	 "should not select this option.  All functionality of the older plugins exists " + 
 	 "in current plugin versions as well.  These legacy plugins are provides soley " + 
-	 "for backward compatability."); 
+	 "for backward compatability.\n" + 
+         "\n" + 
+         "The Local Vendor specifies the name of the default vendor of all locally " + 
+         "created plugins.  Plugins are identified by their name, version ID and vendor. " + 
+         "The vendor is a short name for the creating entity of the plugin.  All of the " + 
+         "standard plugins shipped with Pipeline have a vendor of \"Temerity\".  If " + 
+         "studios create their own plugins, they should use a different vendor name to " + 
+         "avoid name conflicts.   Without using a special override command-line option, " + 
+         "the tool used to install plugins (plpluginmgr) will reject plugins not created " + 
+         "by the default vendor.  This helps to avoid mistakes where plugin developers " + 
+         "copy the source code from a Temerity (or other vendor) plugin and forget to " + 
+         "change the vendor."); 
     }
   }
 
@@ -125,6 +145,7 @@ class JPluginManagerPanel
 
     pPortComp.setPort(pApp.getPluginPort());
     pLegacyField.setValue(pApp.getLegacyPlugins());
+    pVendorField.setText(pApp.getLocalVendor()); 
   }
   
   /**
@@ -149,6 +170,7 @@ class JPluginManagerPanel
     }
 
     pApp.setLegacyPlugins(pLegacyField.getValue());
+    pApp.setLocalVendor(pVendorField.getText()); 
   }
 
 
@@ -171,6 +193,7 @@ class JPluginManagerPanel
   private JHostnameComp     pHostnameComp;
   private JPortComp         pPortComp;
   private JBooleanField     pLegacyField; 
+  private JIdentifierField  pVendorField; 
   
 }
 

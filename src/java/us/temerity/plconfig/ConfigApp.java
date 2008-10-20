@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.49 2008/10/09 00:56:05 jim Exp $
+// $Id: ConfigApp.java,v 1.50 2008/10/20 16:44:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1225,6 +1225,44 @@ class ConfigApp
   }
 
   
+  /**
+   * Set the default vendor for locally create plugins.
+   */
+  public void 
+  setLocalVendor
+  (
+   String vendor
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("LocalVendor", validateLocalVendor(vendor));
+  }
+
+  /** 
+   * Get the default vendor for locally create plugins.
+   */ 
+  public String
+  getLocalVendor()
+  {
+    return (String) pProfile.get("LocalVendor");
+  }
+
+  /**
+   * Validate the default vendor for locally create plugins.
+   */  
+  public String 
+  validateLocalVendor
+  (
+   String vendor
+  )
+    throws IllegalConfigException
+  {
+    if((vendor == null) || (vendor.length() == 0)) 
+      throw new IllegalConfigException
+	("The Local Vendor must be specified!"); 
+    return vendor;
+  }
+
 
   /*----------------------------------------------------------------------------------------*/
 
@@ -1671,6 +1709,7 @@ class ConfigApp
     return (Boolean) pProfile.get("LegacyPlugins");
   }
 
+  
 
   /*----------------------------------------------------------------------------------------*/
  
@@ -2305,6 +2344,9 @@ class ConfigApp
       checkPortConflict(port, "Plugin Port", getFilePort(), "File Port");
       checkPortConflict(port, "Plugin Port", getQueuePort(), "Queue Port");
       checkPortConflict(port, "Plugin Port", getJobPort(), "Job Port");
+
+      String vendor = getLocalVendor();
+      validateLocalVendor(vendor);
     }
 
     /* check for missing hostnames */ 
@@ -2793,9 +2835,9 @@ class ConfigApp
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
-       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
+       "  [--node-dir=...] [--prod-dir=...] [--stat-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
-       "  [--legacy-plugins]\n" +
+       "  [--legacy-plugins] [--local-vendor=...]\n" +
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
        "  [--win-support] [--win-root-dir=...] [--win-prod-dir=...]\n" + 
@@ -2843,6 +2885,9 @@ class ConfigApp
     
     case ConfigOptsParserConstants.USERNAME:
       return "a user/group name";
+    
+    case ConfigOptsParserConstants.VENDORNAME:
+      return "a plugin vendor name";
 
     case ConfigOptsParserConstants.BYTE_SIZE:
       return "a byte size";

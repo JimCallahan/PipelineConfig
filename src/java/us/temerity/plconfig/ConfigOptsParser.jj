@@ -122,6 +122,7 @@ TOKEN :
 | <WIN_APP_DATA_NO_USERNAME:      "--win-app-data-no-unsername">  
 
 | <LEGACY_PLUGINS:   	 "--legacy-plugins">	
+| <LOCAL_VENDOR:   	 "--local-vendor">      : VENDORNAME_SEP 
 
   /* seperators */ 
 | <AE1: (["\0"])+> 
@@ -248,6 +249,22 @@ TOKEN :
 | <ILLEGAL_USERNAME: (~["\0"])+>                       : IGNORE_STATE
 }
 
+
+/* vendorname arguments */ 
+<VENDORNAME_SEP> 
+TOKEN :
+{
+  <EQ9:                      "=">   : VENDORNAME_STATE
+| <MISSING_VENDORNAME_ARG: ~["="]>  : IGNORE_STATE
+}
+
+<VENDORNAME_STATE> 
+TOKEN :
+{
+  <VENDORNAME:         ((["a"-"z","A"-"Z","0"-"9","-","_","."])+)>   : DEFAULT
+| <MISSING_VENDORNAME: ["\0"]>                           : IGNORE_STATE
+| <ILLEGAL_VENDORNAME: (~["\0"])+>                       : IGNORE_STATE
+}
 
 /* byte size arguments */ 
 <BYTE_SIZE_SEP> 
@@ -410,13 +427,12 @@ GlobalOpts()
    MasterHost() | MasterPort() | MasterHeapSize() | NodeDir() | 
    FileHost() | FilePort() | FileHeapSize()  |ProdDir() | StatDir() | 
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
-   PluginHost() | PluginPort() | 
+   PluginHost() | PluginPort() | LegacyPlugins() | LocalVendor() |
    PipelineUser() | PipelineGroup() |
    MacSupport() | MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
    WinSupport() | WinRootDir() | WinProdDir() | WinTempDir() | WinJavaHome() |
    WinUserProfileDir() | WinUserProfileNoUsername() |
-   WinAppDataDir() | WinAppDataNoUsername() |
-   LegacyPlugins()) 
+   WinAppDataDir() | WinAppDataNoUsername())
   {}
 }
 
@@ -894,6 +910,19 @@ PluginPort()
 }
 
 
+void
+LocalVendor() 
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <LOCAL_VENDOR> EQ() t=<VENDORNAME>
+  { 
+    pApp.setLocalVendor(t.image);
+  }
+}
+
 
 /*------------------------------------------------------------------------------------------*/
 
@@ -1210,7 +1239,7 @@ EQ() :
   Token t;
 }
 {
-  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5> | t=<EQ6> | t=<EQ7> | t=<EQ8>)
+  (t=<EQ1> | t=<EQ2> | t=<EQ3> | t=<EQ4> | t=<EQ5> | t=<EQ6> | t=<EQ7> | t=<EQ8> | t=<EQ9>)
   { 
     return t; 
   }

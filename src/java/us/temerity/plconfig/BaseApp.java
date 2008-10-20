@@ -1,10 +1,12 @@
-// $Id: BaseApp.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: BaseApp.java,v 1.2 2008/10/20 16:44:05 jim Exp $
 
 package us.temerity.plconfig;
 
 import java.io.*; 
 import java.util.*;
 import java.util.logging.*;
+import java.awt.Desktop;
+import java.net.URI; 
 
 /*------------------------------------------------------------------------------------------*/
 /*   B A S E   A P P                                                                        */
@@ -104,137 +106,18 @@ class BaseApp
   (
    String url 
   ) 
-  {
-    Map<String,String> env = System.getenv();
-
-    ExecPath epath = new ExecPath(env.get("PATH"));
-    File mozilla = epath.which("mozilla");
-    File firefox = epath.which("firefox");
-    
-    if((mozilla != null) && isBrowserRunning("mozilla"))
-      displayURL("mozilla", url);
-    else if((firefox != null) && isBrowserRunning("firefox"))
-      displayURL("firefox", url);
-    else if(mozilla != null)
-      launchURL("mozilla", url);
-    else if(firefox != null)
-      launchURL("firefox", url);
-    else 
-      LogMgr.getInstance().log
-	(LogMgr.Kind.Sub, LogMgr.Level.Warning,
-	 "Unable to find either firefox(1) or mozilla(1) on your system to " +
-	 "display URLs!");
+  { 
+    try {
+      Desktop.getDesktop().browse(new URI(url));
+      return;
+    }
+    catch(Exception ex) {
+      throw new IllegalStateException
+        ("Unable to launch native browser to display the URL:\n  " + url + "\n\n" + 
+         ex.getMessage());
+    }
   }
 
-  /**
-   * Returns whether a web browser is currently running.
-   * 
-   * @param browser
-   *   The browser program name (mozilla or firefox).
-   */    
-  private static boolean
-  isBrowserRunning
-  (
-   String browser
-  )
-  {
-    int exitCode = -1;
-    try {
-      String args[] = {
-	browser, "-remote", "ping()"
-      };      
-      
-      Process proc = Runtime.getRuntime().exec(args);
-      
-      try {
-	exitCode = proc.waitFor();
-      }
-      catch(InterruptedException ex) {
-      }
-    }
-    catch(IOException ex) {
-      LogMgr.getInstance().log
-	(LogMgr.Kind.Sub, LogMgr.Level.Severe,
-	 ex.getMessage());
-    }
-    
-    return (exitCode == 0);
-  }
-
-  /**
-   * Direct a running browser to display the given URL.
-   * 
-   * @param browser
-   *   The browser program name (mozilla or firefox).
-   * 
-   * @param url
-   *   The URL to display.
-   */ 
-  private static void
-  displayURL
-  (
-   String browser, 
-   String url 
-  )
-  {
-    try {
-      String args[] = {
-	browser, "-remote", ("openURL(" + url + ", new-tab)")
-      }; 
-    
-      Process proc = Runtime.getRuntime().exec(args);
-      
-      int exitCode = -1;
-      try {
-	exitCode = proc.waitFor();
-      }
-      catch(InterruptedException ex) {
-      }
-    }
-    catch(IOException ex) {
-      LogMgr.getInstance().log
-	(LogMgr.Kind.Sub, LogMgr.Level.Severe,
-	 ex.getMessage());
-    }
-  }
-  
-  /**
-   * Launch a new browser process to display the given URL.
-   * 
-   * @param browser
-   *   The browser program name (mozilla or firefox).
-   * 
-   * @param url
-   *   The URL to display.
-   */ 
-  private static void
-  launchURL
-  (
-   String browser, 
-   String url 
-  )
-  {
-    try {
-      String args[] = {
-	browser, url
-      };
-      
-      Process proc = Runtime.getRuntime().exec(args);
-      
-      int exitCode = -1;
-      try {
-	exitCode = proc.waitFor();
-      }
-      catch(InterruptedException ex) {
-      }
-    }
-    catch(IOException ex) {
-      LogMgr.getInstance().log
-	(LogMgr.Kind.Sub, LogMgr.Level.Severe,
-	 ex.getMessage());
-    }
-  }
-    
 
 
   /*----------------------------------------------------------------------------------------*/

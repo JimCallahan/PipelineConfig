@@ -291,19 +291,15 @@ daemons include: <a
  style="font-weight: bold;">plqueuemgr</span></a>(1) and <a
  href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr"><span
  style="font-weight: bold;">plpluginmgr</span></a>(1).&nbsp; Pipeline
-is known to be compatible with <a href="http://www.redhat.com">Red Hat
-9.0</a>, <a href="http://www.redhat.com/software/rhel/">Red
+is known to be compatible with <a
+ href="http://www.redhat.com/software/rhel/">Red
 Hat
 Enterprise Linux</a>, <a href="http://www.redhat.com/fedora">Fedora
-Core 3 &amp; 4</a>, <a href="http://www.centos.org/">CentOS</a> and <a
+Core</a>, <a href="http://www.centos.org/">CentOS</a> and <a
  href="http://www.novell.com/linux/suse/">SUSE
-Linux 10.1</a>.&nbsp; Other distributions of Linux should also work
+Linux</a>.&nbsp; Other distributions of Linux should also work
 fine, but have
-not been as thoroughly tested in production.&nbsp; Pipeline currently
-requires glibc-2.4.&nbsp; Some newer releases of Linux using glibc-2.5
-are not compatible with Pipeline at this time unless a glibc-2.4
-compatibility library exists for the Linux distrobution.&nbsp; This
-requirement will be relaxed in future releases.&nbsp; The hardware
+not been as thoroughly tested in production.&nbsp;&nbsp; The hardware
 requirements for Pipeline servers are similar to a typical render farm
 node: x86 2-Proc (dual/quad core), 3GB+ RAM, Gigibit
 Ethernet.&nbsp; The server running <span style="font-weight: bold;">plmaster</span>(1)
@@ -339,8 +335,8 @@ Finally, all Pipeline programs are heavily dependent
 on Java.&nbsp; Even the <span style="font-weight: bold;">plconfig</span>(1)
 tool, which is itself a Java program, depends on a Java Runtime
 Environment.&nbsp; Pipeline has been well tested with the <a
- href="http://java.sun.com/j2se/1.5.0/download.jsp"><span
- style="font-weight: bold;">JDK 5.0 Update 13</span></a>
+ href="http://java.sun.com/javase/downloads/index.jsp"><span
+ style="font-weight: bold;">JDK 6.0 Update 10</span></a>
 implementation.&nbsp; You can set the JRE used by Unix clients with the
   <a href="#--unix-java-home"><span style="font-weight: bold;">--unix-java-home</span></a>
 option or using the interactive
@@ -365,9 +361,11 @@ Pipeline distribution for your site.<br>
   <br>
 Pipeline on Mac OS X systems also require the Java Runtime
 package.&nbsp; A special release of the Java Runtime can be obtained
-for Mac OS X systems here: <a style="font-weight: bold;"
- href="http://www.apple.com/downloads/macosx/apple/macosx_updates/javaformacosx104release5.html"><span
- class="page_title">J2SE 5.0 Release 5 for Mac OS X</span></a>.&nbsp;&nbsp;
+for Mac OS X systems here:<a style="font-weight: bold;"
+ href="http://www.apple.com/downloads/macosx/apple/application_updates/javaformacosx105update1.html"><span
+ class="page_title"></span></a> <a style="font-weight: bold;"
+ href="http://www.apple.com/downloads/macosx/apple/application_updates/javaformacosx105update1.html">Java
+for Mac OS X 10.5 Update 1</a>.&nbsp;&nbsp;
 In addition, user and group names as well as UIDs and GIDs need to be
 identical between the Linux and Mac OS X systems at your site.&nbsp;
 This includes the Pipeline administration user specified by the <a
@@ -385,9 +383,9 @@ part of the
 Pipeline distribution for your site.<br>
   <br>
 When using Pipeline on Windows XP systems, you will need to install the
-Java Runtime (JDK 5.0 Update 13).&nbsp; In a typical Java Runtime
+Java Runtime (JDK 6.0 Update 10).&nbsp; In a typical Java Runtime
 installation the installed files are located under (C:\Program
-Files\Java\jdk1.5.0_13\jre).&nbsp; If
+Files\Java\jdk1.6.0_10\jre).&nbsp; If
 installed elsewhere you will need to specify the location using the <a
  href="#--win-java-home"><span style="font-weight: bold;">--win-java-home</span></a>
 option.&nbsp; <br>
@@ -999,7 +997,6 @@ If not specified, the port number will default to (53141).<span
  style="color: rgb(255, 0, 0);"></span><br
  style="color: rgb(255, 0, 0);">
 </div>
-<br style="color: rgb(255, 0, 0);">
 <br>
 </div>
 <div style="margin-left: 40px;">
@@ -1010,11 +1007,29 @@ installed a version Pipeline before the 2.0.0 release, this option adds
 the plugins required by these older Pipeline releases.&nbsp; Sites
 which have only installed Pipeline 2.0.0 or later releases should not
 use this option.<br>
+<br>
 </div>
 </div>
 <div style="margin-left: 40px;">
-<span style="font-weight: bold;"><br>
+<span style="font-weight: bold;"><a name="--local-vendor"></a>--local-vendor</span>=<span
+ style="font-style: italic;">vendor-name</span><span
+ style="font-weight: bold;"><br>
 </span>
+<div style="margin-left: 40px;"><br>
+Specifies the default vendor (<span style="font-style: italic;">vendor-name</span>)
+of all locally created plugins.&nbsp; Plugins are identified by their
+name, version ID and vendor.&nbsp; The vendor is a short name for the
+creating entity of the plugin.&nbsp; All of the standard plugins
+shipped with Pipeline have a vendor of&nbsp; "Temerity".&nbsp; If
+studios create their own plugins, they should use a different vendor
+name to avoid name conflicts.&nbsp;&nbsp; Without using a special
+override command-line option, the tool used to install plugins
+(plpluginmgr) will reject plugins not created by the default
+vendor.&nbsp; This helps to avoid mistakes where plugin developers copy
+the source code from a Temerity (or other vendor) plugin and forget to
+change the vendor.&nbsp;&nbsp; <br>
+</div>
+<span style="font-weight: bold;"></span>
 <h4><a name="Mac_OS_X_Options"></a>Mac OS X Options</h4>
 These options specify the paths to use from Mac OS X hosts to access
 the
@@ -1264,7 +1279,7 @@ it needs to be supplied in order for the Pipeline client launcher
 scripts to function properly.<br>
 <br>
 If not specified, the JRE home directory defaults to (C:/Program
-Files/Java/jdk1.5.0_13/jre).<br>
+Files/Java/jdk1.6.0_10/jre).<br>
 <span style="font-style: italic;"><br>
 </span></div>
 </div>
@@ -1276,13 +1291,8 @@ Programs<br>
 </span>
 <div style="margin-left: 40px;"><a href="plid.html"><span
  style="font-weight: bold;">plid</span></a>(1)<br>
-<br>
 </div>
-<span style="font-weight: bold;">Other
-Software</span><br>
-<div style="margin-left: 40px;"><a href="http://www.mozilla.org/"><b>mozilla</b></a>(1)<span
- style="font-weight: bold;"></span><br>
-</div>
+<span style="font-weight: bold;"></span>
 </div>
 <h3><a name="Files"></a>Files</h3>
 <div style="margin-left: 40px; font-weight: bold;"><a
