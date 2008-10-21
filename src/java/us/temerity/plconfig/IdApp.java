@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.11 2008/04/26 03:30:08 jim Exp $
+// $Id: IdApp.java,v 1.12 2008/10/21 00:41:01 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -157,7 +157,7 @@ class IdApp
     try {
       InetAddress addr = InetAddress.getLocalHost();
       if((addr instanceof Inet4Address) && !addr.isLoopbackAddress()) 
-        hostname = addr.getCanonicalHostName();
+        hostname = addr.getCanonicalHostName().toLowerCase(Locale.ENGLISH);
     }
     catch(Exception ex) {
       throw new IOException 

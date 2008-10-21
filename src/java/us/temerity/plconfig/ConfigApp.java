@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.51 2008/10/20 17:05:35 jim Exp $
+// $Id: ConfigApp.java,v 1.52 2008/10/21 00:41:01 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -2071,7 +2071,7 @@ class ConfigApp
 
     try {
       InetAddress addr = InetAddress.getByName(host);
-      return addr.getCanonicalHostName(); 
+      return addr.getCanonicalHostName().toLowerCase(Locale.ENGLISH); 
     }
     catch(UnknownHostException ex) {
       throw new IllegalConfigException

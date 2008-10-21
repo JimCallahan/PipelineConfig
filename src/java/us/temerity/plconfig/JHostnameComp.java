@@ -1,4 +1,4 @@
-// $Id: JHostnameComp.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JHostnameComp.java,v 1.2 2008/10/21 00:41:01 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -111,7 +111,7 @@ class JHostnameComp
       if((host != null) && (host.length() > 1)) {
 	try {
 	  InetAddress addr = InetAddress.getByName(host);
-	  pField.setText(addr.getCanonicalHostName());
+	  pField.setText(addr.getCanonicalHostName().toLowerCase(Locale.ENGLISH));
 	  return;
 	}
 	catch(Exception ex) {
@@ -126,7 +126,7 @@ class JHostnameComp
 	  while(addrs.hasMoreElements()) {
 	    InetAddress addr = (InetAddress) addrs.nextElement();
 	    if((addr instanceof Inet4Address) && !addr.isLoopbackAddress()) {
-	      pField.setText(addr.getCanonicalHostName());
+	      pField.setText(addr.getCanonicalHostName().toLowerCase(Locale.ENGLISH));
 	      return;
 	    }
 	  }
