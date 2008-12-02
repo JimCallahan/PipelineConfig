@@ -1,4 +1,4 @@
-// $Id: IdApp.java,v 1.12 2008/10/21 00:41:01 jim Exp $
+// $Id: IdApp.java,v 1.13 2008/12/02 20:56:23 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -210,7 +210,9 @@ class IdApp
             for(wk=0; wk<cnt; wk++) {
               if(cs[wk] == '\n') {
                 String line = buf.toString();
-                if(!line.startsWith("cpu MHz") && !line.startsWith("bogomips")) 
+                if(!line.startsWith("cpu MHz") && 
+                   !line.startsWith("bogomips") &&
+                   !line.startsWith("core id")) 
                   md.update(line.getBytes());
                 buf = new StringBuffer();
               }
