@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.53 2008/10/21 00:43:44 jim Exp $
+// $Id: ConfigApp.java,v 1.54 2008/12/16 07:56:54 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -93,7 +93,6 @@ class ConfigApp
       pProfile.put("FilePort",            53136);
       pProfile.put("FileHeapSize",        134217728L);  
       pProfile.put("ProductionDirectory", "/base/prod");
-      pProfile.put("FileStatDirectory",   "/base/prod");
 
       pProfile.put("QueuePort",      53139);
       pProfile.put("QueueHeapSize",  134217728L); 
@@ -1006,33 +1005,6 @@ class ConfigApp
   getProdDirectory() 
   {
     String dir = (String) pProfile.get("ProductionDirectory");
-    if(dir != null) 
-      return new File(dir);
-    return null; 
-  }
-
-
-  /**
-   * Set the root production directory.
-   */
-  public void 
-  setStatDirectory
-  (
-   File dir
-  ) 
-    throws IllegalConfigException
-  {
-    pProfile.put("FileStatDirectory",
-		 validateAbsolutePath(dir, "File Status Directory").getPath()); 
-  }
-
-  /**
-   * Get the root production directory.
-   */ 
-  public File
-  getStatDirectory() 
-  {
-    String dir = (String) pProfile.get("FileStatDirectory");
     if(dir != null) 
       return new File(dir);
     return null; 
@@ -2304,9 +2276,6 @@ class ConfigApp
       
       File pdir = getProdDirectory();
       validateAbsolutePath(pdir, "Production Directory"); 
-
-      File sdir = getStatDirectory();
-      validateAbsolutePath(sdir, "File Status Directory"); 
     }
 
     /* queue/job manager */ 
@@ -2671,8 +2640,6 @@ class ConfigApp
 	setFileHeapSize((Long) value);
       else if(title.equals("ProductionDirectory"))
 	setProdDirectory(new File((String) value));
-      else if(title.equals("FileStatDirectory"))
-	setStatDirectory(new File((String) value));
 
       else if(title.equals("QueueHostname"))
 	setQueueHostname((String) value);
@@ -2837,7 +2804,7 @@ class ConfigApp
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
-       "  [--node-dir=...] [--prod-dir=...] [--stat-dir=...] [--queue-dir=...]\n" + 
+       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--legacy-plugins] [--local-vendor=...]\n" +
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 

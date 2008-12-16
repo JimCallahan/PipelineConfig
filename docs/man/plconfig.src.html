@@ -809,35 +809,6 @@ although this is not required.
 </div>
 <h4 style="font-weight: normal; margin-left: 80px;">If not specified,
 the production directory will default to (/base/prod).</h4>
-<div style="margin-left: 40px;"><a name="--stat-dir"></a><span
- style="font-weight: bold;">--stat-dir</span>=<span
- style="font-style: italic;">dir<br>
-</span>
-<div style="margin-left: 40px;"><br>
-The absolute path to the root production directory specified by the <a
- href="#--prod-dir"><span style="font-weight: bold;">--prod-dir</span></a>
-option but through an alternative mount point used to separate file
-status traffic from all other network file I/O operations.&nbsp; In
-order to use this feature, the machine running the File Manager daemon
-needs to have two network interfaces and two NFS mounts of the same
-root production directory from the file server but using different
-local directory names.&nbsp; The local directory and associated network
-interface specified by this option will only be used for file status
-operations, while all other traffic will use the directory specified by
-<span style="font-weight: bold;">--prod-dir</span>.<br>
-</div>
-</div>
-<br>
-<div style="margin-left: 80px;">For
-optimal performance this directory should reside on the
-same host which runs the <span style="font-weight: bold;"><a
- href="http://temerity.us/products/pipeline/docs/man/index.php?target=plfilemgr">plfilemgr</a></span>(1)
-<span style="font-weight: normal;">daemon</span> (see <a
- href="plconfig.src.html#--file-host"><span style="font-weight: bold;">--file-host</span></a>)
-although this is not required.
-</div>
-<h4 style="font-weight: normal; margin-left: 80px;">If not specified,
-the production directory will default to (/base/prod).</h4>
 <div style="margin-left: 40px;"><span style="font-weight: bold;"><a
  name="--queue-host"></a>--queue-host</span>=<span
  style="font-style: italic;">host<br>
