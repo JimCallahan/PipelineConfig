@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.55 2009/02/11 16:39:50 jlee Exp $
+// $Id: ConfigApp.java,v 1.56 2009/02/11 18:46:13 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1230,10 +1230,33 @@ class ConfigApp
   )
     throws IllegalConfigException
   {
-    if((vendor == null) || (vendor.length() == 0)) 
-      throw new IllegalConfigException
-	("The Local Vendor must be specified!"); 
-    return vendor;
+    return validateIdentifier(vendor, "Local Vendor")); 
+  }
+
+  /**
+   * Set the root plugin directory.
+   */
+  public void 
+  setPluginDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("PluginDirectory", 
+      validateAbsolutePath(dir, "Plugin Directory").getPath());
+  }
+ 
+  /**
+   * Get the root plugin directory.
+   */ 
+  public File
+  getPluginDirectory() 
+  {
+    String dir = (String) pProfile.get("PluginDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
   }
 
   /**
@@ -2039,6 +2062,45 @@ class ConfigApp
 	("The path (" + path + ") specified for the " + title + " is not a directory!");
 
     return canon; 
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /** 
+   * Validate an identifier string.
+   * 
+   * @param ident
+   *   The identifier string.
+   * 
+   * @param title
+   *   The name of the parameter to include in exception messages.
+   * 
+   * @return 
+   *   The validated identifier. 
+   */
+  public String 
+  validateIdentifier
+  (
+   String ident,
+   String title
+  )  
+    throws IllegalConfigException
+  { 
+    if((ident == null) || (ident.length() == 0)) 
+      throw new IllegalConfigException
+	("No " + title + " was specified!");
+
+    char[] cs = ident.toCharArray();
+    int wk;
+    for(wk=0; wk<cs.length; wk++) {
+      if(!(Character.isLetterOrDigit(cs[wk]) || 
+           (cs[wk] == '_') ||(cs[wk] == '-') ||(cs[wk] == '.'))) {
+        throw new IllegalConfigException
+          ("The " + title + " must be a legal identifier containing only the alphanumeric " + 
+           "characters and the separators: '_', '-' and '.'");
+      }
+    }
   }
 
 
