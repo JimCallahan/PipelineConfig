@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.56 2009/02/11 18:46:13 jim Exp $
+// $Id: ConfigApp.java,v 1.57 2009/02/11 19:50:26 jlee Exp $
 
 package us.temerity.plconfig;
 
@@ -2753,7 +2753,7 @@ class ConfigApp
       else if(title.equals("LocalVendor"))
 	setLocalVendor((String) value); 
       else if(title.equals("PluginDirectory"))
-  setPluginDirectory(new File((String) value));
+        setPluginDirectory(new File((String) value));
       
       else if(title.equals("HostIDs")) {
 	TreeMap<String,String> hostStrs = (TreeMap<String,String>) value;
