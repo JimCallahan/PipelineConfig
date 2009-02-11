@@ -935,7 +935,7 @@ the node directory will default to (/usr/share/pipeline).<br>
 The host name of the machine (<span style="font-style: italic;">host</span>)
 which will run the Pipeline plugin manager daemon <span
  style="font-weight: bold;"><a
- href="http://temerity.us/products/pipeline/docs/man/index.php?target=plplugin">plplugin</a></span>(1).&nbsp;
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr">plpluginmgr</a></span>(1).&nbsp;
 This daemon is
 responsible for loading plugin
 classes and providing loaded plugins to the other Pipeline programs.<span
@@ -960,16 +960,43 @@ host specified by the <a href="#--server-host"><span
 <div style="margin-left: 40px;">
 <div style="margin-left: 40px;">The number of the network port (<span
  style="font-style: italic;">num</span>) listened to by the Pipeline
-plugin server daemon <span style="font-weight: bold;">plpluginmgr</span>(1).&nbsp;
-This daemon is responsible for loading plugin
-classes and providing loaded plugins to the other Pipeline programs.<br>
+plugin server daemon <span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr">plpluginmgr</a></span>(1).&nbsp;
+This daemon is
+responsible for loading plugin
+classes and providing loaded plugins to the other Pipeline programs.<span
+ style="font-weight: normal;"><br>
+</span>
 <br>
 If not specified, the port number will default to (53141).<span
  style="color: rgb(255, 0, 0);"></span><br
  style="color: rgb(255, 0, 0);">
 </div>
+<!--<br>-->
+</div>
+
+<h4 style="margin-left: 40px;"><span style="font-weight: normal;"><span
+ style="font-weight: bold;"><a name="--plugin-dir"></a>--plugin-dir</span>=<span
+ style="font-style: italic;">dir</span></span></h4>
+<div style="margin-left: 40px;">
+<div style="margin-left: 40px;">
+The absolute path to the root directory
+under which a list of installed plugins will be saved.&nbsp; 
+This directory should reside on a local file system on the host which will run the Pipeline plugin manager daemon
+<span
+ style="font-weight: bold;"><a
+ href="http://temerity.us/products/pipeline/docs/man/index.php?target=plpluginmgr">plpluginmgr</a></span>(1).&nbsp;
+<span style="font-weight: normal;"><br></span>
+<br>
+If not specified, the node directory will default to (/usr/share/pipeline/plugins).
+<span style="color: rgb(255, 0, 0);"></span>
+<br style="color: rgb(255, 0, 0);">
+</div>
 <br>
 </div>
+
+
 <div style="margin-left: 40px;">
 <span style="font-weight: bold;"><a name="--legacy-plugins"></a>--legacy-plugins</span><br>
 <br>

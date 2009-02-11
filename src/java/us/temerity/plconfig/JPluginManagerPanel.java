@@ -1,4 +1,4 @@
-// $Id: JPluginManagerPanel.java,v 1.3 2008/10/20 17:05:49 jim Exp $
+// $Id: JPluginManagerPanel.java,v 1.4 2009/02/11 16:39:50 jlee Exp $
 
 package us.temerity.plconfig;
 
@@ -40,66 +40,71 @@ class JPluginManagerPanel
     /* initialize UI components */ 
     {
       {
-	Box hbox = new Box(BoxLayout.X_AXIS);
+  Box hbox = new Box(BoxLayout.X_AXIS);
 
-	{
-	  Box vbox = new Box(BoxLayout.Y_AXIS);
+  {
+    Box vbox = new Box(BoxLayout.Y_AXIS);
 
-	  pHostnameComp = new JHostnameComp("Plugin Hostname", sHSize);
-	  vbox.add(pHostnameComp);
+    pHostnameComp = new JHostnameComp("Plugin Hostname", sHSize);
+    vbox.add(pHostnameComp);
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 40)));
-	  
-	  vbox.add(UIFactory.createPanelLabel("Legacy Plugins:"));
+    vbox.add(Box.createRigidArea(new Dimension(0, 40)));
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+    vbox.add(UIFactory.createPanelLabel("Legacy Plugins:"));
 
-	  pLegacyField = UIFactory.createBooleanField(sHSize);
-	  vbox.add(pLegacyField); 
+    vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 40)));
-	  
-	  vbox.add(UIFactory.createPanelLabel("Local Vendor:"));
+    pLegacyField = UIFactory.createBooleanField(sHSize);
+    vbox.add(pLegacyField); 
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+    vbox.add(Box.createRigidArea(new Dimension(0, 40)));
 
-	  pVendorField = UIFactory.createIdentifierField(null, sHSize, JTextField.LEFT);
-	  vbox.add(pVendorField); 
+    vbox.add(UIFactory.createPanelLabel("Local Vendor:"));
 
-	  hbox.add(vbox);
-	}
+    vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
-	hbox.add(Box.createRigidArea(new Dimension(40, 0)));
-	  
-	{
-	  Box vbox = new Box(BoxLayout.Y_AXIS);
+    pVendorField = UIFactory.createIdentifierField(null, sHSize, JTextField.LEFT);
+    vbox.add(pVendorField); 
 
-	  pPortComp = new JPortComp("Plugin Port", sHSize);
-	  vbox.add(pPortComp);
-	  
-	  vbox.add(Box.createRigidArea(new Dimension(0, 160)));
+    hbox.add(vbox);
+  }
 
-	  hbox.add(vbox);
-	}	
+  hbox.add(Box.createRigidArea(new Dimension(40, 0)));
 
-	add(hbox);
+  {
+    Box vbox = new Box(BoxLayout.Y_AXIS);
+
+    pPortComp = new JPortComp("Plugin Port", sHSize);
+    vbox.add(pPortComp);
+
+    vbox.add(Box.createRigidArea(new Dimension(0, 160)));
+
+    hbox.add(vbox);
+  }
+
+  add(hbox);
       }
+
+      add(Box.createRigidArea(new Dimension(0, 40)));
+
+      pPluginDirComp = new JAbsoluteDirComp("Plugin Directory", sSize);
+      add(pPluginDirComp);
 
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
       addNotes
-	("The Plugin Manager daemon is responsible for loading plugin classes and " + 
-	 "providing loaded plugins to the other Pipeline programs.  Typically, this " + 
-	 "daemon is run on the same host as the Master Manager, but this is not strictly " +
-	 "required.\n" + 
-	 "\n" + 
-	 "For sites which have previously installed a version Pipeline before the 2.0.0 " +
-	 "release, this option adds the plugins required by these older Pipeline " + 
-	 "releases.  Sites which have only installed Pipeline 2.0.0 or later releases " + 
-	 "should not select this option.  All functionality of the older plugins exists " + 
-	 "in current plugin versions as well.  These legacy plugins are provides soley " + 
-	 "for backward compatability.\n" + 
+  ("The Plugin Manager daemon is responsible for loading plugin classes and " + 
+   "providing loaded plugins to the other Pipeline programs.  Typically, this " + 
+   "daemon is run on the same host as the Master Manager, but this is not strictly " +
+   "required.\n" + 
+   "\n" + 
+   "For sites which have previously installed a version Pipeline before the 2.0.0 " +
+   "release, this option adds the plugins required by these older Pipeline " + 
+   "releases.  Sites which have only installed Pipeline 2.0.0 or later releases " + 
+   "should not select this option.  All functionality of the older plugins exists " + 
+   "in current plugin versions as well.  These legacy plugins are provides soley " + 
+   "for backward compatability.\n" + 
          "\n" + 
          "The Local Vendor specifies the name of the default vendor of all locally " + 
          "created plugins.  Plugins are identified by their name, version ID and vendor. " + 
@@ -110,7 +115,12 @@ class JPluginManagerPanel
          "the tool used to install plugins (plpluginmgr) will reject plugins not created " + 
          "by the default vendor.  This helps to avoid mistakes where plugin developers " + 
          "copy the source code from a Temerity (or other vendor) plugin and forget to " + 
-         "change the vendor."); 
+         "change the vendor.\n" + 
+         "\n" + 
+         "The Plugin Directory is where the Plugin Manager daemon saves a " + 
+         "list of all the plugins installed.  When the Plugin Manager daemon starts " + 
+         "up, it checks that all the plugins are loaded.  This directory should reside on " + 
+         "a local filesystem of the host which will run the Plugin Manager.");
     }
   }
 
@@ -146,6 +156,7 @@ class JPluginManagerPanel
     pPortComp.setPort(pApp.getPluginPort());
     pLegacyField.setValue(pApp.getLegacyPlugins());
     pVendorField.setText(pApp.getLocalVendor()); 
+    pPluginDirComp.setDir(pApp.getPluginDirectory());
   }
   
   /**
@@ -171,6 +182,8 @@ class JPluginManagerPanel
 
     pApp.setLegacyPlugins(pLegacyField.getValue());
     pApp.setLocalVendor(pVendorField.getText()); 
+
+    pApp.setPluginDirectory(pPluginDirComp.validateDir(pApp));
   }
 
 
@@ -194,6 +207,7 @@ class JPluginManagerPanel
   private JPortComp         pPortComp;
   private JBooleanField     pLegacyField; 
   private JIdentifierField  pVendorField; 
+  private JAbsoluteDirComp  pPluginDirComp;
   
 }
 

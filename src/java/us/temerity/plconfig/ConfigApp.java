@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.54 2008/12/16 07:56:54 jim Exp $
+// $Id: ConfigApp.java,v 1.55 2009/02/11 16:39:50 jlee Exp $
 
 package us.temerity.plconfig;
 
@@ -99,7 +99,8 @@ class ConfigApp
       pProfile.put("JobPort",        53140);
       pProfile.put("QueueDirectory", "/usr/share/pipeline");
 
-      pProfile.put("PluginPort",     53141);
+      pProfile.put("PluginPort",      53141);
+      pProfile.put("PluginDirectory", "/usr/share/pipeline/plugins");
 
       pProfile.put("MacSupport",            false);
       pProfile.put("MacHomeDirectory",      "/Users");
@@ -1235,6 +1236,32 @@ class ConfigApp
     return vendor;
   }
 
+  /**
+   * Set the root plugin directory.
+   */
+  public void 
+  setPluginDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("PluginDirectory", 
+      validateAbsolutePath(dir, "Plugin Directory").getPath());
+  }
+ 
+  /**
+   * Get the root plugin directory.
+   */ 
+  public File
+  getPluginDirectory() 
+  {
+    String dir = (String) pProfile.get("PluginDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
+  }
+
 
   /*----------------------------------------------------------------------------------------*/
 
@@ -2316,6 +2343,9 @@ class ConfigApp
 
       String vendor = getLocalVendor();
       validateLocalVendor(vendor);
+
+      File dir = getPluginDirectory();
+      validateAbsolutePath(dir, "Plugin Directory");
     }
 
     /* check for missing hostnames */ 
@@ -2660,6 +2690,8 @@ class ConfigApp
 	setLegacyPlugins((Boolean) value); 
       else if(title.equals("LocalVendor"))
 	setLocalVendor((String) value); 
+      else if(title.equals("PluginDirectory"))
+  setPluginDirectory(new File((String) value));
       
       else if(title.equals("HostIDs")) {
 	TreeMap<String,String> hostStrs = (TreeMap<String,String>) value;
@@ -2804,7 +2836,7 @@ class ConfigApp
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
-       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...]\n" + 
+       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...] [--plugin-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--legacy-plugins] [--local-vendor=...]\n" +
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
