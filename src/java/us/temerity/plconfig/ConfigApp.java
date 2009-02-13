@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.58 2009/02/13 16:06:10 jim Exp $
+// $Id: ConfigApp.java,v 1.59 2009/02/13 16:07:04 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1231,32 +1231,6 @@ class ConfigApp
     throws IllegalConfigException
   {
     return validateIdentifier(vendor, "Local Vendor"); 
-  }
-
-  /**
-   * Set the root plugin directory.
-   */
-  public void 
-  setPluginDirectory
-  (
-   File dir
-  ) 
-    throws IllegalConfigException
-  {
-    pProfile.put("PluginDirectory", 
-      validateAbsolutePath(dir, "Plugin Directory").getPath());
-  }
- 
-  /**
-   * Get the root plugin directory.
-   */ 
-  public File
-  getPluginDirectory() 
-  {
-    String dir = (String) pProfile.get("PluginDirectory");
-    if(dir != null) 
-      return new File(dir);
-    return null; 
   }
 
   /**
