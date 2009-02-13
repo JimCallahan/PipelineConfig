@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.59 2009/02/13 16:07:04 jim Exp $
+// $Id: ConfigApp.java,v 1.60 2009/02/13 16:07:56 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -2075,6 +2075,8 @@ class ConfigApp
            "characters and the separators: '_', '-' and '.'");
       }
     }
+
+    return ident;
   }
 
 
