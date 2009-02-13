@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.57 2009/02/11 19:50:26 jlee Exp $
+// $Id: ConfigApp.java,v 1.58 2009/02/13 16:06:10 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -1230,7 +1230,7 @@ class ConfigApp
   )
     throws IllegalConfigException
   {
-    return validateIdentifier(vendor, "Local Vendor")); 
+    return validateIdentifier(vendor, "Local Vendor"); 
   }
 
   /**
