@@ -1,4 +1,4 @@
-// $Id: JPluginManagerPanel.java,v 1.5 2009/02/11 19:50:26 jlee Exp $
+// $Id: JPluginManagerPanel.java,v 1.6 2009/02/17 00:13:13 jlee Exp $
 
 package us.temerity.plconfig;
 
@@ -48,16 +48,7 @@ class JPluginManagerPanel
 	  pHostnameComp = new JHostnameComp("Plugin Hostname", sHSize);
 	  vbox.add(pHostnameComp);
 
-	  vbox.add(Box.createRigidArea(new Dimension(0, 40)));
-	  
-	  vbox.add(UIFactory.createPanelLabel("Legacy Plugins:"));
-
-	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
-
-	  pLegacyField = UIFactory.createBooleanField(sHSize);
-	  vbox.add(pLegacyField); 
-
-	  vbox.add(Box.createRigidArea(new Dimension(0, 40)));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
 	  
 	  vbox.add(UIFactory.createPanelLabel("Local Vendor:"));
 
@@ -77,7 +68,12 @@ class JPluginManagerPanel
 	  pPortComp = new JPortComp("Plugin Port", sHSize);
 	  vbox.add(pPortComp);
 	  
-	  vbox.add(Box.createRigidArea(new Dimension(0, 160)));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+	  vbox.add(UIFactory.createPanelLabel("Legacy Plugins:"));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+	  pLegacyField = UIFactory.createBooleanField(sHSize);
+	  vbox.add(pLegacyField);
 
 	  hbox.add(vbox);
 	}	
