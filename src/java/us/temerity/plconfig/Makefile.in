@@ -212,9 +212,15 @@ java-all: $(JAVA_SOURCES)
 Enigma.java: crypto-all
 
 .PHONY: crypto-all
-crypto-all:
+crypto-all: glue-all
 	$(MAKE) -C crypto all
 	rm -f Enigma.class
+
+glue-all: $(GLUE_SOURCES) GlueParser.java
+	$(JAVA_C) $(JAVA_C_FLAGS) $(JAVA_PATHS) $(GLUE_SOURCES) \
+                  $(srcdir)/Glue*.java GlueParser*.java \
+                  ParseException.java Token.java TokenMgrError.java
+	touch $@
 
 %.java: %.jj
 	cp --force $(srcdir)/parser/ParseException.java .

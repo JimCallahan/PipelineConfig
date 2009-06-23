@@ -24,7 +24,7 @@ install: all
           ../../../../releases/pipeline
 	$(INSTALL_DATA) RPMS/noarch/plconfig-@VERSION@-1.noarch.rpm \
           $(PIPELINE_SOURCE_ROOT)/plconfig
-	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.class \
+	$(INSTALL_DATA) ../src/java/us/temerity/plconfig/crypto/CryptoApp.jar \
           $(PIPELINE_SOURCE_ROOT)/plconfig
 	$(INSTALL_DATA) RPMS/noarch/plconfig-@VERSION@-1.noarch.rpm \
           $(TEMERITY_SOURCE_ROOT)/www/products/pipeline/plconfig

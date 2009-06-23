@@ -154,7 +154,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 #   V A R I A B L E S                                                                        #
 #--------------------------------------------------------------------------------------------#
 
-      JAVA_PATHS = -d . -classpath .
+      JAVA_PATHS = -d . -classpath .:../../../../
 
          TARGETS = ../Enigma.java CompanyKeyFields
 
@@ -163,8 +163,19 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 #   R U L E S                                                                                #
 #--------------------------------------------------------------------------------------------#
 
-all: Makefile CryptoApp.class
+all: Makefile CryptoApp.jar
 
+
+CryptoApp.jar: CryptoApp.class
+	$(JAR) -cvf $@ $<
+	(cd ../../../../; \
+         $(JAR) -uvf us/temerity/plconfig/crypto/CryptoApp.jar \
+                     us/temerity/plconfig/Glue*.class \
+                     us/temerity/plconfig/glue/*.class \
+                     us/temerity/plconfig/Token.class \
+                     us/temerity/plconfig/TokenMgrError.class \
+                     us/temerity/plconfig/ParseException.class \
+                     us/temerity/plconfig/SimpleCharStream.class)
 
 CryptoApp.java: CryptoApp.java.in $(TARGETS)
 	awk -- '/@COMPANY_KEY_FIELDS@/ { system("cat CompanyKeyFields") } \

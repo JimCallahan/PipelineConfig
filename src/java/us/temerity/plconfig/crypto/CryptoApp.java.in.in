@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in.in,v 1.5 2007/02/17 14:06:19 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.6 2009/06/23 21:44:37 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -7,10 +7,13 @@ import java.net.*;
 import java.security.*;
 import java.security.spec.*;
 import java.security.interfaces.*;
+import java.text.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import javax.crypto.interfaces.*;
 
+import us.temerity.plconfig.*; 
+import us.temerity.plconfig.glue.*; 
 
 /*------------------------------------------------------------------------------------------*/
 /*   C U S T O M E R   P R O F I L E   A P P                                                */
@@ -18,7 +21,7 @@ import javax.crypto.interfaces.*;
 
 /**
  * A utility application which decrypts an encrypted customer profile and performs various
- * cryptographic services for the Pipeline Pipeline build process. <P> 
+ * cryptographic services for the Pipeline build process. <P> 
  * 
  * The encrypted customer profile <CODE>customer-profile</CODE> is generated when a customer
  * runs the <B>plconfig</B>(1) program to configure Pipeline for their site.  This customer 
@@ -64,6 +67,13 @@ import javax.crypto.interfaces.*;
  *     Prints the value of the site configuration parameter with the given name 
  *     (<I>parameter-name</I>) contained in (<I>customer-profile</I>) to standard out and 
  *     exits.
+ *   </DIV> <P> 
+ * 
+ *   --usage-stats <BR> 
+ *   <DIV style="margin-left: 40px;">
+ *     Writes a GLUE format file called (usage-states.glue) to the current directory which 
+ *     contains all of the user event statistics embeded in the (<I>customer-profile</I>)
+ *     and exits.
  *   </DIV> <P> 
  * 
  *   --encrypt <I>source-file</I> <I>target-file</I> <BR> 
@@ -140,6 +150,8 @@ class CryptoApp
 	pParamsOpt = true;
       else if(args[1].equals("--param-names")) 
 	pParamNamesOpt = true;
+      else if(args[1].equals("--usage-stats")) 
+	pUsageStatsOpt = true;
       else 
 	usage();
       break;
@@ -230,6 +242,7 @@ class CryptoApp
        "  --params\n" + 
        "  --param-names\n" + 
        "  --lookup parameter-name\n" + 
+       "  --usage-stats\n" + 
        "  --build-vault source-file1 [source-file2 ...] target-file\n" +
        "  --encrypt source-file target-file\n" + 
        "  --decrypt source-file target-file\n");
@@ -263,28 +276,30 @@ class CryptoApp
 
     if(pParamsOpt) {
       for(String title : pParams.keySet()) {
-	System.out.print(title + " = ");
-	if(title.equals("HostIDs")) {
-	  System.out.print("\n");
-
-	  TreeMap<String,BigInteger> hostIDs = 
-	    (TreeMap<String,BigInteger>) pParams.get("HostIDs");
-	  for(String host : hostIDs.keySet()) {
-	    BigInteger cksum = hostIDs.get(host);
-	    
-	    System.out.print("    " + host + " ");
-	    
-	    int wk;
-	    for(wk=0; wk<(29 - host.length()); wk++) 
-	      System.out.print(" ");
-	    
-	    System.out.print(cksum);
-	    System.out.print("\n");    
-	  }
-	}
-	else {
-	  System.out.print(pParams.get(title) + "\n");
-	}
+        if(!title.equals("UsageStats")) {
+          System.out.print(title + " = ");
+          if(title.equals("HostIDs")) {
+            System.out.print("\n");
+            
+            TreeMap<String,BigInteger> hostIDs = 
+              (TreeMap<String,BigInteger>) pParams.get("HostIDs");
+            for(String host : hostIDs.keySet()) {
+              BigInteger cksum = hostIDs.get(host);
+              
+              System.out.print("    " + host + " ");
+              
+              int wk;
+              for(wk=0; wk<(29 - host.length()); wk++) 
+                System.out.print(" ");
+              
+              System.out.print(cksum);
+              System.out.print("\n");    
+            }
+          }
+          else {
+            System.out.print(pParams.get(title) + "\n");
+          }
+        }
       }
     }
     else if(pParamNamesOpt) {
@@ -312,6 +327,30 @@ class CryptoApp
 	System.out.print(pParams.get(pLookupArg) + "\n");
       }
     }
+    else if(pUsageStatsOpt) {
+      TreeMap<Long,TreeMap<String,Integer>> stats = 
+        (TreeMap<Long,TreeMap<String,Integer>>) pParams.get("UsageStats"); 
+      if(stats == null) {
+        System.out.print("No usage statistics were found in the customer site profile!"); 
+      }
+      else {
+        File file = new File("./usage-stats.glue"); 
+        try {
+          GlueEncoder ge = new GlueEncoderImpl("UsageStats", stats);
+          String glue = ge.getText();
+          
+          FileWriter out = new FileWriter(file); 
+          out.write(glue);
+          out.flush();
+          out.close();
+        }
+        catch(Exception ex) {
+          System.out.print
+            ("Unable to generate (" + file + ") containing the GLUE format representation " + 
+             "of the usage statistics!");
+        }
+      }
+    }
     else if(pBuildVaultOpt) {
       buildVault();
     }
@@ -326,6 +365,7 @@ class CryptoApp
 
     System.exit(0);
   }
+
 
 
 
@@ -609,6 +649,11 @@ class CryptoApp
    * Whether the --lookup option was given.
    */
   private boolean  pLookupOpt;
+
+  /**
+   * Whether the --usage-stats option was given.
+   */
+  private boolean  pUsageStatsOpt;
 
   /**
    * The name of the site configuration parameter to lookup.

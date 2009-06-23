@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.61 2009/02/17 00:12:01 jlee Exp $
+// $Id: ConfigApp.java,v 1.62 2009/06/23 21:44:37 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -15,6 +15,7 @@ import java.util.*;
 import java.security.*;
 import java.security.spec.*;
 import java.security.interfaces.*;
+import java.text.*;
 
 import javax.crypto.*;
 import javax.crypto.spec.*;
@@ -2244,6 +2245,7 @@ class ConfigApp
       /* batch or graphical mode */ 
       if(pIsBatchMode) {
 	validate();
+        collectUsageStats();
 	generate();
 	System.exit(0);
       }
@@ -2472,6 +2474,63 @@ class ConfigApp
   }
   
   /**
+   * Look at the event database for a currently installed Pipeline release and find out who has been using it and how much.
+   */
+  private void 
+  collectUsageStats()
+  {
+    try {
+      /* the number of events generated indexed by timestamp (start of day) and user name */ 
+      TreeMap<Long,TreeMap<String,Integer>> stats = new TreeMap<Long,TreeMap<String,Integer>>(); 
+
+      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+
+      File nodeDir = getNodeDirectory(); 
+      if(nodeDir.isDirectory()) {
+        File eventsDir = new File(nodeDir, "events/authors"); 
+        if(eventsDir.isDirectory()) {
+          File[] authorDirs = eventsDir.listFiles();
+          if((authorDirs != null) && (authorDirs.length > 0)) {
+            for(File authorDir : authorDirs) {
+              if(authorDir.isDirectory()) {
+                String author = authorDir.getName(); 
+                File[] dateDirs = authorDir.listFiles();
+                if((dateDirs != null) && (dateDirs.length > 0)) {
+                  for(File dateDir : dateDirs) {
+                    if(dateDir.isDirectory()) {
+                      Date date = format.parse(dateDir.getName()); 
+                      long stamp = date.getTime();
+
+                      File[] edirs = dateDir.listFiles();
+                      if((edirs != null) && (edirs.length > 0)) {
+                        int numEvents = edirs.length; 
+                  
+                        TreeMap<String,Integer> userEvents = stats.get(stamp); 
+                        if(userEvents == null) {
+                          userEvents = new TreeMap<String,Integer>();
+                          stats.put(stamp, userEvents);
+                        }
+                  
+                        userEvents.put(author, numEvents); 
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+       
+      if(!stats.isEmpty()) 
+        pProfile.put("UsageStats", stats); 
+    }
+    catch(Exception ex) {
+      // be silent if anything fails
+    }
+  }
+
+  /**
    * Generate and write the output files.
    */
   private void 
@@ -2556,6 +2615,9 @@ class ConfigApp
 
     /* remove the Windows Password from the profile so it won't be visible in plaintext */ 
     pProfile.remove("WinPassword");
+
+    /* remove any usage statistics so they not visible to studios */ 
+    pProfile.remove("UsageStats");
 
     /* print the configuration parameters */ 
     ArrayList<String> configText = new ArrayList<String>();
@@ -3092,6 +3154,7 @@ class ConfigApp
   {
     try {
       validate();
+      collectUsageStats();
       generate();
       System.exit(0);
     }
