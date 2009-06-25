@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.62 2009/06/23 21:44:37 jim Exp $
+// $Id: ConfigApp.java,v 1.63 2009/06/25 18:35:59 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -2474,14 +2474,18 @@ class ConfigApp
   }
   
   /**
-   * Look at the event database for a currently installed Pipeline release and find out who has been using it and how much.
+   * Look at the event database for a currently installed Pipeline release and find out who 
+   * has been using it and how much.
    */
   private void 
   collectUsageStats()
   {
     try {
-      /* the number of events generated indexed by timestamp (start of day) and user name */ 
-      TreeMap<Long,TreeMap<String,Integer>> stats = new TreeMap<Long,TreeMap<String,Integer>>(); 
+      /* the unique names of users for each day indexed by timestamp (start of day) */ 
+      TreeMap<Long,TreeSet<String>> dailyUserNames = new TreeMap<Long,TreeSet<String>>(); 
+
+      /* the total number of days Pipeline was used by each user */ 
+      TreeMap<String,Integer> userDays = new TreeMap<String,Integer>();
 
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 
@@ -2498,32 +2502,40 @@ class ConfigApp
                 if((dateDirs != null) && (dateDirs.length > 0)) {
                   for(File dateDir : dateDirs) {
                     if(dateDir.isDirectory()) {
-                      Date date = format.parse(dateDir.getName()); 
-                      long stamp = date.getTime();
+                      try {
+                        Date date = format.parse(dateDir.getName()); 
+                        long stamp = date.getTime();
 
-                      File[] edirs = dateDir.listFiles();
-                      if((edirs != null) && (edirs.length > 0)) {
-                        int numEvents = edirs.length; 
-                  
-                        TreeMap<String,Integer> userEvents = stats.get(stamp); 
-                        if(userEvents == null) {
-                          userEvents = new TreeMap<String,Integer>();
-                          stats.put(stamp, userEvents);
+                        TreeSet<String> userNames = dailyUserNames.get(stamp); 
+                        if(userNames == null) {
+                          userNames = new TreeSet<String>();
+                          dailyUserNames.put(stamp, userNames);
                         }
-                  
-                        userEvents.put(author, numEvents); 
+                        userNames.add(author); 
+                      }
+                      catch(java.text.ParseException pe) {
                       }
                     }
                   }
+
+                  userDays.put(author, dateDirs.length);
                 }
               }
             }
           }
         }
       }
-       
-      if(!stats.isEmpty()) 
-        pProfile.put("UsageStats", stats); 
+      
+      /* the number of unique names of users on each day indexed by timestamp */ 
+      TreeMap<Long,Integer> dailyUsers = new TreeMap<Long,Integer>(); 
+      for(Long stamp : dailyUserNames.keySet()) 
+        dailyUsers.put(stamp, dailyUserNames.get(stamp).size());
+
+      if(!dailyUsers.isEmpty()) 
+        pProfile.put("DailyUsers", dailyUsers); 
+
+      if(!userDays.isEmpty()) 
+        pProfile.put("UserDays", userDays); 
     }
     catch(Exception ex) {
       // be silent if anything fails
@@ -2616,8 +2628,9 @@ class ConfigApp
     /* remove the Windows Password from the profile so it won't be visible in plaintext */ 
     pProfile.remove("WinPassword");
 
-    /* remove any usage statistics so they not visible to studios */ 
-    pProfile.remove("UsageStats");
+    /* remove any usage statistics so they are not visible to studios */ 
+    pProfile.remove("DailyUsers");
+    pProfile.remove("UserDays");
 
     /* print the configuration parameters */ 
     ArrayList<String> configText = new ArrayList<String>();

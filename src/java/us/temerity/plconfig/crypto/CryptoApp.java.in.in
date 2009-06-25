@@ -1,4 +1,4 @@
-// $Id: CryptoApp.java.in.in,v 1.6 2009/06/23 21:44:37 jim Exp $
+// $Id: CryptoApp.java.in.in,v 1.7 2009/06/25 18:35:59 jim Exp $
 
 import java.io.*;
 import java.util.*;
@@ -71,8 +71,8 @@ import us.temerity.plconfig.glue.*;
  * 
  *   --usage-stats <BR> 
  *   <DIV style="margin-left: 40px;">
- *     Writes a GLUE format file called (usage-states.glue) to the current directory which 
- *     contains all of the user event statistics embeded in the (<I>customer-profile</I>)
+ *     Writes several GLUE format files to the current directory which contains the usage
+ *     statistics embeded in the (<I>customer-profile</I>).  
  *     and exits.
  *   </DIV> <P> 
  * 
@@ -219,7 +219,7 @@ class CryptoApp
     if(!pVersionOpt) {
       File file = new File(args[0]);
       if(!file.isFile()) {
-	System.out.print("The customer profile input file (" + file + ") does not exist!");
+	System.out.print("The customer profile input file (" + file + ") does not exist!\n");
 	System.exit(1);
       }
       
@@ -245,7 +245,7 @@ class CryptoApp
        "  --usage-stats\n" + 
        "  --build-vault source-file1 [source-file2 ...] target-file\n" +
        "  --encrypt source-file target-file\n" + 
-       "  --decrypt source-file target-file\n");
+       "  --decrypt source-file target-file\n\n");
     
     System.exit(1);
   }
@@ -270,13 +270,13 @@ class CryptoApp
       read();
     }
     catch(Exception ex) {
-      System.out.print("Unable to read the customer profile from (" + pProfileFile + ")!"); 
+      System.out.print("Unable to read the customer profile from (" + pProfileFile + ")!\n"); 
       System.exit(1);     
     }
 
     if(pParamsOpt) {
       for(String title : pParams.keySet()) {
-        if(!title.equals("UsageStats")) {
+        if(!title.equals("DailyUsers") && !title.equals("UserDays")) {
           System.out.print(title + " = ");
           if(title.equals("HostIDs")) {
             System.out.print("\n");
@@ -328,15 +328,14 @@ class CryptoApp
       }
     }
     else if(pUsageStatsOpt) {
-      TreeMap<Long,TreeMap<String,Integer>> stats = 
-        (TreeMap<Long,TreeMap<String,Integer>>) pParams.get("UsageStats"); 
-      if(stats == null) {
-        System.out.print("No usage statistics were found in the customer site profile!"); 
+      TreeMap<Long,Integer> dailyUsers = (TreeMap<Long,Integer>) pParams.get("DailyUsers");
+      if(dailyUsers == null) {
+        System.out.print("No Daily User counts were found in the customer site profile!\n"); 
       }
       else {
-        File file = new File("./usage-stats.glue"); 
+        File file = new File("./daily-users.glue"); 
         try {
-          GlueEncoder ge = new GlueEncoderImpl("UsageStats", stats);
+          GlueEncoder ge = new GlueEncoderImpl("DailyUsers", dailyUsers);
           String glue = ge.getText();
           
           FileWriter out = new FileWriter(file); 
@@ -347,7 +346,29 @@ class CryptoApp
         catch(Exception ex) {
           System.out.print
             ("Unable to generate (" + file + ") containing the GLUE format representation " + 
-             "of the usage statistics!");
+             "of the Daily User counts!\n"); 
+        }
+      }
+
+      TreeMap<String,Integer> userDays = (TreeMap<String,Integer>) pParams.get("UserDays"); 
+      if(userDays == null) {
+        System.out.print("No User Day counts were found in the customer site profile!\n"); 
+      }
+      else {
+        File file = new File("./user-days.glue"); 
+        try {
+          GlueEncoder ge = new GlueEncoderImpl("UserDays", userDays);
+          String glue = ge.getText();
+          
+          FileWriter out = new FileWriter(file); 
+          out.write(glue);
+          out.flush();
+          out.close();
+        }
+        catch(Exception ex) {
+          System.out.print
+            ("Unable to generate (" + file + ") containing the GLUE format representation " + 
+             "of the User Day counts!\n"); 
         }
       }
     }
@@ -538,8 +559,7 @@ class CryptoApp
     }
     catch(Exception ex) {
       ex.printStackTrace(System.err);
-      System.err.print
-	("Unable to build the enrypted vault!"); 
+      System.err.print("Unable to build the enrypted vault!\n"); 
       System.exit(1);     
     }
   }
@@ -573,7 +593,7 @@ class CryptoApp
     catch(Exception ex) {
       System.out.print
 	("Unable to encrypt the source file (" + pCryptSource + ") to generate the " +
-	 "target file (" + pCryptTarget + ")!"); 
+	 "target file (" + pCryptTarget + ")!\n"); 
       System.exit(1);     
     }
   }
@@ -607,7 +627,7 @@ class CryptoApp
     catch(Exception ex) {
       System.out.print
 	("Unable to encrypt the source file (" + pCryptSource + ") to generate the " +
-	 "target file (" + pCryptTarget + ")!"); 
+	 "target file (" + pCryptTarget + ")!\n"); 
       System.exit(1);     
     }
   }
