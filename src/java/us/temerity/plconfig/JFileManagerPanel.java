@@ -1,4 +1,4 @@
-// $Id: JFileManagerPanel.java,v 1.3 2008/12/16 07:56:54 jim Exp $
+// $Id: JFileManagerPanel.java,v 1.4 2010/01/13 01:52:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -64,7 +64,12 @@ class JFileManagerPanel
 	  pPortComp = new JPortComp("File Port", sHSize);
 	  vbox.add(pPortComp);
 	  
-	  vbox.add(Box.createRigidArea(new Dimension(0, 60)));
+	  vbox.add(Box.createRigidArea(new Dimension(0, 20)));
+
+	  vbox.add(UIFactory.createPanelLabel("Short Symlinks:")); 
+
+          pShortSymlinksField = UIFactory.createBooleanField(sHSize);
+          vbox.add(pShortSymlinksField);
 
 	  hbox.add(vbox);
 	}	
@@ -94,7 +99,20 @@ class JFileManagerPanel
 	 "The Production Directory is the absolute path to the root directory under " + 
 	 "which all production data files will reside.  This directory should reside on " + 
 	 "a network accessible file system such that all machines which will run Pipeline " + 
-	 "related programs can access the directory using this path.");
+	 "related programs can access the directory using this path.\n" + 
+         "\n" + 
+         "The Short Symlinks setting determines whether the value of a symbolic link " + 
+         "(target) is limited to 255 characters by the underlying file system where the " + 
+         "Production Directory resides. Notably, the CVFS file system has this limitation. " + 
+         "Most file systems however do not have any limitation to the length of the value " + 
+         "of symbolic links aside from the normal file name length limitations.\n" + 
+         "\n" + 
+         "Due to the widespread use of symbolic links within the Pipeline repository and " + 
+         "working areas, a 255 character limit will impose limits on the length of node " + 
+         "names so that all of the proper symbolic links can be created by Pipeline " + 
+         "during node check-in/out operations. When this option is used, Pipeline will " + 
+         "refuse to register nodes with names long enough to potentially cause problems " + 
+         "during revision control operations.");
     }
   }
 
@@ -130,6 +148,7 @@ class JFileManagerPanel
     pHeapSizeComp.setHeapSize(pApp.getFileHeapSize());
     pPortComp.setPort(pApp.getFilePort());
     pProdDirComp.setDir(pApp.getProdDirectory());
+    pShortSymlinksField.setValue(pApp.getShortSymlinks());
   }
   
   /**
@@ -152,6 +171,7 @@ class JFileManagerPanel
     }
 
     pApp.setProdDirectory(pProdDirComp.validateDir(pApp)); 
+    pApp.setShortSymlinks(pShortSymlinksField.getValue());
   }
 
 
@@ -175,6 +195,7 @@ class JFileManagerPanel
   private JPortComp         pPortComp;
   private JHeapSizeComp     pHeapSizeComp;
   private JAbsoluteDirComp  pProdDirComp;
+  private JBooleanField     pShortSymlinksField; 
   
 }
 

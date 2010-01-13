@@ -1,4 +1,4 @@
-// $Id: ConfigApp.java,v 1.63 2009/06/25 18:35:59 jim Exp $
+// $Id: ConfigApp.java,v 1.64 2010/01/13 01:52:05 jim Exp $
 
 package us.temerity.plconfig;
 
@@ -94,6 +94,7 @@ class ConfigApp
       pProfile.put("FilePort",            53136);
       pProfile.put("FileHeapSize",        134217728L);  
       pProfile.put("ProductionDirectory", "/base/prod");
+      pProfile.put("ShortSymlinks",       false); 
 
       pProfile.put("QueuePort",      53139);
       pProfile.put("QueueHeapSize",  134217728L); 
@@ -1011,6 +1012,30 @@ class ConfigApp
       return new File(dir);
     return null; 
   }
+
+
+  /**
+   * Set whether symbolic link values are limited to 255 characters. 
+   */
+  public void 
+  setShortSymlinks
+  (
+   boolean tf
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("ShortSymlinks", tf); 
+  }
+
+  /**
+   * Get whether symbolic link values are limited to 255 characters. 
+   */ 
+  public boolean 
+  getShortSymlinks() 
+  {
+    return (Boolean) pProfile.get("ShortSymlinks");
+  }
+
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -2783,6 +2808,8 @@ class ConfigApp
 	setFileHeapSize((Long) value);
       else if(title.equals("ProductionDirectory"))
 	setProdDirectory(new File((String) value));
+      else if(title.equals("ShortSymlinks"))
+	setShortSymlinks((Boolean) value);
 
       else if(title.equals("QueueHostname"))
 	setQueueHostname((String) value);
@@ -2948,9 +2975,10 @@ class ConfigApp
        "  [--home-dir=...] [--temp-dir=...] [--unix-java-home=...]\n" + 
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
+       "  [--prod-dir=...] [--short-symlinks]\n" +
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
-       "  [--node-dir=...] [--prod-dir=...] [--queue-dir=...] [--plugin-dir=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
+       "  [--node-dir=...] [--queue-dir=...] [--plugin-dir=...]\n" + 
        "  [--legacy-plugins] [--local-vendor=...]\n" +
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 

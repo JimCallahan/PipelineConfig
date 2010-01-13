@@ -922,6 +922,19 @@
   specified, the production directory will default to
   (/base/prod).</h4>
 
+
+
+  <h4 style="font-weight: normal; margin-left: 40px;"><b><a name=
+  "--short-symlinks"></a>--short-symlinks</b></h4>
+
+  <h4 style="font-weight: normal; margin-left: 80px;">Whether the value of a symbolic link (target) is
+  limited to 255 characters by the underlying file system where the production directory resides.  Notably, the CVFS file system has this limitation.  Most file systems however do not have any limitation to the length of the value of symbolic links aside from the normal file name length limitations.<br></h4>
+
+  <h4 style="font-weight: normal; margin-left: 80px;">Due to the widespread use of symbolic links within the Pipeline repository and working areas, a 255 character limit will impose limits on the length of node names so that all of the proper symbolic links can be created by Pipeline during node check-in/out operations. When this option is used, Pipeline will refuse to register nodes with names long enough to  potentially cause problems during revision control operations.</h4>
+
+  <h4 style="font-weight: normal; margin-left: 80px;">If not specified, then there will be no limitations to the length of symbolic link values and therefore no limits on node name length.</h4>
+
+
   <div style="margin-left: 40px;">
     <span style="font-weight: bold;"><a name=
     "--queue-host"></a>--queue-host</span>=<span style=
