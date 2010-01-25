@@ -1,175 +1,1203 @@
-2004-04-01  Jim Callahan  <jim@salamander>
+commit 0b9527faa73ca75a9905cf4aa27cba791358b09f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jan 13 01:52:05 2010 +0000
 
-	* configure.ac, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in.in, src/java/us/temerity/plconfig/crypto/Makefile.in:
-	renamed CryptoApp.java.in to CryptoApp.java.in.in in order to get @VERSION@ replacement
+    fixed 2175 - Error: Can't Lock Node with a LONG filename
 
-	* ChangeLog: latest
+commit a1ed6211e7a6113fa6842a600eb4070f23d5ac9c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jan 13 01:33:21 2010 +0000
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	support for printing IPAddrs param
+    v3.8.0
 
-	* src/java/us/temerity/plconfig/PackageInfo.java.in: added sLicense
+commit 892da7c67167b7307922512892c8a4221c0de08f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Nov 12 03:22:32 2009 +0000
 
-	* src/java/us/temerity/plconfig/ConfigApp.java, docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	added --ip-addr, --notify-control-port and --notify-monitor-port
+    updated docs
 
-	* configure.ac: version 1.3.1
+commit 5077b435d219df1f7af7700bd3f4915b8e096398
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Oct 14 02:01:17 2009 +0000
 
-2004-04-01  Jim Callahan  <jim@salamander>
+    fixed links
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	support for printing IPAddrs param
+commit bca3050188f63e5d38923ab1a4bc0d3f6a69994d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jun 25 18:35:59 2009 +0000
 
-	* src/java/us/temerity/plconfig/PackageInfo.java.in: added sLicense
+    optimized usage statistics collection
 
-	* src/java/us/temerity/plconfig/ConfigApp.java, docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	added --ip-addr, --notify-control-port and --notify-monitor-port
+commit aedc8051562ab6a8e0efab06a76d2bdf43182d62
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jun 25 18:35:38 2009 +0000
 
-	* configure.ac: version 1.3.1
+    changed compression method to always be gzip
 
-2004-03-23  Jim Callahan  <jim@salamander>
+commit 73050887b37a85f6d62a0ebfe9cbfc86782cdc23
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jun 23 21:44:37 2009 +0000
 
-	* rpm/install-header.in: new license agreement
+    added collection of usage statistics from existing event database
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	added better debugging messages
+commit 1eb3b41a8167ac1c0fce32c0b6fca8e7e2ef8540
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jun 23 19:13:37 2009 +0000
 
-	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/IllegalConfigException.java, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	remove [IN] parameter notation comments
+    shouldn't have been in CVS to start with
 
-	* src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	now exits immediately after all information options
+commit 7436b34022d824e9b594249139a600b8f502f8fb
+Author: John Lee <jlee@temerity.us>
+Date:   Tue Feb 17 00:13:13 2009 +0000
 
-	* configure.ac: version 1.3.0
+    Changed the plpluginmgr directory to follow plqueuemgr convention.  Also modified the ui to follow the queue panel.
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	replaced encodeBytes() and decodeBytes() with inline code
+commit bdd8066e32cc460255a69864c162c13daa35d9ba
+Author: John Lee <jlee@temerity.us>
+Date:   Tue Feb 17 00:12:01 2009 +0000
 
-	* src/java/us/temerity/plconfig/ConfigApp.java:
-	moved config files into the <root-dir>/config directory
+    Changed the plpluginmgr directory to follow the plqueuemgr convention.
 
-	* rpm/Makefile.am: now cleans source directorys as well
+commit 908a09c6e3fbc8540854c990d6da6dcbfe95027c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Feb 13 16:07:56 2009 +0000
 
-	* docs/man/plconfig.html:
-	moved config files into the <root-dir>/config directory
+    added missing return from validateIdentifier()
 
-2004-03-22  Jim Callahan  <jim@salamander>
+commit fc69e21857dc5776e7bb78abc976da0c3cc7e35f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Feb 13 16:07:04 2009 +0000
 
-	* docs/man/plconfig.html:
-	added unlimited strength JCE to the prerequisites
+    fixed duplicated methods during merge
 
-	* rpm/Makefile.am: added missing clean target actions
+commit 2b36de1b29655e290700c5be9d4a237e61758db2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Feb 13 16:06:10 2009 +0000
 
-	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/crypto/CryptoApp.java.in, src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
-	now uses 1024-bit keys, encodes keys and encrypted data as integer strings instead of hexdecimal strings
+    fixed typo in setPluginDirectory()
 
-	* Makefile.am, rpm/Makefile.am: standardized make targets
+commit 9118d451a6045872c766dbcbff639b30c8ca1c7a
+Author: John Lee <jlee@temerity.us>
+Date:   Wed Feb 11 19:50:26 2009 +0000
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in: latest
+    fixed the spacing and formatting issues introduced in the previous version.
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	reverted back to . seperators
+commit 6fdccc276f88febe0d26ed117a003dc9c057a708
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Feb 11 18:46:13 2009 +0000
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	chamged package paths back to more standard / delemiter instead of .
+    added identifier string check to LocalVendor property
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	added --build-vault, removed --encrypt-input
+commit d42483ed9851b8ac5889fc086b5237907188b2d6
+Author: John Lee <jlee@temerity.us>
+Date:   Wed Feb 11 16:40:27 2009 +0000
 
-	* src/java/us/temerity/plconfig/crypto/Makefile.in, src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
-	now uses BigIntegers converted to final Strings to store keys
+    Implemented 945 - http://temerity.us/community/forums/viewtopic.php?t=945
+    
+    plconfig was modified to create a new settings variable for the plugins directory called PluginDirectory to support the required plugins feature.  By default the PluginDirectory is set to /usr/share/pipeline/plugins.
+    
+    plconfig's version number is now 3.6.2
 
-	* src/java/us/temerity/plconfig/Makefile.in:
-	renamed CompanyPublicKey.java to Enigma.java to make it less obvious
+commit 3a665a726f998ccb0a5309f2fda03333eb825da9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Dec 16 07:56:54 2008 +0000
 
-	* src/java/us/temerity/plconfig/ConfigApp.java:
-	now uses BigIntegers converted to final Strings to store keys
+    removed obsolete FileStatusDirectory profile option
 
-	* rpm/install-header.in: comments
+commit 41f7ae14fbcbd44379f2c342494ecbb3dd3e62d6
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Dec 2 20:56:23 2008 +0000
 
-2004-03-20  Jim Callahan  <jim@salamander>
+    fixed 1773 - Host ID Inconsistent
 
-	* rpm/Makefile.am: fixed bug in clean target
+commit 3e6143247d7db758fa2c6d28ae2c15fabfbb21ce
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Oct 21 00:43:44 2008 +0000
 
-	* src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	added --temp-dir option
+    upgraded to JDK 6.0 Update 10
 
-	* src/java/us/temerity/plconfig/ConfigApp.java:
-	added --temp-dir option, now sets pipeline UID and GID
+commit 6fa405472d803e5b15beac9a98b7c26c59f8d228
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Oct 21 00:41:01 2008 +0000
 
-	* docs/man/plconfig.html: added --temp-dir option
+    fixed 1735 - Canonical Hostnames should be lower-case
 
-	* configure.ac: version 1.2.0
+commit ae11cef6a7fa4141f27c9ab8bd0bb53a5c81f995
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Oct 20 17:05:49 2008 +0000
 
-	* Makefile.am: fixed permissions for autoextract archive
+    fixed UI layout
 
-	* src/java/us/temerity/plconfig/ConfigApp.java:
-	added --library-path, now checks for Java3D and JAI jars and libraries
+commit 8cbea55f50be330ea89a6243c3cf7d03567972d9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Oct 20 17:05:35 2008 +0000
 
-	* docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	added --library-path
+    fixed loading of previous LocalVendor from GLUE
 
-	* Makefile.am, configure.ac, rpm/Makefile.am:
-	added a license checking shell script based autoinstaller for the RPM
+commit e76fd0f20a7542c1ace505c95b3586b27f15ae09
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Oct 20 17:05:18 2008 +0000
 
-	* rpm/install-header.in: initial revision
+    upgraded to JDK 6.0 Update 10
 
-2004-03-19  Jim Callahan  <jim@salamander>
+commit 349eebe0c4f436305123d57c95bcb31b98324c25
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Oct 20 16:44:05 2008 +0000
 
-	* src/java/us/temerity/plconfig/tests/Makefile.in:
-	fixed bug in subdir name
+    implemented 1713 - plplugin should enforce Name/VersionID/Vendor
 
-	* src/java/scripts/plconfig.in, docs/man/Makefile.am, src/java/us/temerity/plconfig/Makefile.in, src/java/us/temerity/plconfig/PackageInfo.java.in:
-	standardized install location
+commit 951c1533b75763ed35b11289f8d830d0ffab1fae
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Oct 9 00:56:05 2008 +0000
 
-	* config/bootstrap.sh, configure.ac, Makefile.am:
-	added rpm SUBDIR and install-src target
+    added File Status Directory
 
-	* rpm/.cvsignore, rpm/Makefile.am, rpm/plconfig.spec.in, rpm/rpmmacros.in, rpm/rpmrc.in:
-	initial revision
+commit 46ebc0b752a3d2053d395c25b8de032f0c697c21
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Oct 7 08:16:08 2008 +0000
 
-2004-03-18  Jim Callahan  <jim@salamander>
+    changed to trex...
 
-	* docs/javadoc/.cvsignore, docs/javadoc/Makefile.in: initial revision
+commit 67b4c8c0c788827eca33648b6ead5b7c3a044238
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Oct 7 08:09:38 2008 +0000
 
-	* src/java/us/temerity/plconfig/.cvsignore, src/java/us/temerity/plconfig/crypto/.cvsignore:
-	obsolete
+    updated for jdk-1.6.0_07 and trex
 
-	* src/java/us/temerity/plconfig/Makefile.in, src/java/us/temerity/plconfig/crypto/Makefile.in, src/java/us/temerity/plconfig/tests/Makefile.in:
-	initial revision
+commit 6145a9d6fadfc74ce9b67e6c047c399f4810ad6b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Oct 7 07:38:13 2008 +0000
 
-	* src/java/us/temerity/plconfig/tests/.cvsignore: obsolete
+    removed architecture depenency for RPM
 
-	* src/java/us/temerity/plconfig/tests/TestNtpApp.java: initial revision
+commit b7473c4c1f3ee40fe7011df5e426aa4067b6a601
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu May 22 09:26:56 2008 +0000
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	added --decrypt
+    upgraded for newer automake/autoconf
 
-	* src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj:
-	added time stamp profile information, added time stamps and domain name as encrypted data to the pipeline-license.key file
+commit 187470084a065513965776a9ab548d2fb2392cb2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 20 21:42:14 2008 +0000
 
-	* docs/man/plconfig.html: added time stamp profile information
+    --reconfig flag missing from plconfig man page
 
-	* src/java/us/temerity/plconfig/TimeService.java: initial revision
+commit 6178f02cfb54fdd15990314f226b61b622601e70
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 13 06:36:57 2008 +0000
 
-	* src/java/us/temerity/plconfig/crypto/KeyGenApp.java:
-	renamed key classes
+    fixed button sizes
 
-	* src/java/us/temerity/plconfig/ConfigApp.java:
-	renamed key classes, removed all references to the company private key
+commit 5202d3723b8f1ebb8a0b09a92f828bd1f8fc72f5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 13 06:20:21 2008 +0000
 
-	* src/java/us/temerity/plconfig/crypto/CryptoApp.java.in:
-	intial revision
+    fixed button sizes
 
-	* src/java/us/temerity/plconfig/CustomerProfile.java:
-	replaced by CryptoApp.java.in
+commit 93ed3fe3bf853cff5f0cd23a7a9c266f985555c2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 6 02:03:45 2008 +0000
 
-	* docs/man/plconfig.html, src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj, src/java/us/temerity/plconfig/CustomerProfile.java:
-	90% functional
+    jdk1.6.0
 
-2004-03-17  Jim Callahan  <jim@salamander>
+commit 3573f011708bbdf1f0026a3729b34103874bc716
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 6 01:46:55 2008 +0000
 
-	* .cvsignore, AUTHORS, COPYING, ChangeLog, INSTALL, Makefile.am, NEWS, README, aclocal.m4, autogen.sh, config/bootstrap.sh, config/config.guess, config/config.sub, config/depcomp, config/install-sh, config/missing, config/mkinstalldirs, configure.ac, docs/.cvsignore, docs/Makefile.am, docs/javadoc/.cvsignore, docs/man/.cvsignore, docs/man/Makefile.am, docs/man/plconfig.html, src/.cvsignore, src/Makefile.am, src/java/.cvsignore, src/java/Makefile.am, src/java/scripts/.cvsignore, src/java/scripts/Makefile.am, src/java/scripts/plconfig.in, src/java/us/.cvsignore, src/java/us/Makefile.am, src/java/us/temerity/.cvsignore, src/java/us/temerity/Makefile.am, src/java/us/temerity/plconfig/.cvsignore, src/java/us/temerity/plconfig/ConfigApp.java, src/java/us/temerity/plconfig/ConfigOptsParser.jj, src/java/us/temerity/plconfig/CustomerProfile.java, src/java/us/temerity/plconfig/IllegalConfigException.java, src/java/us/temerity/plconfig/PackageInfo.java.in, src/java/us/temerity/plconfig/crypto/.cvsignore, src/java/us/temerity/plconfig/crypto/KeyGenApp.java, src/java/us/temerity/plconfig/package.html, src/java/us/temerity/plconfig/parser/ParseException.java, src/java/us/temerity/plconfig/parser/SimpleCharStream.java, src/java/us/temerity/plconfig/parser/TokenMgrError.java, src/java/us/temerity/plconfig/tests/.cvsignore, src/java/us/temerity/plconfig/tests/TestInfo.java.in:
-	initial revision
+    jdk1.6.0
 
- 
+commit 4e9c3116f08e13e2296518ab2ae2be2ef6a26eda
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Apr 26 03:30:08 2008 +0000
+
+    removed network interfaces from plid generation, added /proc/version
+
+commit cc542d85f260266eb6dda2b329cf0f51b6c0a504
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jan 15 23:53:02 2008 +0000
+
+    bumped version
+
+commit cca6a6fa06293c21e20a50580449fdeb10382c62
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jan 15 23:50:16 2008 +0000
+
+    better banners, added Java paths
+
+commit e776ea15b358883cdd6a64d391faa4ca41de942e
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jan 15 23:45:21 2008 +0000
+
+    implemented 1409 - Upgrade to JDK 5.0 Update 14
+
+commit 2aa4797293313c9729cb8966bb9ade0f05bdf553
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Jan 15 23:43:01 2008 +0000
+
+    renamed build dirs for consistency with pipeline
+
+commit e4afcfdb4ca63cf0efc2b0ea8d790030884f43c3
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jan 10 01:30:39 2008 +0000
+
+    removed canonical dir tests
+
+commit 5d634244b4b10d2bd4795d809cb19f154b1b346f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jan 10 01:01:45 2008 +0000
+
+    removed canonical directory resolution checks
+
+commit 2008a3bcf1f6cd247d1f218ad33ae680c8315b92
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Oct 12 21:20:38 2007 +0000
+
+    implemented 1357 - Upgrade to JDK 5.0 Update 13
+
+commit 5a1abd9f8f409e02e63f997138582088287539e0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jun 21 03:22:33 2007 +0000
+
+    crazy Technicolor NTP requird servers added to the start of the search list
+
+commit 62e8577b08440e7d35f2881be5a07bc2c443c3f8
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jun 20 23:10:28 2007 +0000
+
+    replaced NTP pool servers with IP addresses for Stratum One NTP servers
+
+commit 18e6e78f2ff3e0f2433fb8d1b82a7806a313c2f3
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jun 20 23:07:56 2007 +0000
+
+    replaced NTP pool servers with IP addresses for Stratum One NTP servers
+
+commit ec0d9b12487e81c400120cea1d448a5cfc610aa5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Jun 17 17:48:30 2007 +0000
+
+    fixed 1086 - JDK + man page links to JDK 12
+
+commit 296fb6ff3ff158acbae763a081792e8220086c7a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jun 14 12:57:07 2007 +0000
+
+    added Improved Windows Path parameters
+
+commit 6291dd918c8b26e2d13e36d4fb6a6f2728914068
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 27 21:11:32 2007 +0000
+
+    updated for new code-dimetrodon directory structure
+
+commit 6b799f4c4155186f05026d0086568012922ab8a1
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 27 21:07:55 2007 +0000
+
+    fixed 998 - JobMgr fails to run mayabatch on Windows
+
+commit 7c9a831d3f445aa8aac8b3dbf948bd9c011de305
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Mar 21 20:51:46 2007 +0000
+
+    Moved Windows server configuration parameters into their own panel, added Windows Password, renamed Mac/WinClient to Mac/WinSupport
+
+commit 5a30d7e179fdb64212dc446642587d4eca036755
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 6 04:28:57 2007 +0000
+
+    help messages
+
+commit 3a65fefb8a90af69c0470789359655eed47cade5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 6 04:28:38 2007 +0000
+
+    made pipeline group check more flexible to allow the primary group to be different than the official pipeline group as long as the pipeline user is a member of the official group
+
+commit 2eab76f52b3ebebfed902a4c7a971f363ed113a4
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 3 22:19:34 2007 +0000
+
+    increased eval to 60-days (was 30-days)
+
+commit e95fcd6725e80653670a8cfa86b5a9895bcec350
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 3 22:19:21 2007 +0000
+
+    increased eval to 60-days (was 30-days), made Pipeline Group test more robust
+
+commit c39df460d2b01c2ca3cf197e60f4b0cc17087e06
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Feb 17 14:06:19 2007 +0000
+
+    implemented 924 - Alternative Server Java Runtime, 936 Default Windows Domain
+
+commit 4afc3274b09144e4cc1a4fa158a430b27d3d016d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Feb 17 14:06:14 2007 +0000
+
+    implemented 934 - Update Java/JOGL versions in Docs
+
+commit 0b829ee1273b7424a517ccb6f4c7009b04b000f5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Feb 17 14:02:42 2007 +0000
+
+    v3.1.0
+
+commit 480cd1419cb90bd900405951f77c5c9b1c43c83b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Jan 5 21:37:55 2007 +0000
+
+    implemented 900 - Fix JOGL Install Instructions
+
+commit bd4fe3fca6074d35e7fd5f979196278f27233ece
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Sep 3 14:52:21 2006 +0000
+
+    v3.0.2
+
+commit 712bf21b99bf7868b1d5ed7b4955ea323242e24c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Sep 3 14:52:14 2006 +0000
+
+    fixed 718 - Cannot Determine HostID
+
+commit 304509f21c67a736589340c3007d10241f656f7e
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri May 19 15:08:35 2006 +0000
+
+    fixed 618 - Initial Limited License Exception
+
+commit cfd1ea83e542718f131398be67fef8e6fba3515e
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri May 19 15:08:16 2006 +0000
+
+    fixed 617 - Windows Path Command-line Options
+
+commit bf21b191da16109262ca196b4a86003580f85904
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri May 19 15:07:19 2006 +0000
+
+    fixed copyright dates
+
+commit f0685074fe3c44758417edc303aa58012fe590e0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri May 19 15:06:57 2006 +0000
+
+    version 3.0.1
+
+commit ef9cab88cf540e4974ae08abeb8b71cb5d1871ab
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon May 8 03:06:15 2006 +0000
+
+    make setLimitedLicense() capable of handling LicenseEnd in the past
+
+commit 09fddfaa0257c06b03052ec57bd2c489ffe4f940
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 18:38:55 2006 +0000
+
+    renabled deebug build
+
+commit 7518676f3e03b852beaa732839a6da4b696024d9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 18:38:45 2006 +0000
+
+    fixed bug in Limited license end date computation
+
+commit 8bbe30dec1bb421584a2995f292f806ba9ec820c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 18:01:10 2006 +0000
+
+    added missing default Unix home directory
+
+commit cb50c7ea3230ac4f436ce4e2757646e5f3568019
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 17:53:21 2006 +0000
+
+    fixed computation of 1-year for limited duration licenses
+
+commit 910bc93ef4708e778ffc7713131688cf85e43587
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 05:57:11 2006 +0000
+
+    removed SCSI/PCI info from host ID checksum generation
+
+commit 939ab3154645460a2a68b486e35802685a606482
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 7 05:56:32 2006 +0000
+
+    fixed broken load of host IDs file, added clear button
+
+commit a4915876245fce4e497d44a2d47a4c64ebcf3316
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 21 12:59:22 2006 +0000
+
+    now requires J2SE 5.0 Release 4 - Mac OS X v10.4.5
+
+commit 4a17e335341d6a7dd3efaacf1b490f1527a20efd
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 21 12:58:42 2006 +0000
+
+    removed JAVA debugging
+
+commit 7f8c244a26a8c8a0ee13e29edc133c871d1262e5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Feb 22 16:50:20 2006 +0000
+
+    fixed bug in all configuration settings get methods which return File instances when the value is (null)
+
+commit 804a48ef846f622a8c3123e7e733d71a728d9088
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Feb 20 20:13:21 2006 +0000
+
+    removed debugging prints
+
+commit df23be1a7c636f4eab97dc2e5e1c3b88b335c842
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Feb 20 20:12:04 2006 +0000
+
+    complete overhaul to add graphical wizard, GLUE format settings file and Windows XP options.
+
+commit 632e8c864dbcb7aee48a42337cc5f416f1970339
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Oct 9 16:28:48 2005 +0000
+
+    added --legacy-plugins docs
+
+commit caee9905d9b1e62c1004b891e3dd362b45546df5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Jul 22 22:18:50 2005 +0000
+
+    v2.9.0
+
+commit 7efd2a4939f46d2c8aae7665041e0f8cb159211b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Jul 22 22:18:43 2005 +0000
+
+    implemented 503 - Legacy Plugins
+
+commit 94f817bb3fa57a1ede2e3cf0489dae1639e0a1a2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jun 22 23:06:53 2005 +0000
+
+    v2.8.2
+
+commit 16bdeb5f2628233c756ff14eb7dd3b98ed3b61b0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jun 22 23:06:45 2005 +0000
+
+    fixed 473 - Should Ignore IPv6 Addresses
+
+commit 08bd90915c708003a1f910235485db2a1aac4452
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jun 22 23:01:33 2005 +0000
+
+    fixed - 467 JOGL Version in Docs
+
+commit 5ea2987c7b2c27dcaa55cccb34a720a5ef8fc266
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Jun 13 13:59:13 2005 +0000
+
+    removed jai/jio jar and native library checks
+
+commit 199fa0b164fbb476064f608890930b1011efb3f6
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Jun 13 13:09:17 2005 +0000
+
+    added --mac-temp-dir option
+
+commit 93dd50611b17e6c60a0498bbfe3865fb3fe4ad0f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Jun 9 13:49:55 2005 +0000
+
+    implemented 448 - Mac OS X Options
+
+commit fdc638f715821cda6a0ae923c4e9fdb32a5de592
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 17 13:21:36 2005 +0000
+
+    CryptoApp --build-vault now takes the name of a file containing the compiled Java classes instead of the class file names as arguments
+
+commit 0cc67de8208af29d03f293e6c7cec582f5e2a9bd
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon May 16 22:33:40 2005 +0000
+
+    removed unneed try/catch block
+
+commit 303ac17f2bec8d346ba7f209cfc527709ea0544d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon May 16 22:24:00 2005 +0000
+
+    removed time checks for --perpetual licenses
+
+commit e0cc147e6f1773dc7eff22421dc32ba4adf45b29
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 3 22:29:11 2005 +0000
+
+    fixed Customer Registration links
+
+commit bf268d11c9befb10fada1ca5518d815837325811
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue May 3 22:21:14 2005 +0000
+
+    fixed Customer Registration text/links
+
+commit c774dc176ccb9815b762de7911661724c83d8125
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 1 22:39:23 2005 +0000
+
+    added --with-temerity config option
+
+commit f3a9aabd83058223438cfe1e20fe201566e6a52a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun May 1 22:13:11 2005 +0000
+
+    renamed customer-profile to site-profile, remove --graphical option
+
+commit 751821c25bcb379d64c8d801d977d171a76ab53a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Apr 30 22:18:21 2005 +0000
+
+    implemented 393 - Java Max Heap Sizes
+
+commit 4130add44baa87bfabc0d6850d70e6c6f7d16ed9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Apr 30 06:25:46 2005 +0000
+
+    v2.7.0
+
+commit a4aa1cdcaccdf255519f01040c7a400a7f1e187a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 29 20:07:46 2005 +0000
+
+    fixed 396 - Man Page Corrections
+
+commit e8bb279966a58f8dd7675f752414e86164785ce0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Apr 18 17:57:53 2005 +0000
+
+    updated --help message
+
+commit 225ab2ed557e0fdfa7c66eb15d55f50dd05ae1d7
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 11 06:09:58 2005 +0000
+
+    added LicenseStartStamp, LicenseEndStamp and LicenseType - removed extra data in private key
+
+commit b80c448dce1fb8b6d5235008a731bbad1ea9c8e0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 11 01:39:33 2005 +0000
+
+    v2.6.0
+
+commit 0204a6485468dbc81cacda278416d6626a4c2e82
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 11 01:39:08 2005 +0000
+
+    added LicenseStartStamp, LicenseEndStamp and LicenseType to customer profile
+
+commit 15519e2a31202f2df4474484edf659b5162d06bd
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 10 10:47:29 2005 +0000
+
+    v2.5.1
+
+commit 6f32245d3d1f8473bb9d1471fae6f9f1104419bf
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 10 10:47:17 2005 +0000
+
+    made class private
+
+commit 4ee1f4ee20f624a79810297545fecc24ac1d76cb
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 10 10:47:02 2005 +0000
+
+    updated NTP server list
+
+commit 5db3c6e0afdc8330632b212834623c264b018d4b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Jan 15 02:35:45 2005 +0000
+
+    added 2005
+
+commit d771a5fe9325bbb8218df199c92fa9f57a97d602
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Jan 15 02:35:35 2005 +0000
+
+    v2.5.0
+
+commit 8040ae8a1c247af4235d63db644617ba39d102f4
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Jan 15 02:35:19 2005 +0000
+
+    added support for the plugin manager daemon with --plugin-port and --plugin-host options
+
+commit f2eb200ceb912b25569ca56a2db63daf45e10695
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Nov 6 21:20:45 2004 +0000
+
+    removed plnotify(1) related options [Bug# 117], now allows dashes in hostnames [Bug #150]
+
+commit 2ef30bc304b4670b9501c73acabb9e521793606d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Oct 20 03:38:28 2004 +0000
+
+    upgraded to rh9, automake-1.9.2, autoconf-2.59
+
+commit 68abaf679cfda5dbe9bfdb6d3def34ff133712a9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Oct 1 18:37:53 2004 +0000
+
+    built with jdk1.5.0
+
+commit f89d3af71bcfe8da01ec1b5171974dfb3d8d3c74
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Sep 29 08:15:40 2004 +0000
+
+    built with jdk1.5.0-rc
+
+commit a032e51d3bdef3292abfa26e3cc05d792cdcc058
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Sep 12 22:38:00 2004 +0000
+
+    v2.3.0
+
+commit 3ed22ebed6eb073d3ba5f86e2f3201230a2f2a98
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Sep 12 22:37:52 2004 +0000
+
+    fixed a bug in hardware ID generation due to CPU MHz and bogomips changing on reboot
+
+commit 5873bef6eb9288c9fe1db9ff31877e824d95ac0c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Sep 2 14:25:01 2004 +0000
+
+    v2.2.3
+
+commit d6f2333a01de670066eddb1b8a3cbdca592fdab5
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Sep 2 14:24:56 2004 +0000
+
+    removed --toolsets-dir option
+
+commit 882a7ccd94c1b83d27775ee8b90e3f7677b7b7a2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Sep 2 14:11:59 2004 +0000
+
+    v2.2.1
+
+commit 323f605f57eb312731b0f4fc65bb9cdd18086ed8
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Sep 2 14:11:48 2004 +0000
+
+    removed SCSI and PCI stuff
+
+commit c555fa04e3044f86742cf9e96c6ea6ae295c8867
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Sep 1 12:10:58 2004 +0000
+
+    fixed link errors
+
+commit 460928fa315fadc3968efc439b252254dab5daec
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Sep 1 12:08:01 2004 +0000
+
+    added --disable-cache and made --root-dir relative
+
+commit bdb5c154af7a4a0746faeb4c7ddf3dd096f515db
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Sep 1 04:31:55 2004 +0000
+
+    version 2.2.0
+
+commit d5314e7e82e05a3a4ec530480e7c7068c1092284
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Sep 1 04:30:34 2004 +0000
+
+    fixed bug where MAC address was not being determined correctly, readded /proc/scsi and /proc/pci checks
+
+commit f925a5b342e576f08d64b545af7ba84b3367d599
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Aug 28 17:43:15 2004 +0000
+
+    added install to release directory
+
+commit ec22b45c7409b861fdf6dfdf16f5764b51049aac
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 23:22:50 2004 +0000
+
+    now uses checkbot to verify the links in the HTML man pages
+
+commit b2d92135346d47d095922988b097510119d7a657
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:27:49 2004 +0000
+
+    fixed permissions for installed RPM
+
+commit d1dca9a682f8722338f3d394a1ed413839428bb1
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:22:35 2004 +0000
+
+    removed rpm/headerB.in
+
+commit 738921f5856382158364522dc9be66285c9aeca6
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:20:20 2004 +0000
+
+    obsolete
+
+commit 5bdc633e63c9d15f9709cbdf2c6312ea8ab5aa3c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:19:34 2004 +0000
+
+    replaced PackageInfo.java.src.in
+
+commit 2037b44f4b53cd1a2e1665232c4a68c536e12f53
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:19:20 2004 +0000
+
+    replaced by PackageInfo.java.in
+
+commit 55983ef4e6bedfd3c89577cd31a99c663c1dcb35
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:18:57 2004 +0000
+
+    simplified ID checksum, removed --license option
+
+commit 93d584d38f6e7551b4117ba77c430847ee4802a2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:18:20 2004 +0000
+
+    added --pipeline-user option, remove --license option
+
+commit 00af96f5a9b220f74afbb8429f14b33e763875d6
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:17:16 2004 +0000
+
+    now only needs host IDs for master, queue and file server
+
+commit 883ed0442fe4e78018f343d321c43bf195447d85
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Aug 27 22:16:45 2004 +0000
+
+    unified rhinofx and non-rhinofx versions
+
+commit d666b6cd470d7bc7bcaa90362e17a4972300fd77
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Aug 23 20:10:31 2004 +0000
+
+    optimized version
+
+commit d2a69826639ab46927d4aa8d370b52c44bbdf98f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Aug 23 20:09:14 2004 +0000
+
+    replaced IP addresses and domain name with hardware IDs
+
+commit 59ba2f3e7dee1ffb25a1de39eb02e1176e165690
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Aug 4 16:26:04 2004 +0000
+
+    added --enable-rhino configuration option and rhino specific license messages
+
+commit 52873ff540606a266a8171e56f5e2469c138f4e7
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Jul 21 07:02:15 2004 +0000
+
+    added plqueuemgr and pljobmgr related site configuration options
+
+commit b55d6a8ab15388bcf751e9f7a2cd6a0fc01e2f6a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Apr 12 14:01:02 2004 +0000
+
+    added BOLD arbitrartion paragraph to 6(c)
+
+commit 1cb46ca35746bb4c3a71e9cbabad2f67090ff391
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 11 22:54:59 2004 +0000
+
+    new license, automatic inclusion of license in installer program
+
+commit 07b4c9357eb75ca870dce07cf8e976b1271d9f4b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Apr 10 12:54:05 2004 +0000
+
+    changed commas to parantheses in the DEFINED BELOW phrases of the license agreement header
+
+commit 61d2e199029ef7117dfb0f1b4693f661b9a0f0bf
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Apr 10 01:43:17 2004 +0000
+
+    license update
+
+commit b357f8787a1c5de41a6664035043a75dc6ec29a9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 9 22:19:07 2004 +0000
+
+    version 1.3.3
+
+commit 2d196876bbd8b8f8b02ff4cb9d79e6ad479d45cb
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 9 22:18:51 2004 +0000
+
+    now includes external license agreement and copyright
+
+commit 24c3b8e83fa6abbb16d60d0b8fef3e1fdfe039e4
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 9 22:18:23 2004 +0000
+
+    final license agreement
+
+commit 78dd2465064977cd91441d5ceaf5ec52ed83b158
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 9 22:18:05 2004 +0000
+
+    renamed to generated files
+
+commit d542a130baeaea5ac1b576c3afc82814555158a3
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Apr 9 22:16:27 2004 +0000
+
+    initial revision
+
+commit e6186ac622664b4b5c4d2a956473280d0f1413b8
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:52:19 2004 +0000
+
+    fixed some broken links
+
+commit 16032744d9398f88b0eb2620183d9884dd88a4ca
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:35:40 2004 +0000
+
+    version 1.3.2
+
+commit 6dec124f6cdaa7696dd36c571b05c26a6ea84aba
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:35:13 2004 +0000
+
+    new copyright and license agreement
+
+commit c053e199d31528b1e07feba5a108065972882114
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:34:55 2004 +0000
+
+    added plconfig.html
+
+commit d80f5b4a03d28738947945e5a994aaba6fe3f732
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:33:36 2004 +0000
+
+    initial revision
+
+commit 5f5c895c310b7e60800205f84a185ca56e7e603f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sun Apr 4 05:33:18 2004 +0000
+
+    obsolete
+
+commit b435145c463602f297e5c4858dfc0e6ae9944635
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:53:13 2004 +0000
+
+    latest
+
+commit c97017d2c924344edd7eb63f31127605ac894f8b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:51:34 2004 +0000
+
+    renamed CryptoApp.java.in to CryptoApp.java.in.in in order to get @VERSION@ replacement
+
+commit 4aae2e6e7575f12275948020c880b251fa284568
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:07:07 2004 +0000
+
+    latest
+
+commit 9dda49a99a7088b2f1b42336cfbadb2320d0351f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:06:24 2004 +0000
+
+    support for printing IPAddrs param
+
+commit cc6ccaaa623b21af9548552ea555ba4bf4c6b415
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:05:59 2004 +0000
+
+    added sLicense
+
+commit 8a7431226cf0da40eced29a1b978550d7c1d509f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:05:38 2004 +0000
+
+    added --ip-addr, --notify-control-port and --notify-monitor-port
+
+commit 5d56951a443cc01936174c6f07396889197d6616
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Apr 1 23:04:09 2004 +0000
+
+    version 1.3.1
+
+commit 7551bde7bc6b8fc3470a4f8c060f7db9ebdc2e1e
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 20:26:47 2004 +0000
+
+    new license agreement
+
+commit 3518fb51c798343cc4f0c4e95e5799517256abfc
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 20:26:33 2004 +0000
+
+    added better debugging messages
+
+commit 54d3f510edd005a1165e6a6d9e5d97c442ceb490
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 07:40:43 2004 +0000
+
+    remove [IN] parameter notation comments
+
+commit d1e49164177eb2063260c46db8c802ad33445102
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 02:26:23 2004 +0000
+
+    now exits immediately after all information options
+
+commit 6b25e8cd0aeb73efc88f9bcd2f6184a1ee8a2831
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 02:14:27 2004 +0000
+
+    version 1.3.0
+
+commit 0970041351eb0000b4b16f159275071fe655ecf9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 02:13:24 2004 +0000
+
+    replaced encodeBytes() and decodeBytes() with inline code
+
+commit 1787654f7699310e0c74904ff88a23ab1817502d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 02:12:40 2004 +0000
+
+    moved config files into the <root-dir>/config directory
+
+commit c7b2f20fefe97607fce280da1038cd301edcf967
+Author: Jim Callahan <jim@temerity.us>
+Date:   Tue Mar 23 02:12:13 2004 +0000
+
+    now cleans source directorys as well
+
+commit e5fdf6dfb21f297e99f7e8278b00bb1238d937fa
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 23:39:37 2004 +0000
+
+    added unlimited strength JCE to the prerequisites
+
+commit 74927065e25c5fe07b85fe99a48e8374f643885b
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 23:39:13 2004 +0000
+
+    added missing clean target actions
+
+commit 34a615ea59ed8e72f22dd6e8379802d134c03e38
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 23:38:52 2004 +0000
+
+    now uses 1024-bit keys, encodes keys and encrypted data as integer strings instead of hexdecimal strings
+
+commit e5a9578c45dd418beaef7b36c67d0ff832fef149
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 20:22:04 2004 +0000
+
+    standardized make targets
+
+commit 5a3bc9289421b1c52efa68b0d6285f5a0c0f29bc
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 03:54:41 2004 +0000
+
+    latest
+
+commit c0dacb7223f4d02eeeba57de7b7ddf64caf70801
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 03:40:05 2004 +0000
+
+    reverted back to . seperators
+
+commit df5a6955c5164b2f99464a5cd012d21525dcee10
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 03:16:16 2004 +0000
+
+    chamged package paths back to more standard / delemiter instead of .
+
+commit 397adf77b98e56ba1932e99fadbcd2cadfb4a7bc
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 01:44:33 2004 +0000
+
+    added --build-vault, removed --encrypt-input
+
+commit 14d21656c5e95d54a57144699711bf1b3faecf61
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 01:43:50 2004 +0000
+
+    now uses BigIntegers converted to final Strings to store keys
+
+commit 431aac7727efd88d9cce95347998d4e1c56954f0
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 01:43:04 2004 +0000
+
+    renamed CompanyPublicKey.java to Enigma.java to make it less obvious
+
+commit 30cacf36f5f2a1043ed27845df1f2df644d5e024
+Author: Jim Callahan <jim@temerity.us>
+Date:   Mon Mar 22 01:41:28 2004 +0000
+
+    comments
+
+commit 84158de1ec0dc59f4e24e8bdeb810f2985d164f2
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 18:59:56 2004 +0000
+
+    fixed bug in clean target
+
+commit cf8bbfd9808c1e5256821cbc9c45664c6d089e3f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 18:45:17 2004 +0000
+
+    added --temp-dir option
+
+commit 057c70de94eef7358adeee8c28f0be494099fcfc
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 18:45:11 2004 +0000
+
+    added --temp-dir option, now sets pipeline UID and GID
+
+commit 01d2ccb50f9c80f7c9a28009bafbad16ec1f903d
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 18:44:39 2004 +0000
+
+    version 1.2.0
+
+commit 4a59ac6f08b20d0095905d9456aa64bbc4a2e77a
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 05:46:15 2004 +0000
+
+    fixed permissions for autoextract archive
+
+commit e4445e0bb544aa2dbcdc8ffa9858dc065751f836
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 05:45:01 2004 +0000
+
+    added --library-path, now checks for Java3D and JAI jars and libraries
+
+commit f4abbf1a1f338fdc7e10df448d114712b5759e7c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 05:44:28 2004 +0000
+
+    added --library-path
+
+commit ce3fb7b80f4c2191f62b5523da277ad2f2a257f9
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 01:47:07 2004 +0000
+
+    added a license checking shell script based autoinstaller for the RPM
+
+commit f935bbc0f7157bd9cf1736b15d9ebac5bf05c63f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Sat Mar 20 01:46:31 2004 +0000
+
+    initial revision
+
+commit d3ed3d5b6b350cbf860bf8f18e7a601e44023dc3
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 19 20:50:41 2004 +0000
+
+    fixed bug in subdir name
+
+commit 61f8b8c804ee889ad9b2c2cfadb8986fc207b986
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 19 20:50:17 2004 +0000
+
+    standardized install location
+
+commit f3cb8a9ceebb22682f456575c19c6d411ec6d3d8
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 19 20:49:23 2004 +0000
+
+    added rpm SUBDIR and install-src target
+
+commit db336143e0d5074d68fffbc9044090b19c37278f
+Author: Jim Callahan <jim@temerity.us>
+Date:   Fri Mar 19 20:48:22 2004 +0000
+
+    initial revision
+
+commit 54d9f783969f14f12a0bf8030db5940ed1ff0aae
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:58:30 2004 +0000
+
+    initial revision
+
+commit 79b27b463e5d0b0117b6dfe8819a33626de5cd71
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:57:24 2004 +0000
+
+    obsolete
+
+commit a290507a26587e33b438dc0605500e6da74d40bf
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:55:02 2004 +0000
+
+    added --decrypt
+
+commit c62628ff90b78085fb9816baaa0e2f3579110471
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:54:08 2004 +0000
+
+    added time stamp profile information, added time stamps and domain name as encrypted data to the pipeline-license.key file
+
+commit 0c3426942fc89720a609c85d9e56af44bf286d5c
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:52:32 2004 +0000
+
+    added time stamp profile information
+
+commit 1bad8c7caa9aed2aea72b9e62674e61b2ed47ad7
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 23:38:46 2004 +0000
+
+    initial revision
+
+commit 00d31853051c54b15a7e147693e13aac4264c6ca
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 18:00:53 2004 +0000
+
+    renamed key classes
+
+commit e05031b91cbb750b3faf27dda8fe1639827b3616
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 18:00:21 2004 +0000
+
+    renamed key classes, removed all references to the company private key
+
+commit 5c1e2b411e0e779643d95f7f2afe5916b9c58055
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 17:59:35 2004 +0000
+
+    intial revision
+
+commit 76e82e8ed108ba5a8f160cce5ff608179215a79e
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 17:58:46 2004 +0000
+
+    replaced by CryptoApp.java.in
+
+commit 6e581b1e33ca0ebf1cd1ca0a0acb106af4621f15
+Author: Jim Callahan <jim@temerity.us>
+Date:   Thu Mar 18 00:56:47 2004 +0000
+
+    90% functional
+
+commit f3d2d74bbca6d7bd0b1065299cf38f6d4688c099
+Author: Jim Callahan <jim@temerity.us>
+Date:   Wed Mar 17 21:50:31 2004 +0000
+
+    initial revision
