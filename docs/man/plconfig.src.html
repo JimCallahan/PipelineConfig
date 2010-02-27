@@ -193,17 +193,13 @@
       "font-style: italic;">date</span><span style=
       "font-family: monospace;">.bin</span><br>
     </div><br>
-    Where (customer) is a short name assigned by Temerity Software
-    for your site, (version) is the Pipeline release version number
-    and (date) is the date that the site configuration was
-    created.&nbsp;&nbsp; For example, a distribution of Pipeline
-    2.2.1 built for a configuration created by hypothetical Studio
-    X on February 15th, 2007 would be named:<br>
+       Where (customer) is a short name assigned by Temerity Software for your site, (version) is the Pipeline release version number and (date) is the date that the site configuration was created. For example, a distribution of Pipeline 2.4.24 built for a configuration created by hypothetical Studio X on February 23rd, 2010 would be named: 
+      <br>
 
     <div style="margin-left: 40px;">
       <br>
       <span style=
-      "font-family: monospace;">pipeline-studiox-2.4.15-091110.bin</span><br>
+      "font-family: monospace;">pipeline-studiox-2.4.24-100223.bin</span><br>
       </div><br>
     When executed, this example shell archive would extract the
     following RPMs:<br>
@@ -211,23 +207,23 @@
 
     <div style="margin-left: 40px;">
       <span style=
-      "font-family: monospace;">pipeline-studiox-2.4.15-091110/</span>
+      "font-family: monospace;">pipeline-studiox-2.4.24-100223/</span>
 
       <div style="margin-left: 40px;">
         <span style=
-        "font-family: monospace;">pipeline-studiox-2.4.15-091110.i686.rpm</span><br>
+        "font-family: monospace;">pipeline-studiox-2.4.24-100223.i686.rpm</span><br>
 
         <span style=
-        "font-family: monospace;">plmaster-studiox-2.4.15-091110.i686.rpm</span><br>
+        "font-family: monospace;">plmaster-studiox-2.4.24-100223.i686.rpm</span><br>
 
         <span style=
-        "font-family: monospace;">plqueuemgr-studiox-2.4.15-091110.i686.rpm</span><br>
+        "font-family: monospace;">plqueuemgr-studiox-2.4.24-100223.i686.rpm</span><br>
 
         <span style=
-        "font-family: monospace;">plmac-studiox-2.4.15-091110.i686.rpm</span><br>
+        "font-family: monospace;">plmac-studiox-2.4.24-100223.i686.rpm</span><br>
 
         <span style=
-        "font-family: monospace;">plwin-studiox-2.4.15-091110.i686.rpm</span><br>
+        "font-family: monospace;">plwin-studiox-2.4.24-100223.i686.rpm</span><br>
         </div>
     </div><br>
     The "pipeline" RPM contains the binaries which make up
@@ -351,7 +347,7 @@
     Java program, depends on a Java Runtime Environment.&nbsp;
     Pipeline has been well tested with the <a href=
     "http://java.sun.com/javase/downloads/index.jsp"><span style=
-    "font-weight: bold;">JDK 6.0 Update 17</span></a>
+    "font-weight: bold;">JDK 6.0 Update 18</span></a>
     implementation.&nbsp; You can set the JRE used by Unix clients
     with the <a href="#--unix-java-home"><span style=
     "font-weight: bold;">--unix-java-home</span></a> option or
@@ -401,18 +397,16 @@
     When using Pipeline on Windows XP systems, you will need to
     install the Java Runtime (<a href=
     "http://java.sun.com/javase/downloads/index.jsp"><strong>JDK
-    6.0 Update 17</strong></a>).&nbsp; In a typical Java Runtime
+    6.0 Update 18</strong></a>).&nbsp; In a typical Java Runtime
     installation the installed files are located under (C:\Program
-    Files\Java\jdk1.6.0_17\jre).&nbsp; If installed elsewhere you
+    Files\Java\jdk1.6.0_18\jre).&nbsp; If installed elsewhere you
     will need to specify the location using the <a href=
     "#--win-java-home"><span style=
     "font-weight: bold;">--win-java-home</span></a>
     option.&nbsp;<br>
     <br>
     You will also need to use <a style="font-weight: bold;" href=
-    "http://samba.org">Samba</a> or some other SMB capable file
-    server (or network appliance) to make the root install
-    directory (<a href="#--win-root-dir"><span style=
+    "http://samba.org">Samba</a> or some other SMB/CIFS capable file server (or network appliance) to make the root install directory (<a href="#--win-root-dir"><span style=
     "font-weight: bold;">--win-root-dir</span></a>) and root
     production directory (<a href="#--win-prod-dir"><span style=
     "font-weight: bold;">--win-prod-dir</span></a>) available to
@@ -690,14 +684,8 @@
   "font-style: italic;">dir</span></span></h4>
 
   <div style="margin-left: 80px;">
-    The path to the root directory of the local Java Runtime
-    Environment (JRE) installed on the Linux artist
-    workstations.&nbsp;&nbsp; You can use this option to set a
-    different JRE to be used for Pipelint client programs than is
-    used to run the back-end server daemons.&nbsp; For instance,
-    you could use a high performance server optimized
-    implementation like BEA JRockit for the servers and Sun's JDK
-    5.0 Update 13 for clients.<br>
+      The path to the root directory of the local Java Runtime Environment (JRE) installed on the Linux artist workstations. You can use this option to set a different JRE to be used for Pipeline client programs than is used to run the back-end server daemons.
+      <br>
     <br>
     If not specified, the JRE home directory defaults to the
     version of Java used to run this configuration tool.
@@ -1270,8 +1258,7 @@
 
   <div style="margin-left: 80px;">
     If not specified, the temporary directory will default to
-    (/var/tmp).<span style="font-weight: bold;"><br>
-    <br></span>
+    (/var/tmp).
   </div>
 
   <h4 style="margin-left: 40px;"><a name="Windows_XP_Options" id=
@@ -1460,9 +1447,9 @@
       Windows XP hosts, it needs to be supplied in order for the
       Pipeline client launcher scripts to function properly.<br>
       <br>
-      If not specified, the JRE home directory defaults to
-      (C:/Program Files/Java/jdk1.6.0_17/jre).<br>
-      <span style="font-style: italic;"><br></span>
+         If not specified, the JRE home directory defaults to (C:/Program Files/Java/jdk1.6.0_18/jre).
+      
+      
     </div>
   </div>
 
