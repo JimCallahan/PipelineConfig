@@ -286,7 +286,7 @@ class CryptoApp
             for(String host : hostIDs.keySet()) {
               BigInteger cksum = hostIDs.get(host);
               
-              System.out.print("    " + host + " ");
+              System.out.print("  " + host + " ");
               
               int wk;
               for(wk=0; wk<(29 - host.length()); wk++) 
@@ -295,6 +295,16 @@ class CryptoApp
               System.out.print(cksum);
               System.out.print("\n");    
             }
+          }
+          else if(title.equals("UnixLocalJavaLibraries") || 
+                  title.equals("MacLocalJavaLibraries") || 
+                  title.equals("WinLocalJavaLibraries")) {
+            LinkedList<String> libs = (LinkedList<String>) pParams.get(titls);
+            if(!libs.isEmpty()) {
+              System.out.print("\n");
+              for(String lib : libs) 
+                System.out.print("  " + lib + "\n"); 
+            }     
           }
           else {
             System.out.print(pParams.get(title) + "\n");
@@ -319,9 +329,17 @@ class CryptoApp
 	  for(wk=0; wk<(29 - host.length()); wk++) 
 	    System.out.print(" ");
 	  
-	    System.out.print(cksum);
-	    System.out.print("\n");    
+          System.out.print(cksum);
+          System.out.print("\n");    
 	}
+      }
+      else if(pLookupArg.equals("UnixLocalJavaLibraries") || 
+              pLookupArg.equals("MacLocalJavaLibraries") || 
+              pLookupArg.equals("WinLocalJavaLibraries")) {
+        LinkedList<String> libs = (LinkedList<String>) pParams.get(pLookupArg);
+        for(String lib : libs) 
+          System.out.print(":" + lib); 
+        System.out.print("\n"); 
       }
       else {
 	System.out.print(pParams.get(pLookupArg) + "\n");
