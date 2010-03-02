@@ -19,8 +19,7 @@ import javax.swing.border.*;
  */ 
 public
 class JListCellRenderer
-  extends JLabel 
-  implements ListCellRenderer 
+  extends DefaultListCellRenderer 
 {
   /*----------------------------------------------------------------------------------------*/
   /*   C O N S T R U C T O R                                                                */

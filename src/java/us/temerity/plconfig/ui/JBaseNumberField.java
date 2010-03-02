@@ -75,6 +75,8 @@ class JBaseNumberField<T>
   {
     if(color.equals(Color.cyan)) 
       setName("WarningTextField");
+    else if(color.equals(Color.yellow)) 
+      setName("SelectionTextField");
     else    
       setName("EditableTextField");
     

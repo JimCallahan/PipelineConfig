@@ -2,6 +2,8 @@
 
 package us.temerity.plconfig.ui;
 
+import us.temerity.plconfig.*;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -16,7 +18,7 @@ import javax.swing.text.*;
  * An identifier may only contain one of the following characters: 
  * '<CODE>a</CODE>'-'<CODE>z</CODE>', '<CODE>A</CODE>'-'<CODE>Z</CODE>',
  * '<CODE>0</CODE>'-'<CODE>9</CODE>', '<CODE>_</CODE>', '<CODE>-</CODE>', 
- * '<CODE>.</CODE>' <P>
+ * '<CODE>~</CODE>', '<CODE>.</CODE>' <P>
  */ 
 public 
 class JIdentifierField
@@ -72,18 +74,12 @@ class JIdentifierField
     ) 
       throws BadLocationException 
     {
-      if(str == null) {
+      if(str == null) 
 	return;
-      }
       
-      char[] cs = str.toCharArray();
-      int wk;
-      for(wk=0; wk<cs.length; wk++) {
-	if(!(Character.isLetterOrDigit(cs[wk]) || 
-	     (cs[wk] == '_') ||(cs[wk] == '-') ||(cs[wk] == '.'))) {
-	  Toolkit.getDefaultToolkit().beep();
-	  return;
-	}
+      if(!Identifiers.hasExtendedIdentChars(str)) {
+        Toolkit.getDefaultToolkit().beep();
+        return;
       }
 
       super.insertString(offset, str, attr);

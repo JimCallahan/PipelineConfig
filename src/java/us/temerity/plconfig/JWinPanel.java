@@ -36,7 +36,7 @@ class JWinPanel
    ConfigApp app
   ) 
   {
-    super(app, "Windows XP Paths:");
+    super(app, "Windows Client Paths:");
     
     /* initialize UI components */ 
     {
@@ -121,70 +121,97 @@ class JWinPanel
 	add(hbox);
       }
 
+      add(Box.createRigidArea(new Dimension(0, 40)));
+      
+      pJavadocDirComp = new JWindowsDirComp("Local Vendor Javadoc Directory", sSize);
+      add(pJavadocDirComp);
+      
+      add(Box.createRigidArea(new Dimension(0, 20)));
+      
+      pExtraJavaLibsComp = new JWindowsJarsComp("Local Java Libraries", sSize);
+      add(pExtraJavaLibsComp);
+      
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
-      
-      addNotes
-	("If you will be using Pipeline on Windows XP Professional hosts, you need to " + 
-         "enable the Windows Support.  Due to differences between Linux and Windows XP " +
-         "file naming conventions, standard paths and how network file systems are " +
-         "accessed, the paths required by Pipeline must be seperately configured for " + 
-         "Windows systems.\n" + 
-	 "\n" + 
-	 "All Windows directory paths passed to the following options should be specified " + 
-	 "using the forward slash (/) in place of the back slash (\\).  This means that " + 
-	 "in order to specify a native Windows path (C:\\foo\\bar) you will need to type " + 
-	 "(C:/foo/bar).  Similarly, a native UNC path such as " + 
-	 "(\\\\server\\share\\foo\\bar) will need to be specified as " + 
-	 "(//server/share/foo/bar).\n" + 
-	 "\n" + 
-	 "The Root Install Directory and Production Directory should map to the same " + 
-	 "network file system directories seen from Windows XP systems as the " +
-	 "corresponing Linux paths specified earlier.  For example, a Linux path such " + 
-	 "as (/base/prod) might might mapped to something like (Z:/base/prod) or " + 
-	 "(//myserver/base/prod) on a Windows XP system.\n" +
-	 "\n" + 
-	 "The Java Home Directory is the path to the root directory of the local Java " +
-	 "Runtime Environment (JRE) installed on Windows XP hosts at your site.  For " + 
-	 "consitancy, the version of the JRE installed on the Windows XP hosts should " + 
-	 "match the version used by Linux hosts.  Since the JRE will be installed in a " + 
-         "much different location on Windows XP hosts, it needs to be supplied in order " + 
-         "for the Pipeline client launcher scripts to function properly.\n" +
-         "\n" +
-         "The Temporary Directory should reside on a local file system for optimal " + 
-         "performance.\n" + 
-	 "\n" + 
-         "The User Profile Directory should specify the location of the Windows user " + 
-         "profile hive.  Depending on the value of User Profile Needs Username, this " + 
-         "path may or may not need to have the specific user name appended to it in order " + 
-         "to specify the actual directory where the user's profile lives.  Depending on " + 
-         "site configuration, the user profile directory may be either local or on a " + 
-         "network share.  In either case, it will contain at least the following well " + 
-         "known Windows user directories:\n" +
-         "\n" + 
-         "  Application Data\n" + 
-         "  Desktop\n" + 
-         "  Favorites\n" +
-         "  My Documents\n" + 
-         "  Start Menu\n" +
-         "\n" + 
-         "Some site configurations may use a home share (UNC path) which does not " +
-         "contain the user's name, but is set by Windows to point to the specific users " + 
-         "profile directory on the network file server.  In cases like this, we recommend " + 
-         "using a UNC path like (//myserver/homes) to avoid problems some application have " +
-         "with drive letter mappings in this context and set User Profile Needs Username " + 
-         "to \"no\".\n" + 
-         "\n" +
-         "In most cases the Windows \"Application Data\" directory is located simply " + 
-         "under the user profile directory and need not be specified.  However, some sites " +
-         "may wish to store this application specific data on a network share unrelated " + 
-         "to the user profile.  In cases like this, the Application Data Directory will " + 
-         "specify alternative directory containing the \"Applicata Data\" directory for " + 
-         "users.  Like the User Profile Directory, the specified directory may be " + 
-         "configured at the site to automatically already point to a current user specific " +
-         "share or require that the username be appended to the specified path.  The " +
-         "Application Data Needs Username parameter controls this behavior.");
     }
+      
+    pNotesDialog.setMessage
+      ("Windows Client Parameters:", 
+       "If you will be using Pipeline on Windows XP Professional hosts, you need to " + 
+       "enable the Windows Support.  Due to differences between Linux and Windows XP " +
+       "file naming conventions, standard paths and how network file systems are " +
+       "accessed, the paths required by Pipeline must be seperately configured for " + 
+       "Windows systems.\n" + 
+       "\n" + 
+       "All Windows directory paths passed to the following options should be specified " + 
+       "using the forward slash (/) in place of the back slash (\\).  This means that " + 
+       "in order to specify a native Windows path (C:\\foo\\bar) you will need to type " + 
+       "(C:/foo/bar).  Similarly, a native UNC path such as " + 
+       "(\\\\server\\share\\foo\\bar) will need to be specified as " + 
+       "(//server/share/foo/bar).\n" + 
+       "\n" + 
+       "The Root Install Directory and Production Directory should map to the same " + 
+       "network file system directories seen from Windows XP systems as the " +
+       "corresponing Linux paths specified earlier.  For example, a Linux path such " + 
+       "as (/base/prod) might might mapped to something like (Z:/base/prod) or " + 
+       "(//myserver/base/prod) on a Windows XP system.\n" +
+       "\n" + 
+       "The Java Home Directory is the path to the root directory of the local Java " +
+       "Runtime Environment (JRE) installed on Windows XP hosts at your site.  For " + 
+       "consitancy, the version of the JRE installed on the Windows XP hosts should " + 
+       "match the version used by Linux hosts.  Since the JRE will be installed in a " + 
+       "much different location on Windows XP hosts, it needs to be supplied in order " + 
+       "for the Pipeline client launcher scripts to function properly.\n" +
+       "\n" +
+       "The Temporary Directory should reside on a local file system for optimal " + 
+       "performance.\n" + 
+       "\n" + 
+       "The User Profile Directory should specify the location of the Windows user " + 
+       "profile hive.  Depending on the value of User Profile Needs Username, this " + 
+       "path may or may not need to have the specific user name appended to it in order " + 
+       "to specify the actual directory where the user's profile lives.  Depending on " + 
+       "site configuration, the user profile directory may be either local or on a " + 
+       "network share.  In either case, it will contain at least the following well " + 
+       "known Windows user directories:\n" +
+       "\n" + 
+       "  Application Data\n" + 
+       "  Desktop\n" + 
+       "  Favorites\n" +
+       "  My Documents\n" + 
+       "  Start Menu\n" +
+       "\n" + 
+       "Some site configurations may use a home share (UNC path) which does not " +
+       "contain the user's name, but is set by Windows to point to the specific users " + 
+       "profile directory on the network file server.  In cases like this, we recommend " + 
+       "using a UNC path like (//myserver/homes) to avoid problems some application have " +
+       "with drive letter mappings in this context and set User Profile Needs Username " + 
+       "to \"no\".\n" + 
+       "\n" +
+       "In most cases the Windows \"Application Data\" directory is located simply " + 
+       "under the user profile directory and need not be specified.  However, some sites " +
+       "may wish to store this application specific data on a network share unrelated " + 
+       "to the user profile.  In cases like this, the Application Data Directory will " + 
+       "specify alternative directory containing the \"Applicata Data\" directory for " + 
+       "users.  Like the User Profile Directory, the specified directory may be " + 
+       "configured at the site to automatically already point to a current user specific " +
+       "share or require that the username be appended to the specified path.  The " +
+       "Application Data Needs Username parameter controls this behavior.\n" +
+       "\n" + 
+       "The Local Vendor Javadoc Directory is the path to the root directory where the " + 
+       "documentation generated by javadoc for locally created Pipeline plugins and " + 
+       "standalone utils is located.  Providing this will allow users to easily access " +
+       "the documentation for locally created plugins from Pipeline's user interface.\n" +
+       "\n" + 
+       "The Local Java Libraries is a optional set of JAR files containing common Java " + 
+       "class shared by a large number of locally created plugins and/or standalone " + 
+       "utils.  Any JARs provided will be added to the Java classpath for all Pipeline " + 
+       "programs.  This is typically used for relatively large 3rd party libraries for " + 
+       "things such as XML parsing or SQL database connections which would otherwise " + 
+       "need to be embedded in many different plugin JARs.  Since these libraries " + 
+       "be dynamically updated (like plugins can), they are not suitable for anything " + 
+       "which might need to modified without a Pipeline shutdown.  This feature is " + 
+       "only an optimization to reduce plugin size and memory footprint but is not " + 
+       "required in order to use 3rd party Java libraries with Pipeline."); 
   }
 
   
@@ -199,7 +226,7 @@ class JWinPanel
   public String
   getPanelTitle()
   {
-    return "Windows XP";
+    return "Windows Client";
   }
 
   /**
@@ -232,7 +259,9 @@ class JWinPanel
       pApp.setWinUserProfileDirectory(pUserProfileDirComp.validateDir(pApp)); 
       pApp.setWinUserProfileNeedsUser(pUserProfileNeedsUserField.getValue());
       pApp.setWinAppDataDirectory(pAppDataDirComp.validateDir(pApp)); 
-      pApp.setWinAppDataNeedsUser(pAppDataNeedsUserField.getValue());      
+      pApp.setWinAppDataNeedsUser(pAppDataNeedsUserField.getValue());   
+      pApp.setWinLocalJavadocDirectory(pJavadocDirComp.validateDir(pApp));
+      pApp.setWinLocalJavaLibraries(pExtraJavaLibsComp.validateJars(pApp));   
     }
   }
 
@@ -253,6 +282,8 @@ class JWinPanel
    ActionEvent e
   ) 
   {
+    super.actionPerformed(e); 
+
     String cmd = e.getActionCommand();
     if(cmd.equals("support-changed")) 
       doSupportChanged();
@@ -277,6 +308,8 @@ class JWinPanel
     pUserProfileNeedsUserField.setEnabled(enabled);
     pAppDataDirComp.setEnabled(enabled);
     pAppDataNeedsUserField.setEnabled(enabled);
+    pJavadocDirComp.setEnabled(enabled);
+    pExtraJavaLibsComp.setEnabled(enabled);
 
     if(!enabled)
       return; 
@@ -327,6 +360,9 @@ class JWinPanel
       Boolean tf = pApp.getWinUserProfileNeedsUser();
       pAppDataNeedsUserField.setValue((tf != null) && tf);
     }
+
+    pJavadocDirComp.setDir(pApp.getWinLocalJavadocDirectory());
+    pExtraJavaLibsComp.setJars(pApp.getWinLocalJavaLibraries()); 
   }
 
   
@@ -355,6 +391,8 @@ class JWinPanel
   private JBooleanField    pUserProfileNeedsUserField;  
   private JWindowsDirComp  pAppDataDirComp;
   private JBooleanField    pAppDataNeedsUserField;
+  private JWindowsDirComp  pJavadocDirComp; 
+  private JWindowsJarsComp pExtraJavaLibsComp;
 
 }
 

@@ -803,6 +803,70 @@ class ConfigApp
   }
 
 
+  /**
+   * Set the Unix local directory where plugin javadocs reside. 
+   */
+  public void 
+  setUnixLocalJavadocDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("UnixLocalJavadocDirectory", 
+		 validateAbsolutePath(dir, "Unix Local Javadoc Directory").getPath()); 
+  }
+
+  /** 
+   * Get the Unix local directory where plugin javadocs reside. 
+   */ 
+  public File
+  getUnixLocalJavadocDirectory()
+  {
+    String dir = (String) pProfile.get("UnixLocalJavadocDirectory");
+    if(dir == null) 
+      return new File(getRootDirectory(), "pipeline-latest/share/docs/local-javadoc");
+    return new File(dir);
+  }
+
+
+  /**
+   * Set the Unix paths for the set of additional local JAR libaries.
+   */
+  public void 
+  setUnixLocalJavaLibraries
+  (
+   Collection<File> jars
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<String> paths = new LinkedList<String>();
+    
+    for(File file : jars) 
+      paths.add(validateAbsolutePath(file, "Unix Local JAR Library").getPath()); 
+
+    pProfile.put("UnixLocalJavaLibraries", paths); 
+  }
+
+  /** 
+   * Get the Unix paths for the set of additional local JAR libaries.
+   */ 
+  public Collection<File> 
+  getUnixLocalJavaLibraries()
+  {
+    LinkedList<File> jars = new LinkedList<File>();
+
+    LinkedList<String> paths = (LinkedList<String>) pProfile.get("UnixLocalJavaLibraries"); 
+    if(paths != null) {
+      for(String path : paths) 
+        jars.add(new File(path));
+    }
+
+    return jars;
+  }
+
+
+
   /*----------------------------------------------------------------------------------------*/
 
   /**
@@ -1419,6 +1483,71 @@ class ConfigApp
   }
 
 
+
+  /**
+   * Set the Mac local directory where plugin javadocs reside. 
+   */
+  public void 
+  setMacLocalJavadocDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("MacLocalJavadocDirectory", 
+		 validateAbsolutePath(dir, "(Mac OS X) Local Javadoc Directory").getPath()); 
+  }
+
+  /** 
+   * Get the Mac local directory where plugin javadocs reside. 
+   */ 
+  public File
+  getMacLocalJavadocDirectory()
+  {
+    String dir = (String) pProfile.get("MacLocalJavadocDirectory");
+    if(dir == null) 
+      return new File(getRootDirectory(), "pipeline-latest/share/docs/local-javadoc");
+    return new File(dir);
+  }
+
+
+  /**
+   * Set the Mac paths for the set of additional local JAR libaries.
+   */
+  public void 
+  setMacLocalJavaLibraries
+  (
+   Collection<File> jars
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<String> paths = new LinkedList<String>();
+    
+    for(File file : jars) 
+      paths.add(validateAbsolutePath(file, "(Mac OS X) Local JAR Library").getPath()); 
+
+    pProfile.put("MacLocalJavaLibraries", paths); 
+  }
+
+  /** 
+   * Get the Mac paths for the set of additional local JAR libaries.
+   */ 
+  public Collection<File> 
+  getMacLocalJavaLibraries()
+  {
+    LinkedList<File> jars = new LinkedList<File>();
+
+    LinkedList<String> paths = (LinkedList<String>) pProfile.get("MacLocalJavaLibraries"); 
+    if(paths != null) {
+      for(String path : paths) 
+        jars.add(new File(path));
+    }
+
+    return jars;
+  }
+
+
+
   /*----------------------------------------------------------------------------------------*/
 
   /**
@@ -1454,7 +1583,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("WinRootInstallDirectory", 
-		 validateWindowsPath(dir, "(Windows XP) Root Install Directory"));
+		 validateWindowsPath(dir, "(Windows) Root Install Directory"));
   }
   
   /**
@@ -1478,7 +1607,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("WinProductionDirectory", 
-		 validateWindowsPath(dir, "(Mac OS X) Production Directory"));
+		 validateWindowsPath(dir, "(Windows) Production Directory"));
   }
 
   /**
@@ -1594,7 +1723,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("WinTemporaryDirectory", 
-		 validateWindowsPath(dir, "(Windows XP) Temporary Directory"));
+		 validateWindowsPath(dir, "(Windows) Temporary Directory"));
   }
 
   /**
@@ -1618,7 +1747,7 @@ class ConfigApp
     throws IllegalConfigException
   {
     pProfile.put("WinJavaHome", 
-		 validateWindowsPath(dir, "(Windows XP) Java Home Directory"));
+		 validateWindowsPath(dir, "(Windows) Java Home Directory"));
   }
 
   /**
@@ -1628,6 +1757,64 @@ class ConfigApp
   getWinJavaHome() 
   {
     return (String) pProfile.get("WinJavaHome");
+  }
+
+
+  /**
+   * Set the Win local directory where plugin javadocs reside. 
+   */
+  public void 
+  setWinLocalJavadocDirectory
+  (
+   String dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("WinLocalJavadocDirectory", 
+		 validateWindowsPath(dir, "(Windows) Local Javadoc Directory")); 
+  }
+
+  /** 
+   * Get the Win local directory where plugin javadocs reside. 
+   */ 
+  public String
+  getWinLocalJavadocDirectory()
+  {
+    String dir = (String) pProfile.get("WinLocalJavadocDirectory");
+    if(dir == null) 
+      return (getWinRootDirectory() + "/pipeline-latest/share/docs/local-javadoc");
+    return dir;
+  }
+
+
+  /**
+   * Set the Win paths for the set of additional local JAR libaries.
+   */
+  public void 
+  setWinLocalJavaLibraries
+  (
+   Collection<String> jars
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<String> paths = new LinkedList<String>();
+    
+    for(String file : jars) 
+      paths.add(validateWindowsPath(file, "(Windows) Local JAR Library")); 
+
+    pProfile.put("WinLocalJavaLibraries", paths); 
+  }
+
+  /** 
+   * Get the Win paths for the set of additional local JAR libaries.
+   */ 
+  public Collection<String> 
+  getWinLocalJavaLibraries()
+  {
+    LinkedList<String> paths = (LinkedList<String>) pProfile.get("WinLocalJavaLibraries"); 
+    if(paths != null) 
+      return paths; 
+    return new LinkedList<String>();
   }
 
 
@@ -2684,9 +2871,36 @@ class ConfigApp
 	    configText.add(buf.toString());
 	  }
 	}
+        else if(title.equals("UnixLocalJavaLibraries")) {
+          LinkedList<String> libs = 
+            (LinkedList<String>) pProfile.get("UnixLocalJavaLibraries");
+          if(!libs.isEmpty()) {
+            configText.add("  " + title + " = ");
+            for(String lib : libs) 
+              configText.add("    " + lib); 
+          }              
+        }
+        else if(title.equals("MacLocalJavaLibraries")) {
+          LinkedList<String> libs = 
+            (LinkedList<String>) pProfile.get("MacLocalJavaLibraries");
+          if(!libs.isEmpty()) {
+            configText.add("  " + title + " = ");
+            for(String lib : libs) 
+              configText.add("    " + lib); 
+          }              
+        }
+        else if(title.equals("WinLocalJavaLibraries")) {
+          LinkedList<String> libs = 
+            (LinkedList<String>) pProfile.get("WinLocalJavaLibraries");
+          if(!libs.isEmpty()) {
+            configText.add("  " + title + " = ");
+            for(String lib : libs) 
+              configText.add("    " + lib); 
+          }              
+        }
 	else {
 	  configText.add("  " + title + " = " + pProfile.get(title));
-	}
+	} 
       }
 
       StringBuffer buf = new StringBuffer();
@@ -2847,6 +3061,15 @@ class ConfigApp
 	setTemporaryDirectory(new File((String) value));
       else if(title.equals("UnixJavaHome"))
 	setUnixJavaHome(new File((String) value));
+      else if(title.equals("UnixLocalJavadocDirectory"))
+	setUnixLocalJavadocDirectory(new File((String) value));
+      else if(title.equals("UnixLocalJavaLibraries")) {
+        LinkedList<String> jars = (LinkedList<String>) value;
+        LinkedList<File> files = new LinkedList<File>();
+        for(String path : jars) 
+          files.add(new File(path));
+        setUnixLocalJavaLibraries(files);
+      }
 
       else if(title.equals("MacSupport"))
 	setMacSupport((Boolean) value); 
@@ -2858,6 +3081,15 @@ class ConfigApp
 	setMacHomeDirectory(new File((String) value));
       else if(title.equals("MacTemporaryDirectory"))
 	setMacTemporaryDirectory(new File((String) value));
+      else if(title.equals("MacLocalJavadocDirectory"))
+	setMacLocalJavadocDirectory(new File((String) value));
+      else if(title.equals("MacLocalJavaLibraries")) {
+        LinkedList<String> jars = (LinkedList<String>) value;
+        LinkedList<File> files = new LinkedList<File>();
+        for(String path : jars) 
+          files.add(new File(path));
+        setMacLocalJavaLibraries(files);
+      }
 
       else if(title.equals("WinSupport"))
 	setWinSupport((Boolean) value);
@@ -2869,16 +3101,18 @@ class ConfigApp
 	setWinJavaHome((String) value);
       else if(title.equals("WinTemporaryDirectory"))
 	setWinTemporaryDirectory((String) value);
-
       else if(title.equals("WinUserProfileDirectory"))
 	setWinUserProfileDirectory((String) value);
       else if(title.equals("WinUserProfileNeedsUser"))
 	setWinUserProfileNeedsUser((Boolean) value);
-
       else if(title.equals("WinAppDataDirectory"))
 	setWinAppDataDirectory((String) value);
       else if(title.equals("WinAppDataNeedsUser"))
 	setWinAppDataNeedsUser((Boolean) value);
+      else if(title.equals("WinLocalJavadocDirectory"))
+	setWinLocalJavadocDirectory((String) value);
+      else if(title.equals("WinLocalJavaLibraries")) 
+        setWinLocalJavaLibraries((LinkedList<String>) value); 
 
       else if(title.equals("WinServer"))
 	setWinServer((Boolean) value);
@@ -2972,7 +3206,6 @@ class ConfigApp
        "  [--batch] [--evaluation | --limited=... | --perpetual]\n" +
        "  [--root-dir=...] [--server-host=...] [--host-ids=...]\n" + 
        "  [--reconfig=...] [--pipeline-user=...] [--pipeline-group=...]\n" + 
-       "  [--home-dir=...] [--temp-dir=...] [--unix-java-home=...]\n" + 
        "  [--master-host=...] [--master-port=...] [--master-heap-size=...]\n" +
        "  [--file-host=...] [--file-port=...] [--file-heap-size=...]\n" +  
        "  [--prod-dir=...] [--short-symlinks]\n" +
@@ -2980,12 +3213,16 @@ class ConfigApp
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
        "  [--node-dir=...] [--queue-dir=...] [--plugin-dir=...]\n" + 
        "  [--legacy-plugins] [--local-vendor=...]\n" +
+       "  [--home-dir=...] [--temp-dir=...] [--unix-java-home=...]\n" + 
+       "  [--local-vendor-javadoc-dir=...] [--local-java-lib=...]\n" + 
        "  [--mac-support] [--mac-root-dir=...] [--mac-prod-dir=...]\n" + 
        "  [--mac-home-dir=...] [--mac-temp-dir=...]\n" + 
+       "  [--mac-local-vendor-javadoc-dir=...] [--mac-local-java-lib=...]\n" + 
        "  [--win-support] [--win-root-dir=...] [--win-prod-dir=...]\n" + 
        "  [--win-temp-dir=...] [--win-java-home=...]\n" +
        "  [--win-user-profile-dir=...] [--win-user-profile-no-username]\n" + 
-       "  [--win-app-data-dir=...] [--win-app-data-no-username]\n" + 
+       "  [--win-app-data-dir=...] [--win-app-data-no-username]\n" +    
+       "  [--win-local-vendor-javadoc-dir=...] [--win-local-java-lib=...]\n" + 
        "\n" +  
        "Use \"plconfig --html-help\" to browse the full documentation.\n");
   }
@@ -3502,7 +3739,7 @@ class ConfigApp
 		Box vbox = new Box(BoxLayout.Y_AXIS);
 
 		{
-		  JLabel label = new JLabel("UNIX (Linux)", pNoneIcon, JLabel.LEFT); 
+		  JLabel label = new JLabel("Linux", pNoneIcon, JLabel.LEFT); 
 		  pPanelLabels.add(label);
 		  vbox.add(label);
 		}
@@ -3518,7 +3755,7 @@ class ConfigApp
 		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
 		{
-		  JLabel label = new JLabel("Windows XP", pNoneIcon, JLabel.LEFT); 
+		  JLabel label = new JLabel("Windows Client", pNoneIcon, JLabel.LEFT); 
 		  pPanelLabels.add(label);
 		  vbox.add(label);
 		}

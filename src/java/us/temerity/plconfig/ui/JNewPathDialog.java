@@ -13,14 +13,14 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 
 /*------------------------------------------------------------------------------------------*/
-/*   N E W   I D E N T I F I E R   D I A L O G                                              */
+/*   N E W   P A T H   D I A L O G                                                          */
 /*------------------------------------------------------------------------------------------*/
 
 /**
- * Queries the user for an identifier name.
+ * Queries the user for a path.
  */ 
 public 
-class JNewIdentifierDialog
+class JNewPathDialog
   extends JBaseDialog
   implements DocumentListener
 {
@@ -40,24 +40,24 @@ class JNewIdentifierDialog
    * @param fieldTitle
    *   The title of the text field.
    * 
-   * @param name
-   *   The initial identifier name. 
+   * @param path
+   *   The initial path. 
    * 
    * @param confirm
    *   The title of the confirm button.
    */ 
   public 
-  JNewIdentifierDialog
+  JNewPathDialog
   (
    Frame owner,       
    String title,  
    String fieldTitle, 
-   String name, 
+   String path, 
    String confirm
   )
   {
     super(owner, title);
-    initUI(fieldTitle, name, confirm);
+    initUI(fieldTitle, path, confirm);
   }
 
   /**
@@ -72,24 +72,24 @@ class JNewIdentifierDialog
    * @param fieldTitle
    *   The title of the text field.
    * 
-   * @param name
-   *   The initial identifier name. 
+   * @param path
+   *   The initial path. 
    * 
    * @param confirm
    *   The title of the confirm button.
    */ 
   public 
-  JNewIdentifierDialog
+  JNewPathDialog
   (
    Dialog owner,       
    String title,  
    String fieldTitle, 
-   String name, 
+   String path, 
    String confirm
   )
   {
     super(owner, title);
-    initUI(fieldTitle, name, confirm);
+    initUI(fieldTitle, path, confirm);
   }
 
 
@@ -101,8 +101,8 @@ class JNewIdentifierDialog
    * @param fieldTitle
    *   The title of the text field.
    * 
-   * @param name
-   *   The initial identifier name. 
+   * @param path
+   *   The initial path. 
    * 
    * @param confirm
    *   The title of the confirm button.
@@ -111,7 +111,7 @@ class JNewIdentifierDialog
   initUI
   (      
    String fieldTitle, 
-   String name, 
+   String path, 
    String confirm
   ) 
   {
@@ -127,8 +127,8 @@ class JNewIdentifierDialog
       body.add(Box.createRigidArea(new Dimension(0, 4)));
       
       {
-	JIdentifierField field = UIFactory.createIdentifierField(name, 60, JLabel.LEFT);
-	pNameField = field;
+	JPathField field = UIFactory.createPathField(path, 350, JLabel.LEFT);
+	pPathField = field;
 	
 	field.getDocument().addDocumentListener(this);
 	
@@ -138,7 +138,7 @@ class JNewIdentifierDialog
       super.initUI(null, body, confirm, null, null, "Cancel");
     }  
 
-    pConfirmButton.setEnabled((name != null) && (name.length() > 0));
+    pConfirmButton.setEnabled((path != null) && (path.length() > 0));
     setResizable(false);
   }
 
@@ -164,8 +164,8 @@ class JNewIdentifierDialog
    DocumentEvent e
   )
   {
-    String name = pNameField.getText();
-    pConfirmButton.setEnabled((name != null) && (name.length() > 0));
+    String path = pPathField.getText();
+    pConfirmButton.setEnabled((path != null) && (path.length() > 0));
   }
   
   /**
@@ -177,8 +177,8 @@ class JNewIdentifierDialog
    DocumentEvent e
   )
   {
-    String name = pNameField.getText();
-    pConfirmButton.setEnabled((name != null) && (name.length() > 0));    
+    String path = pPathField.getText();
+    pConfirmButton.setEnabled((path != null) && (path.length() > 0));    
   }
 
 
@@ -188,12 +188,12 @@ class JNewIdentifierDialog
   /*----------------------------------------------------------------------------------------*/
 
   /**
-   * Get the new identifier name. 
+   * Get the new identifier path. 
    */ 
   public String
-  getName() 
+  getPath() 
   {
-    return (pNameField.getText());
+    return (pPathField.getText());
   }
 
 
@@ -203,7 +203,7 @@ class JNewIdentifierDialog
   /*   S T A T I C   I N T E R N A L S                                                      */
   /*----------------------------------------------------------------------------------------*/
 
-  private static final long serialVersionUID = -8184225402127026678L;
+  private static final long serialVersionUID = 8065240837306127465L; 
 
 
 
@@ -213,8 +213,8 @@ class JNewIdentifierDialog
   /*----------------------------------------------------------------------------------------*/
 
   /**
-   * The field containing the new name. <P> 
+   * The field containing the new path. <P> 
    */
-  protected JIdentifierField  pNameField;
+  protected JPathField  pPathField;
 
 }

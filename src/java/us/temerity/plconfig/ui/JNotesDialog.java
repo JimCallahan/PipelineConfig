@@ -11,14 +11,14 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /*------------------------------------------------------------------------------------------*/
-/*   E R R O R     D I A L O G                                                              */
+/*   N O T E S     D I A L O G                                                              */
 /*------------------------------------------------------------------------------------------*/
 
 /**
- * Displays Pipeline error messages.
+ * Displays notes. 
  */ 
 public 
-class JErrorDialog
+class JNotesDialog
   extends JBaseDialog
 {
   /*----------------------------------------------------------------------------------------*/
@@ -29,49 +29,10 @@ class JErrorDialog
    * Construct a new dialog.
    */ 
   public 
-  JErrorDialog() 
+  JNotesDialog() 
   {
-    this((Frame) null);
-  }
+    super((Frame) null, "Notes", false);
 
-  /**
-   * Construct a new dialog.
-   * 
-   * @param owner
-   *   The parent frame.
-   */ 
-  public 
-  JErrorDialog
-  (
-   Frame owner
-  )  
-  {
-    super(owner, "Error");
-    initUI();
-  }
-
-  /**
-   * Construct a new dialog.
-   * 
-   * @param owner
-   *   The parent dialog.
-   */ 
-  public 
-  JErrorDialog
-  (
-   Dialog owner
-  )  
-  {
-    super(owner, "Error");
-    initUI();
-  }
-
-
-  /*----------------------------------------------------------------------------------------*/
-
-  public void 
-  initUI() 
-  {
     /* create dialog body components */ 
     {
       JPanel body = new JPanel(new BorderLayout());
@@ -80,7 +41,7 @@ class JErrorDialog
       body.setMinimumSize(new Dimension(300, 180));
 
       {
-	JTextArea area = new JTextArea(8, 35); 
+	JTextArea area = new JTextArea(15, 45); 
 	pMessageArea = area;
 
 	area.setName("TextArea");
@@ -93,7 +54,7 @@ class JErrorDialog
       }
       
       {
-	JScrollPane scroll = 
+        JScrollPane scroll = 
           UIFactory.createScrollPane
           (pMessageArea, 
            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER, 
@@ -103,7 +64,7 @@ class JErrorDialog
 	body.add(scroll);
       }
 
-      super.initUI("Error:", body, null, null, null, "Close");
+      super.initUI("Notes:", body, null, null, null, "Close");
       pack();
     }  
   }
@@ -127,37 +88,13 @@ class JErrorDialog
     pMessageArea.setText(msg);
   }
 
-  /**
-   * Set the title and text of the error message based on an exception.
-   */ 
-  public void 
-  setMessage
-  (
-   Throwable ex
-  ) 
-  {
-    if(ex instanceof IllegalConfigException) {
-      pHeaderLabel.setText("Configuration Error:");
-      pMessageArea.setText(ex.getMessage());
-    }
-    else if(ex instanceof IOException) {
-      pHeaderLabel.setText("I/O Error:");
-      pMessageArea.setText(ex.getMessage());
-    }
-    else {
-      pHeaderLabel.setText("Internal Error:");
-      pMessageArea.setText(Exceptions.getFullMessage(ex));
-    }
-  }
-
-
 
 
   /*----------------------------------------------------------------------------------------*/
   /*   S T A T I C   I N T E R N A L S                                                      */
   /*----------------------------------------------------------------------------------------*/
 
-  private static final long serialVersionUID = 6715827604298406774L;
+  private static final long serialVersionUID = -2581681349282137012L;
 
 
 
@@ -169,5 +106,10 @@ class JErrorDialog
    * The error message text.
    */ 
   private JTextArea pMessageArea;
-  
+
+  /** 
+   * The scroll panel containing the message text.
+   */ 
+  private JScrollPane pScroll; 
+
 }

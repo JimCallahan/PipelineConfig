@@ -21,7 +21,7 @@ import javax.swing.tree.*;
  */ 
 public abstract 
 class JBaseFileSelectDialog
-  extends JBaseDialog
+  extends JFullDialog
   implements ListSelectionListener, DocumentListener, MouseListener
 {
   /*----------------------------------------------------------------------------------------*/
@@ -31,17 +31,20 @@ class JBaseFileSelectDialog
   /**
    * Construct a new dialog for selecting files.
    * 
+   * @param owner
+   *   The parent frame.
+   * 
    * @param title
    *   The title of the dialog.
    */ 
   public 
   JBaseFileSelectDialog
   (
+   Frame owner,
    String title
   ) 
   {
-    super(title, true);
-    pRootDir = new File("/");
+    super(owner, title);
   }
 
   /**
@@ -60,8 +63,7 @@ class JBaseFileSelectDialog
    String title
   ) 
   {
-    super(owner, title, true);
-    pRootDir = new File("/");
+    super(owner, title);
   }
 
 
@@ -134,6 +136,25 @@ class JBaseFileSelectDialog
 
 	  hbox.add(field);
 	}
+
+	hbox.add(Box.createRigidArea(new Dimension(4, 0)));
+	
+	{
+	  JButton btn = new JButton();
+	  btn.setName("ReloadButton");
+	  
+	  Dimension size = new Dimension(24, 19);
+	  btn.setMinimumSize(size);
+	  btn.setMaximumSize(size);
+	  btn.setPreferredSize(size);
+	  
+	  btn.setActionCommand("refresh-directory");
+	  btn.addActionListener(this);
+
+	  btn.setToolTipText(UIFactory.formatToolTip("Refresh current directory."));
+
+	  hbox.add(btn);
+	} 
 	
 	hbox.add(Box.createRigidArea(new Dimension(4, 0)));
 	
@@ -154,23 +175,6 @@ class JBaseFileSelectDialog
 	  hbox.add(btn);
 	} 
 
-	hbox.add(Box.createRigidArea(new Dimension(4, 0)));
-	
-	{
-	  JButton btn = new JButton();
-	  btn.setName("HomeButton");
-	  
-	  Dimension size = new Dimension(24, 19);
-	  btn.setMinimumSize(size);
-	  btn.setMaximumSize(size);
-	  btn.setPreferredSize(size);
-	  
-	  btn.setActionCommand("jump-home");
-	  btn.addActionListener(this);
-	  
-	  hbox.add(btn);
-	} 
-
 	body.add(hbox);
       }
       
@@ -187,15 +191,12 @@ class JBaseFileSelectDialog
 	lst.addMouseListener(this);
 
 	{
-	  JScrollPane scroll = new JScrollPane(lst);
-	  
-	  scroll.setMinimumSize(new Dimension(690, 120));
-	  scroll.setPreferredSize(new Dimension(690, 240));
-	  
-	  scroll.setHorizontalScrollBarPolicy
-	    (ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-	  scroll.setVerticalScrollBarPolicy
-	    (ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+	  JScrollPane scroll = 
+            UIFactory.createScrollPane
+            (lst, 
+             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER,
+             ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+             new Dimension(690, 120), new Dimension(690, 240), null);
 	  
 	  body.add(scroll);
 	}
@@ -233,7 +234,7 @@ class JBaseFileSelectDialog
 	}  
       }
 
-      super.initUI(header, true, body, confirm, null, null, "Close");
+      super.initUI(header, body, confirm, null, null, "Close");
 
       pack();
     }    
@@ -268,6 +269,36 @@ class JBaseFileSelectDialog
 
 
   /*----------------------------------------------------------------------------------------*/
+  /*   P R E D I C A T E S                                                                  */
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Whether browsing is restricted to a subset of the filesystem.
+   */ 
+  public boolean
+  isRestricted() 
+  {
+    return (pRootDir != null);
+  }
+  
+  /**
+   * Whether the given canonical file is within the allowed subset of the filesystem.
+   * 
+   * @return 
+   *   Always returns true if not restricted.
+   */ 
+  public boolean
+  isAllowed
+  (
+   File canon
+  ) 
+  {
+    return (!isRestricted() || canon.getPath().startsWith(getRootDir().getPath()));
+  }
+  
+
+
+  /*----------------------------------------------------------------------------------------*/
   /*   A C C E S S                                                                          */
   /*----------------------------------------------------------------------------------------*/
 
@@ -275,7 +306,8 @@ class JBaseFileSelectDialog
    * Set the root directory.
    * 
    * @param root
-   *   The root directory under which the dialog will browse.
+   *   The root directory under which browsing is restricted or 
+   *   <CODE>null</CODE> for no restrictions.
    */ 
   public void 
   setRootDir
@@ -283,13 +315,14 @@ class JBaseFileSelectDialog
    File root
   ) 
   {
-    if(root == null) 
-      throw new IllegalArgumentException
-	("The root directory cannot be (null)!");
-
+    if(root == null) {
+      pRootDir = null;
+      return;
+    }
+   
     if(!root.isDirectory()) 
       throw new IllegalArgumentException
-	("The root directory must exist!");
+	("The root directory (" + root + ") does not exist!");
 
     try {
       pRootDir = root.getCanonicalFile();
@@ -300,7 +333,51 @@ class JBaseFileSelectDialog
   }
 
   /**
-   * Get the current directory.
+   * Get the root directory under which browsing is restricted.
+   * 
+   * @return 
+   *   The root directory or <CODE>null</CODE> if there are no restrictions.
+   */ 
+  public File
+  getRootDir()
+  {
+    return pRootDir;
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
+  
+  /**
+   * Get a default directory to use as a fallback location when user input is illegal. 
+   */ 
+  public File 
+  getDefaultDirectory()
+  {
+    File canon = null;
+    try {
+      File dir = new File(System.getProperty("user.dir"));
+      if(dir != null) {
+	File cdir = dir.getCanonicalFile();
+	if(isAllowed(cdir)) 
+	  canon = dir; 
+      }
+    }
+    catch(IOException ex) {
+    }
+      
+    if(canon != null) 
+      return canon;
+
+    if(pRootDir != null) 
+      return pRootDir;
+    return new File("/");
+  }
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Get the current directory relative to the root directory.
    */ 
   public File 
   getDirectory() 
@@ -311,6 +388,7 @@ class JBaseFileSelectDialog
 
     return new File(dir);
   }
+
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -422,10 +500,10 @@ class JBaseFileSelectDialog
   {
     if(e.getActionCommand().equals("jump-dir")) 
       doJumpDir();
-    else if(e.getActionCommand().equals("jump-home")) 
-      doJumpHome();
     else if(e.getActionCommand().equals("new-folder")) 
       doNewFolder();
+    else if(e.getActionCommand().equals("refresh-directory")) 
+      doRefreshDirectory();
     else 
       super.actionPerformed(e);
   }
@@ -452,16 +530,16 @@ class JBaseFileSelectDialog
   doJumpDir();
 
   /**
-   * Jump to the home directory.
-   */ 
-  protected abstract void 
-  doJumpHome();
-
-  /**
    * Create a new directory under the current working directory and jump to it.
    */ 
   protected abstract void 
   doNewFolder();
+
+  /**
+   * Refresh the current directory.
+   */
+  protected abstract void
+  doRefreshDirectory();
 
 
 
@@ -472,7 +550,7 @@ class JBaseFileSelectDialog
   /**
    * The root directory.
    */ 
-  protected File  pRootDir;
+  private File  pRootDir;
 
 
   /**
@@ -491,5 +569,10 @@ class JBaseFileSelectDialog
    * May be <CODE>null</CODE> if this a directory only dialog.
    */ 
   protected JTextField  pFileField;
+
+  /**
+   * The current target directory.
+   */
+  protected File  pCurrentDirectory;
 
 }

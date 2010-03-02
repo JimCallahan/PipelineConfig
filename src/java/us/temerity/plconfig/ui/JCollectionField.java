@@ -28,6 +28,9 @@ class JCollectionField
 
   /**
    * Construct a new field.
+   * 
+   * @param values
+   *   The possible choices the field selects among.
    */ 
   public 
   JCollectionField
@@ -35,11 +38,43 @@ class JCollectionField
    Collection<String> values
   )
   {
-    this(values, null);
+    this(values, (JFrame) null);
   }
 
   /**
    * Construct a new field.
+   * 
+   * @param values
+   *   The possible choices the field selects among.
+   * 
+   * @param parent
+   *   The parent frame containing this field.
+   */ 
+  public 
+  JCollectionField
+  (
+   Collection<String> values, 
+   JFrame parent
+  )
+  {
+    super();  
+
+    if(parent != null) 
+      pDialog = new JDialog(parent);
+    else 
+      pDialog = new JDialog();
+    
+    initUI(values);
+  }
+    
+  /**
+   * Construct a new field.
+   * 
+   * @param values
+   *   The possible choices the field selects among.
+   * 
+   * @param parent
+   *   The parent dialog containing this field.
    */ 
   public 
   JCollectionField
@@ -49,6 +84,30 @@ class JCollectionField
   )
   {
     super();  
+
+    if(parent != null) 
+      pDialog = new JDialog(parent);
+    else 
+      pDialog = new JDialog();
+    
+    initUI(values);
+  }
+    
+
+  /*----------------------------------------------------------------------------------------*/
+  
+  /**
+   * Initialize the common user interface components. <P> 
+   *
+   * @param values
+   *   The possible choices the field selects among.
+   */ 
+  private void 
+  initUI
+  (
+   Collection<String> values
+  )
+  {
     setName("CollectionField");
 
     setAlignmentY(0.5f);
@@ -86,11 +145,6 @@ class JCollectionField
     pPopup.addPopupMenuListener(this);
 
     {
-      if(parent != null) 
-	pDialog = new JDialog(parent);
-      else 
-	pDialog = new JDialog();
-    
       pDialog.setUndecorated(true);
       pDialog.setResizable(false);
       pDialog.setAlwaysOnTop(true);
@@ -112,12 +166,12 @@ class JCollectionField
 	  lst.addListSelectionListener(this);
 
 	  {
-	    JScrollPane scroll = new JScrollPane(lst);
-	    
-	    scroll.setHorizontalScrollBarPolicy
-	      (ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-	    scroll.setVerticalScrollBarPolicy
-	      (ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+	    JScrollPane scroll = 
+              UIFactory.createScrollPane
+              (lst,
+               ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER, 
+               ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
+               null, null, null);
 	  
 	    panel.add(scroll);
 	  }
@@ -164,8 +218,12 @@ class JCollectionField
   setValues
   (
    Collection<String> values
-  )  
+  ) 
   {
+    if(values.isEmpty()) 
+      throw new IllegalArgumentException
+	("At least one value must be supplied!");
+
     pValues = new ArrayList<String>(values);
 
     pPopup.removeAll();
@@ -227,7 +285,9 @@ class JCollectionField
    int idx
   ) 
   {
-    assert(idx < pValues.size());
+    if(idx >= pValues.size() || idx < 0)
+      throw new IllegalArgumentException
+	("The index (" + idx + ") was not valid!");
     pSelectedIdx = idx;
 
     if(pSelectedIdx >= 0) 
@@ -407,24 +467,39 @@ class JCollectionField
    MouseEvent e
   ) 
   {
-    if((pValues.size() > 0) && (pSelectedIdx >= 0)) {
+    mousePressedHelper(e, pValues, pValues);
+  }
+
+  protected void 
+  mousePressedHelper
+  (
+   MouseEvent e, 
+   ArrayList<String> displayed, 
+   ArrayList<String> selected
+  ) 
+  {
+    if((selected.size() > 0) && (pSelectedIdx >= 0)) {
       pLabel.setForeground(Color.yellow);
       Dimension size = getSize();
 
-      if(pValues.size() < sItemLimit) {
-	pPopup.setPopupSize(new Dimension(size.width, 23*pValues.size() + 10));
-	pPopup.show(this, 0, size.height);
+      if(selected.size() < sItemLimit) {
+	pPopup.show(this, e.getX(), e.getY());
       }
       else {
 	pItemList.removeListSelectionListener(this);
 	{
 	  DefaultListModel model = (DefaultListModel) pItemList.getModel();
 	  model.clear();
-	  
-	  for(String value : pValues) 
-	    model.addElement(value);	  
-	  
-	  pItemList.setSelectedIndex(getSelectedIndex());
+
+	  for(String value : selected)
+	    model.addElement(value);
+
+	  {	  
+	    String value = getSelected();
+	    int idx = selected.indexOf(value);
+	    if(idx != -1) 
+	      pItemList.setSelectedIndex(idx);
+	  }
 	}
 	pItemList.addListSelectionListener(this);
 
@@ -432,8 +507,9 @@ class JCollectionField
 	  Point pos = new Point(0, size.height);
 	  SwingUtilities.convertPointToScreen(pos, this);
 
-	  Dimension dsize = new Dimension(size.width, 23*sItemLimit + 14);
-	  pDialog.setSize(dsize);
+	  pDialog.pack();
+
+	  Dimension dsize = new Dimension(pDialog.getWidth(), 23*sItemLimit + 14);
 
 	  Rectangle bounds = pDialog.getGraphicsConfiguration().getBounds();
 
@@ -558,7 +634,7 @@ class JCollectionField
   /**
    * The popup menu.
    */ 
-  private JPopupMenu  pPopup; 
+  protected JPopupMenu  pPopup; 
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -566,12 +642,12 @@ class JCollectionField
   /**
    * The item selection dialog used for long lists.
    */ 
-  private JDialog  pDialog;
+  protected JDialog  pDialog;
 
   /** 
    * The item selection list.
    */ 
-  private JList  pItemList;
+  protected JList  pItemList;
   
 
   /*----------------------------------------------------------------------------------------*/
@@ -595,7 +671,7 @@ class JCollectionField
   /**
    * The underlying Collection.
    */ 
-  private ArrayList<String>  pValues;
+  protected ArrayList<String>  pValues;
 
 
   /*----------------------------------------------------------------------------------------*/

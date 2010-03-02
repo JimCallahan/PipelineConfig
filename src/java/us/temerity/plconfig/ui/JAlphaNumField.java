@@ -2,6 +2,8 @@
 
 package us.temerity.plconfig.ui;
 
+import us.temerity.plconfig.*;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -67,17 +69,12 @@ class JAlphaNumField
     ) 
       throws BadLocationException 
     {
-      if(str == null) {
+      if(str == null) 
 	return;
-      }
       
-      char[] cs = str.toCharArray();
-      int wk;
-      for(wk=0; wk<cs.length; wk++) {
-	if(!Character.isLetterOrDigit(cs[wk])) {
-	  Toolkit.getDefaultToolkit().beep();
-	  return;
-	}
+      if(!Identifiers.hasAlphaNumericChars(str)) {
+        Toolkit.getDefaultToolkit().beep();
+        return;
       }
 
       super.insertString(offset, str, attr);

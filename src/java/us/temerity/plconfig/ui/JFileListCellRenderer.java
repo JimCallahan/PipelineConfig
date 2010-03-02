@@ -122,8 +122,7 @@ class JFileListCellRenderer
       pSizeLabel.setText(null);
     }
     
-    Date date = new Date(file.lastModified());
-    pDateLabel.setText(Dates.format(date));
+    pDateLabel.setText(TimeStamps.format(file.lastModified()));
 
     if(isDir) 
       pNameLabel.setIcon(isSelected ? sDirSelectedIcon : sDirNormalIcon);

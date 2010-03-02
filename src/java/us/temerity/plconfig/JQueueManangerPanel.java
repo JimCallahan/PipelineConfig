@@ -83,8 +83,9 @@ class JQueueManagerPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
-      addNotes
-	("The Queue Manager daemon assigns jobs from the Pipeline queue to the hosts " + 
+      pNotesDialog.setMessage
+	("Queue Manager Parameters:", 
+         "The Queue Manager daemon assigns jobs from the Pipeline queue to the hosts " + 
 	 "running Job Manager daemons.  It also provides information about the status of " + 
 	 "these jobs to both the Master Manager and Pipeline client programs.  You must " +
 	 "specify the host where the Queue Manager will run and the network ports listened " +

@@ -72,8 +72,9 @@ class JSystemInfoPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
 
-      addNotes
-	("The operating system configuration information for the host running this " +
+      pNotesDialog.setMessage
+	("System Parameters:", 
+         "The operating system configuration information for the host running this " +
 	 "configuration tool.  It is assumed that all Linux based hosts at your site " + 
 	 "will have a similar or compatable configuration.  We recommend running " +
 	 "plconfig(1) on the host where you intend to run the Master server deamon " + 

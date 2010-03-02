@@ -88,6 +88,7 @@ class JDoubleField
   /**
    * Checks a speculative result text for validity.
    */ 
+  @Override
   protected boolean 
   isValidResult
   (

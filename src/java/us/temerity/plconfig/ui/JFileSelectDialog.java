@@ -1,8 +1,6 @@
-// $Id: JFileSelectDialog.java,v 1.1 2006/02/20 20:12:04 jim Exp $
+// $Id: JFileSelectDialog.java,v 1.12 2009/07/13 17:29:47 jlee Exp $
 
 package us.temerity.plconfig.ui;
-
-import us.temerity.plconfig.*; 
 
 import java.awt.*;
 import java.awt.event.*;
@@ -55,8 +53,94 @@ class JFileSelectDialog
    String confirm
   ) 
   {
-    super(title);
+    this((Frame) null, title, header, fieldTitle, fieldTitleSize, confirm);
+  }
+
+  /**
+   * Construct a new dialog for selecting directories only.
+   * 
+   * @param title
+   *   The title of the dialog.
+   * 
+   * @param header
+   *   The header label.
+   * 
+   * @param confirm
+   *   The name of the confirm button.
+   */ 
+  public 
+  JFileSelectDialog
+  (
+   String title, 
+   String header, 
+   String confirm
+  ) 
+  {
+    this((Frame) null, title, header, confirm);
+  }
+
+  /**
+   * Construct a new dialog for selecting files.
+   * 
+   * @param owner
+   *   The parent frame.
+   * 
+   * @param title
+   *   The title of the dialog.
+   * 
+   * @param header
+   *   The header label.
+   * 
+   * @param fieldTitle
+   *   The title of the filename field.
+   * 
+   * @param fieldTitleSize
+   *   The width of the filename field title.
+   * 
+   * @param confirm
+   *   The name of the confirm button.
+   */ 
+  public 
+  JFileSelectDialog
+  (
+   Frame owner,
+   String title,
+   String header,
+   String fieldTitle, 
+   int fieldTitleSize, 
+   String confirm
+  ) 
+  {
+    super(owner, title);
     initUI(title, header, fieldTitle, fieldTitleSize, confirm);
+  }
+
+  /**
+   * Construct a new dialog for selecting directories only.
+   * 
+   * @param owner
+   *   The parent frame.
+   * 
+   * @param title
+   *   The title of the dialog.
+   * 
+   * @param header
+   *   The header label.
+   * 
+   * @param confirm
+   *   The name of the confirm button.
+   */ 
+  public 
+  JFileSelectDialog
+  (
+   Frame owner,
+   String title, 
+   String header, 
+   String confirm
+  ) 
+  {
+    super(owner, title);
+    initUI(title, header, null, 0, confirm);
   }
 
   /**
@@ -95,7 +179,6 @@ class JFileSelectDialog
     initUI(title, header, fieldTitle, fieldTitleSize, confirm);
   }
 
-  
   /**
    * Construct a new dialog for selecting directories only.
    * 
@@ -123,32 +206,6 @@ class JFileSelectDialog
     super(owner, title);
     initUI(title, header, null, 0, confirm);
   }
-
-  /**
-   * Construct a new dialog for selecting directories only.
-   * 
-   * @param title
-   *   The title of the dialog.
-   * 
-   * @param header
-   *   The header label.
-   * 
-   * @param confirm
-   *   The name of the confirm button.
-   */ 
-  public 
-  JFileSelectDialog
-  (
-   String title, 
-   String header, 
-   String confirm
-  ) 
-  {
-    super(title);
-    initUI(title, header, null, 0, confirm);
-  }
-
-
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -190,6 +247,7 @@ class JFileSelectDialog
   }
 
 
+
   /*----------------------------------------------------------------------------------------*/
   /*   A C C E S S                                                                          */
   /*----------------------------------------------------------------------------------------*/
@@ -206,9 +264,9 @@ class JFileSelectDialog
     String dtext = pDirField.getText(); 
     if(dtext == null) 
       return null;
+    File dir = new File(dtext);
 
     if(pFileField == null) {
-      File dir = new File(dtext);
       try {
 	return dir.getCanonicalFile();
       }
@@ -221,7 +279,7 @@ class JFileSelectDialog
       if(ftext == null) 
 	return null;
 
-      File file = new File(dtext + "/" + ftext);
+      File file = new File(dir, ftext);
       try {
 	return file.getCanonicalFile();
       }
@@ -231,7 +289,6 @@ class JFileSelectDialog
     }
   }
 
-    
 
 
   /*----------------------------------------------------------------------------------------*/
@@ -270,18 +327,8 @@ class JFileSelectDialog
 	}
       }
       
-      if(canon == null) {
-	try {
-	  File dir = new File(System.getProperty("user.dir"));
-	  if(dir.getPath().startsWith(pRootDir.getPath())) 
-	    canon = dir.getCanonicalFile();
-	}
-	catch(IOException ex) {
-	}
-      }
-      
       if(canon == null) 
-	canon = pRootDir;
+	canon = isRestricted() ? getRootDir() : getDefaultDirectory();
     }
 
     /* determine the target directory and file name */ 
@@ -295,21 +342,25 @@ class JFileSelectDialog
 	name = canon.getName();
       }
       else {
-	Toolkit.getDefaultToolkit().beep();
+        Toolkit.getDefaultToolkit().beep();
 
 	File file = canon;
-	while(file.getPath().startsWith(pRootDir.getPath())) {
+	while(isAllowed(file)) {
 	  if(file.isDirectory()) {
 	    dir = file;
 	    break;
 	  }
 
 	  file = file.getParentFile();
+	  if(file == null) 
+	    break;
 	}
 
 	if(dir == null) 
 	  return;
       }
+
+      assert(dir != null);
     }
 
     /* initialize the UI components */ 
@@ -330,7 +381,8 @@ class JFileSelectDialog
 	    dirs.add(fs[wk]);
 	}
 	
-	if(!dir.equals(pRootDir)) 
+	if((isRestricted() && !dir.equals(getRootDir())) ||
+	   (!isRestricted() && (dir.getParentFile() != null)))
 	  model.addElement(new File(dir, ".."));
 	
 	for(File file : dirs) 
@@ -342,13 +394,17 @@ class JFileSelectDialog
 	pDirField.setText(dir.getPath());
       }
       else {
-	Toolkit.getDefaultToolkit().beep();
+        Toolkit.getDefaultToolkit().beep();
 	return;
       }
     }
 
     if((pFileField != null) && (name != null))
       pFileField.setText(name);
+
+    /* store the current directory for refreshing */
+    if(target != null && target != pCurrentDirectory)
+      pCurrentDirectory = target;
   }
 
 
@@ -410,15 +466,6 @@ class JFileSelectDialog
   }
 
   /**
-   * Jump to the user's home directory.
-   */ 
-  protected void 
-  doJumpHome()
-  { 
-    updateTargetFile(new File("/"));
-  }
-
-  /**
    * Create a new directory under the current working directory and jump to it.
    */ 
   protected void 
@@ -432,7 +479,7 @@ class JFileSelectDialog
       if(diag.wasConfirmed()) {
 	File ndir = new File(dir, diag.getName());
 	if(!ndir.mkdirs()) {
-	  UIFactory.showErrorDialog
+	  showErrorDialog
 	    ("I/O Error:", 
 	     "Unable to create directory (" + ndir + ")!");
 	}
@@ -443,6 +490,16 @@ class JFileSelectDialog
     else {
       Toolkit.getDefaultToolkit().beep();
     }
+  }
+
+  /**
+   * Create a new directory under the current working directory and jump to it.
+   */
+  protected void
+  doRefreshDirectory()
+  {
+    if(pCurrentDirectory != null)
+      updateTargetFile(pCurrentDirectory);
   }
 
 

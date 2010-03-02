@@ -22,6 +22,7 @@ import javax.swing.event.*;
 abstract 
 class JBaseConfigPanel
   extends JPanel
+  implements ActionListener
 {  
   /*----------------------------------------------------------------------------------------*/
   /*   C O N S T R U C T O R                                                                */
@@ -54,12 +55,28 @@ class JBaseConfigPanel
       }
       
       hbox.add(Box.createHorizontalGlue());
+
+      {
+        JButton btn = new JButton();
+        btn.setName("HelpButton");
+        
+        Dimension size = new Dimension(19, 19);
+        btn.setMinimumSize(size);
+        btn.setMaximumSize(size);
+        btn.setPreferredSize(size);
+        
+        btn.setActionCommand("show-notes");
+        btn.addActionListener(this);
+        
+        hbox.add(btn);
+      }
       
       add(hbox);
     }
 
     add(Box.createRigidArea(new Dimension(0, 20)));
-    
+
+    pNotesDialog = new JNotesDialog(); 
   }
 
 
@@ -92,49 +109,26 @@ class JBaseConfigPanel
 
 
   /*----------------------------------------------------------------------------------------*/
-  /*   H E L P E R S                                                                        */
+  /*   L I S T E N E R S                                                                    */
   /*----------------------------------------------------------------------------------------*/
 
-  /**
-   * Add the panel notes.
+  /*-- ACTION LISTENER METHODS -------------------------------------------------------------*/
+
+  /** 
+   * Invoked when an action occurs. 
    */ 
-  protected void
-  addNotes
+  public void 
+  actionPerformed
   (
-   String text 
+   ActionEvent e
   ) 
   {
-    JPanel body = new JPanel(new BorderLayout());
-
-    Dimension size = new Dimension(600, 120);
-    body.setMinimumSize(size);
-    body.setMaximumSize(size);
-    body.setPreferredSize(size);
-
-    {
-      JTextArea area = new JTextArea(text, 0, 0); 
-      
-      area.setName("TextArea");
-      
-      area.setLineWrap(true);
-      area.setWrapStyleWord(true);
-      area.setEditable(false);
-      
-      area.setFocusable(true);
-
-    
-      {
-	JScrollPane scroll = new JScrollPane(area);
-	scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	
-	body.add(scroll);
-      } 
-    }
-
-    add(body);
+    String cmd = e.getActionCommand();
+    if(cmd.equals("show-notes")) 
+      pNotesDialog.setVisible(true);
   }
 
+  
 
   /*----------------------------------------------------------------------------------------*/
   /*   S T A T I C   I N T E R N A L S                                                      */
@@ -156,6 +150,10 @@ class JBaseConfigPanel
    */ 
   protected ConfigApp  pApp; 
 
+  /**
+   * The parameter help notes.
+   */ 
+  protected JNotesDialog pNotesDialog; 
 }
 
 

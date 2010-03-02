@@ -85,8 +85,9 @@ class JFileManagerPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
-      addNotes
-	("The File Manager daemon is responsible performing all file system operations on " +
+      pNotesDialog.setMessage
+	("File Manager Parameters:", 
+         "The File Manager daemon is responsible performing all file system operations on " +
 	 "behalf of Master Manager daemon.  You must specify the host where this daemon " + 
 	 "will be run, the network port on which it will listen and the maxmimum size of " +
 	 "the Java Runtime heap.  When run as a seperate process from the Master Manager, " +

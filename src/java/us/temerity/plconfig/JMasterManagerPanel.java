@@ -80,8 +80,9 @@ class JMasterManagerPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
-      addNotes
-	("The Master Manager daemon is responsible for managing all Pipeline node " + 
+      pNotesDialog.setMessage
+        ("Master Manager Parameters:", 
+         "The Master Manager daemon is responsible for managing all Pipeline node " + 
 	 "operations including dispatching jobs.  You must specify the host where this " +
 	 "daemon will be run, the network port on which it will listen and the maxmimum " + 
 	 "size of the Java Runtime heap.  The Master Hostname must be reachable by all " + 
@@ -95,7 +96,7 @@ class JMasterManagerPanel
 	 "reside on a local filesystem of the host which will run the Master Manager.");
     }
   }
-
+    
 
   /*----------------------------------------------------------------------------------------*/
   /*   P A N E L   O P S                                                                    */

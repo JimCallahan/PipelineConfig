@@ -89,8 +89,9 @@ class JWinServerPanel
 
       add(Box.createVerticalGlue());
       
-      addNotes
-	("If you will be using the Pipeline Job Manager on Windows XP Professional hosts " + 
+      pNotesDialog.setMessage
+	("Windows Server Parameters:", 
+         "If you will be using the Pipeline Job Manager on Windows XP Professional hosts " + 
          "to execute jobs on behalf of the Pipeline queue, you need to enable Windows " + 
          "Job Manager.  This will include a standard Windows installer (MSI) for the Job " + 
          "Manager Windows Service as part of the Pipeline distribution.  When this " + 
@@ -172,6 +173,8 @@ class JWinServerPanel
    ActionEvent e
   ) 
   {
+    super.actionPerformed(e); 
+
     String cmd = e.getActionCommand();
     if(cmd.equals("server-changed")) 
       doServerChanged();

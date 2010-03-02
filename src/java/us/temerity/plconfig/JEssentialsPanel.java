@@ -105,8 +105,9 @@ class JEssentialsPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
-      addNotes
-	("You must choose the type of license for your site.  A 60-Day Evaluation " +
+      pNotesDialog.setMessage
+	("Essential Parameters:", 
+         "You must choose the type of license for your site.  A 60-Day Evaluation " +
 	 "license expires 60 days from now, while a Limited license expires at the date " + 
 	 "specified.  Finally, a Perpetual license will never expire.\n\n" + 
 	 "You must also specify the location where Pipeline will be installed at your " + 
@@ -196,6 +197,8 @@ class JEssentialsPanel
    ActionEvent e
   ) 
   {
+    super.actionPerformed(e); 
+
     String cmd = e.getActionCommand();
     if(cmd.equals("license-changed")) 
       doLicenseChanged();

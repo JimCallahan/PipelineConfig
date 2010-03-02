@@ -242,6 +242,147 @@ class UIFactory
   }
 
   
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Create a new dialog confirm button. <P> 
+   * 
+   * @param text
+   *   The button text.
+   * 
+   * @param actionCommand
+   *    The command to pass to the ActionListener or <CODE>null</CODE> to ignore.
+   * 
+   * @param actionListener
+   *    The listener which will handle the the event of the button being pressed or 
+   *    <CODE>null</CODE> to ignore.
+   * 
+   * @param tooltip
+   *   The tooltip text or <CODE>null</CODE> to ignore.
+   */ 
+  public static JButton
+  createConfirmButton
+  (
+   String text, 
+   String actionCommand, 
+   ActionListener actionListener, 
+   String tooltip
+  )
+  {
+    return createButtonHelper(text, "RaisedConfirmButton", 
+                              actionCommand, actionListener, tooltip);
+  }
+
+  /**
+   * Create a new dialog button. <P> 
+   * 
+   * @param text
+   *   The button text.
+   * 
+   * @param actionCommand
+   *    The command to pass to the ActionListener or <CODE>null</CODE> to ignore.
+   * 
+   * @param actionListener
+   *    The listener which will handle the the event of the button being pressed or 
+   *    <CODE>null</CODE> to ignore.
+   * 
+   * @param tooltip
+   *   The tooltip text or <CODE>null</CODE> to ignore.
+   */ 
+  public static JButton
+  createDialogButton
+  (
+   String text, 
+   String actionCommand, 
+   ActionListener actionListener, 
+   String tooltip
+  )
+  {
+    return createButtonHelper(text, "RaisedButton", 
+                              actionCommand, actionListener, tooltip);
+  }
+
+  /**
+   * Create a new dialog cancel button. <P> 
+   * 
+   * @param text
+   *   The button text.
+   * 
+   * @param actionCommand
+   *    The command to pass to the ActionListener or <CODE>null</CODE> to ignore.
+   * 
+   * @param actionListener
+   *    The listener which will handle the the event of the button being pressed or 
+   *    <CODE>null</CODE> to ignore.
+   * 
+   * @param tooltip
+   *   The tooltip text or <CODE>null</CODE> to ignore.
+   */ 
+  public static JButton
+  createCancelButton
+  (
+   String text, 
+   String actionCommand, 
+   ActionListener actionListener, 
+   String tooltip
+  )
+  {
+    return createButtonHelper(text, "RaisedCancelButton", 
+                              actionCommand, actionListener, tooltip);
+  }
+
+  /**
+   * Create a new raised button suitable for use in dialogs. <P> 
+   * 
+   * @param text
+   *   The button text.
+   * 
+   * @param style
+   *    Name of the synth style to apply to the button.
+   * 
+   * @param actionCommand
+   *    The command to pass to the ActionListener or <CODE>null</CODE> to ignore.
+   * 
+   * @param actionListener
+   *    The listener which will handle the the event of the button being pressed or 
+   *    <CODE>null</CODE> to ignore.
+   * 
+   * @param tooltip
+   *   The tooltip text or <CODE>null</CODE> to ignore.
+   */ 
+  private static JButton
+  createButtonHelper
+  (
+   String text, 
+   String style, 
+   String actionCommand, 
+   ActionListener actionListener, 
+   String tooltip
+  )
+  {
+    JButton btn = new JButton(text);
+    btn.setName(style); 
+    btn.setHorizontalTextPosition(SwingConstants.LEFT);
+
+    Dimension size = btn.getPreferredSize();
+    size.setSize(size.width, 31);
+    btn.setPreferredSize(size);
+    btn.setMinimumSize(size); 
+    btn.setMaximumSize(size); 
+	
+    if((actionCommand != null) && (actionListener != null)) {
+      btn.setActionCommand(actionCommand);
+      btn.addActionListener(actionListener);
+    }
+  
+    if(tooltip != null) 
+      btn.setToolTipText(UIFactory.formatToolTip(tooltip)); 
+
+    return btn;
+  }
+  
+  
   /*----------------------------------------------------------------------------------------*/
 
   /**
@@ -2308,6 +2449,104 @@ class UIFactory
 
     return field;
   }
+
+  /*----------------------------------------------------------------------------------------*/
+  
+  /**
+   * Create a new vertical scrollpane with no horizontal scrollbar.
+   * 
+   * @param view 
+   *   The component to display in the scrollpanes viewport.
+   */ 
+  public static JScrollPane
+  createVertScrollPane
+  (
+   Component view
+  ) 
+  {
+    return createVertScrollPane(view, null, null);
+  }
+
+  /**
+   * Create a new vertical scrollpane with no horizontal scrollbar and 
+   * a minimum/preferred size.
+   * 
+   * @param view 
+   *   The component to display in the scrollpanes viewport.
+   *
+   * @param width
+   *   The minimum and preferred width of the scrollpane or 
+   *   <CODE>null</CODE> to ignore.
+   * 
+   * @param height
+   *   The minimum and preferred height of the scrollpane or 
+   *   <CODE>null</CODE> to ignore.
+   */ 
+  public static JScrollPane
+  createVertScrollPane
+  (
+   Component view, 
+   Integer width, 
+   Integer height
+  ) 
+  {
+    Dimension size = null;
+    if((width != null) && (height != null)) 
+      size = new Dimension(width, height);
+
+    return createScrollPane(view, 
+                            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER,
+                            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
+                            size, size, null);
+  }
+
+  /**
+   * Create a new scrollpane.
+   * 
+   * @param view 
+   *   The component to display in the scrollpanes viewport.
+   * 
+   * @param hsbPolicy 
+   *   An integer that specifies the horizontal scrollbar policy.
+   *
+   * @param vsbPolicy
+   *   An integer that specifies the vertical scrollbar policy.
+   * 
+   * @param minSize
+   *   The minimum size scrollpane or <CODE>null</CODE> to ignore.
+   * 
+   * @param prefSize
+   *   The preferred size scrollpane or <CODE>null</CODE> to ignore.
+   * 
+   * @param maxSize
+   *   The maximum size scrollpane or <CODE>null</CODE> to ignore.
+   */ 
+  public static JScrollPane
+  createScrollPane
+  (
+   Component view, 
+   int hsbPolicy, 
+   int vsbPolicy, 
+   Dimension minSize, 
+   Dimension prefSize, 
+   Dimension maxSize
+  ) 
+  {
+    JScrollPane scroll = new JScrollPane(view, vsbPolicy, hsbPolicy);
+    
+    if(minSize != null)
+      scroll.setMinimumSize(minSize);
+    if(prefSize != null)
+      scroll.setPreferredSize(prefSize);    
+    if(maxSize != null)
+      scroll.setMaximumSize(maxSize);
+    
+    scroll.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+    scroll.getVerticalScrollBar().setUnitIncrement(22);
+
+    return scroll;
+  }
+
 
 
   /*----------------------------------------------------------------------------------------*/

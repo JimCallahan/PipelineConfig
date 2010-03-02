@@ -84,8 +84,9 @@ class JRuntimePanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
 
-      addNotes
-	("Information about the Java Runtime Environment (JRE) used to run the server " + 
+      pNotesDialog.setMessage
+	("Java Runtime Parameters:", 
+         "Information about the Java Runtime Environment (JRE) used to run the server " + 
          "daemons which make up the back-end of Pipeline.  The JRE information is " + 
          "inferred from the version of Java used to run this tool.  We recommend that " + 
          "you run plconfig(1) on the host where you intend to run the Master server " + 
@@ -93,7 +94,7 @@ class JRuntimePanel
 	 "\n" +
          "We recommend the following server implementation:\n" + 
          "\n" + 
-         "Sun Microsystems - JDK 6.0 Update 10\n" + 
+         "Sun Microsystems - JDK 6.0 Update 18\n" + 
          "  http://java.sun.com/javase/downloads/index.jsp");
     }
   }

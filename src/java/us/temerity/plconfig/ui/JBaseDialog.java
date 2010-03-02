@@ -6,6 +6,7 @@ import us.temerity.plconfig.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 
 /*------------------------------------------------------------------------------------------*/
@@ -13,7 +14,7 @@ import javax.swing.*;
 /*------------------------------------------------------------------------------------------*/
 
 /**
- * Base class of all application dialogs.
+ * Base class of all model dialogs.
  */ 
 public 
 class JBaseDialog
@@ -25,45 +26,64 @@ class JBaseDialog
   /*----------------------------------------------------------------------------------------*/
   
   /**
-   * Construct a new dialog owned by the main application frame. 
+   * Construct a new dialog owned by a top-level frame.
+   * 
+   * @param owner
+   *   The parent frame.
    * 
    * @param title
-   *   The title of the dialog window.
-   * 
-   * @param modal
-   *   Is the dialog modal?
+   *   The title of the dialog.
    */ 
   protected
   JBaseDialog
   (
-   String title,    
+   Frame owner,        
+   String title
+  ) 
+  {
+    super(owner, title, true);
+  }
+
+  /**
+   * Construct a new dialog owned by a top-level frame.
+   * 
+   * @param owner
+   *   The parent frame.
+   * 
+   * @param title
+   *   The title of the dialog.
+   * 
+   * @param modal
+   *   Whether the dialog is modal.
+   */ 
+  protected
+  JBaseDialog
+  (
+   Frame owner,        
+   String title, 
    boolean modal
   ) 
   {
-    super((JFrame) null, title, modal);
+    super(owner, title, modal);
   }
 
   /**
    * Construct a new dialog owned by another dialog.
    * 
    * @param owner
-   *   The parent dialog window.
+   *   The parent dialog.
    * 
    * @param title
    *   The title of the dialog.
-   * 
-   * @param modal
-   *   Is the dialog modal?
    */ 
   protected
   JBaseDialog
   (
    Dialog owner,        
-   String title,  
-   boolean modal
+   String title
   ) 
   {
-    super(owner, title, modal);
+    super(owner, title, true);
   }
 
 
@@ -77,9 +97,6 @@ class JBaseDialog
    * 
    * @param header
    *   The text displayed in the dialog header. 
-   * 
-   * @param modal
-   *   Is the dialog modal?
    * 
    * @param body
    *   The component containing the body of the dialog.
@@ -103,7 +120,6 @@ class JBaseDialog
   initUI
   (
    String header, 
-   boolean modal, 
    JComponent body, 
    String confirm, 
    String apply, 
@@ -116,14 +132,23 @@ class JBaseDialog
 
     if(header != null) {
       JPanel panel = new JPanel();
-      panel.setName(modal ? "ModalDialogHeader" : "DialogHeader");	
+      panel.setName("ModalDialogHeader");	
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
       
       {
 	JLabel label = new JLabel(header);
 	pHeaderLabel = label;
 
-	label.setName("DialogHeaderLabel");	
+	label.setName("DialogHeaderLabel");
+
+	/* Specify a minimum and maximum size for the label, so that long header strings 
+	   will be displayed with trailing "..." */
+	{
+	  int height = label.getPreferredSize().height;
+
+	  label.setMinimumSize(new Dimension(1, height));
+	  label.setMaximumSize(new Dimension(Integer.MAX_VALUE, height));
+	}
 
 	panel.add(label);	  
       }
@@ -137,25 +162,19 @@ class JBaseDialog
       root.add(body);
 
     JButton[] extraBtns = null;
+    pExtraButtons = new TreeMap<String,JButton>();
     {
       JPanel panel = new JPanel();
       panel.setName((body != null) ? "DialogButtonPanel" : "DialogButtonPanel2");
+
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
       
       panel.add(Box.createHorizontalGlue());
       panel.add(Box.createRigidArea(new Dimension(20, 0)));
 
       if(confirm != null) {
-	JButton btn = new JButton(confirm);
+	JButton btn = UIFactory.createConfirmButton(confirm, "confirm", this, null); 
 	pConfirmButton = btn;
-	btn.setName("RaisedConfirmButton");
-	
-	Dimension size = btn.getPreferredSize();
-	btn.setMinimumSize(new Dimension(108, 31));
-	btn.setMaximumSize(new Dimension(size.width, 31));
-	
-	btn.setActionCommand("confirm");
-	btn.addActionListener(this);
 	
 	panel.add(btn);	  
       }
@@ -164,17 +183,9 @@ class JBaseDialog
 	panel.add(Box.createRigidArea(new Dimension(20, 0)));
      
       if(apply != null) {
-	JButton btn = new JButton(apply);
+        JButton btn = UIFactory.createDialogButton(apply, "apply", this, null); 
 	pApplyButton = btn;
-	btn.setName("RaisedButton");
-	
-	Dimension size = btn.getPreferredSize();
-	btn.setMinimumSize(new Dimension(108, 31));
-	btn.setMaximumSize(new Dimension(size.width, 31));
-	
-	btn.setActionCommand("apply");
-	btn.addActionListener(this);
-	
+
 	panel.add(btn);	  
       }
 
@@ -187,16 +198,11 @@ class JBaseDialog
 	int wk;
 	for(wk=0; wk<extra.length; wk++) {
 	  if(extra[wk] != null) {
-	    JButton btn = new JButton(extra[wk][0]);
+            JButton btn = 
+              UIFactory.createDialogButton(extra[wk][0], extra[wk][1], this, null); 
+
 	    extraBtns[wk] = btn;
-	    btn.setName("RaisedButton");
-	    
-	    Dimension size = btn.getPreferredSize();
-	    btn.setMinimumSize(new Dimension(108, 31));
-	    btn.setMaximumSize(new Dimension(size.width, 31));
-	    
-	    btn.setActionCommand(extra[wk][1]);
-	    btn.addActionListener(this);
+            pExtraButtons.put(extra[wk][0], btn);
 
 	    panel.add(btn);	  
 	  }
@@ -210,16 +216,8 @@ class JBaseDialog
 	panel.add(Box.createRigidArea(new Dimension(40, 0)));
      
       if(cancel != null) {
-	JButton btn = new JButton(cancel);
+	JButton btn = UIFactory.createCancelButton(cancel, "cancel", this, null); 
 	pCancelButton = btn;
-	btn.setName("RaisedCancelButton");
-
-	Dimension size = btn.getPreferredSize();
-	btn.setMinimumSize(new Dimension(108, 31));
-	btn.setMaximumSize(new Dimension(size.width, 31));
-
-	btn.setActionCommand("cancel");
-	btn.addActionListener(this);
 
 	panel.add(btn);	  
       }
@@ -250,8 +248,9 @@ class JBaseDialog
   }
      
 
+
   /*----------------------------------------------------------------------------------------*/
-  /*   A C C E S S                                                                          */
+  /*   P R E D I C A T E S                                                                  */
   /*----------------------------------------------------------------------------------------*/
 
   /**
@@ -261,6 +260,45 @@ class JBaseDialog
   wasConfirmed()
   {
     return pConfirmed;
+  }
+
+
+
+  /*----------------------------------------------------------------------------------------*/
+  /*   A C C E S S                                                                          */
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Get the confirm foooter button or <CODE>null</CODE> if none exists.
+   */ 
+  public JButton
+  getConfirmButton() 
+  {
+    return pConfirmButton; 
+  }
+
+  /**
+   * Get the apply foooter button or <CODE>null</CODE> if none exists.
+   */ 
+  public JButton
+  getApplyButton() 
+  {
+    return pApplyButton; 
+  }
+
+  /**
+   * Get the extra btton with the given title.
+   * 
+   * @param title
+   *   The title of the extra button given in the constructor.
+   */ 
+  public JButton
+  getExtraButton
+  (
+   String title
+  ) 
+  {
+    return pExtraButtons.get(title);
   }
 
 
@@ -374,4 +412,10 @@ class JBaseDialog
   protected JButton  pConfirmButton;
   protected JButton  pApplyButton;
   protected JButton  pCancelButton;
+
+  /**
+   * The extra footer buttons indexed by title.
+   */ 
+  private TreeMap<String,JButton>  pExtraButtons;
+
 }

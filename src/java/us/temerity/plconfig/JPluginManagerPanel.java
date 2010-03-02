@@ -88,9 +88,10 @@ class JPluginManagerPanel
 
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
-      
-      addNotes
-	("The Plugin Manager daemon is responsible for loading plugin classes and " + 
+       
+      pNotesDialog.setMessage
+	("Plugin Manager Parameters:", 
+         "The Plugin Manager daemon is responsible for loading plugin classes and " + 
 	 "providing loaded plugins to the other Pipeline programs.  Typically, this " + 
 	 "daemon is run on the same host as the Master Manager, but this is not strictly " +
 	 "required.\n" + 

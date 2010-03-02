@@ -36,6 +36,7 @@ class JBooleanField
     {
       setName("BooleanField");
       setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+      setAlignmentY(0.5f);
       addMouseListener(this);
 
       {

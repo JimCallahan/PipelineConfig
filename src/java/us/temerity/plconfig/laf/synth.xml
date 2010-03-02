@@ -599,6 +599,25 @@
   <bind style="HomeButton" type="name" key="HomeButton"/>
 
 
+  <!--  H E L P   B U T T O N  -->
+
+  <style id="HelpButton"> 
+    <state>
+      <imagePainter path="Help.png"
+                    sourceInsets="0 0 0 0"/>
+    </state>
+    <state value="PRESSED">
+      <imagePainter path="HelpPressed.png"
+                    sourceInsets="0 0 0 0"/>
+    </state>
+    <state value="DISABLED">
+      <imagePainter path="HelpDisabled.png"
+                    sourceInsets="0 0 0 0"/>
+    </state>
+  </style>
+  <bind style="HelpButton" type="name" key="HelpButton"/>
+
+
   <!--  T E X T   F I E L D  -->
 
   <style id="TextField">

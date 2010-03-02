@@ -60,8 +60,9 @@ class JAdminUserPanel
       add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
       
-      addNotes
-	("This special account is used to run the various Pipeline server daemons and " + 
+      pNotesDialog.setMessage
+	("Pipeline Admin Parameters:", 
+         "This special account is used to run the various Pipeline server daemons and " + 
 	 "to perform privileged administrative tasks using one of the client programs. " + 
 	 "It is important that this account is not used for any other purpose, in " + 
 	 "particular that it is not a normal user account.");
