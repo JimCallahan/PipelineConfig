@@ -299,12 +299,10 @@ class CryptoApp
           else if(title.equals("UnixLocalJavaLibraries") || 
                   title.equals("MacLocalJavaLibraries") || 
                   title.equals("WinLocalJavaLibraries")) {
-            LinkedList<String> libs = (LinkedList<String>) pParams.get(titls);
-            if(!libs.isEmpty()) {
-              System.out.print("\n");
-              for(String lib : libs) 
-                System.out.print("  " + lib + "\n"); 
-            }     
+            System.out.print("\n");
+            LinkedList<String> libs = (LinkedList<String>) pParams.get(title);
+            for(String lib : libs) 
+              System.out.print("  " + lib + "\n"); 
           }
           else {
             System.out.print(pParams.get(title) + "\n");
