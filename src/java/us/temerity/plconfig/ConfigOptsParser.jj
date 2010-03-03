@@ -48,7 +48,6 @@ ConfigOptsParser
    * The application instance. 
    */
   private ConfigApp  pApp;
-
 }
 
 
@@ -79,7 +78,10 @@ TOKEN :
   
 | <HOME_DIR:       	 "--home-dir">          : PATH_SEP    
 | <TEMP_DIR:             "--temp-dir">          : PATH_SEP
-| <UNIX_JAVA_HOME:       "--unix-java-home">    : PATH_SEP  
+| <UNIX_JAVA_HOME:       "--unix-java-home">    : PATH_SEP
+  
+| <LOCAL_VENDOR_JAVADOC_DIR:  "--local-vendor-javadoc-dir">  : PATH_SEP
+| <LOCAL_JAVA_LIB:            "--local-java-lib">            : PATH_SEP
 
 | <MASTER_HOST:          "--master-host">       : HOSTNAME_SEP
 | <MASTER_PORT:          "--master-port">       : INTEGER_SEP
@@ -108,13 +110,19 @@ TOKEN :
 | <MAC_ROOT_DIR:       	 "--mac-root-dir">      : PATH_SEP 
 | <MAC_PROD_DIR:         "--mac-prod-dir">      : PATH_SEP
 | <MAC_HOME_DIR:       	 "--mac-home-dir">      : PATH_SEP  
-| <MAC_TEMP_DIR:         "--mac-temp-dir">      : PATH_SEP
+| <MAC_TEMP_DIR:         "--mac-temp-dir">      : PATH_SEP 
+
+| <MAC_LOCAL_VENDOR_JAVADOC_DIR:  "--mac-local-vendor-javadoc-dir">  : PATH_SEP
+| <MAC_LOCAL_JAVA_LIB:            "--mac-local-java-lib">            : PATH_SEP
    		    
 | <WIN_SUPPORT:       	 "--win-support">  
 | <WIN_ROOT_DIR:       	 "--win-root-dir">      : WIN_PATH_SEP 
 | <WIN_PROD_DIR:         "--win-prod-dir">      : WIN_PATH_SEP
 | <WIN_TEMP_DIR:         "--win-temp-dir">      : WIN_PATH_SEP 
-| <WIN_JAVA_HOME:        "--win-java-home">     : WIN_PATH_SEP
+| <WIN_JAVA_HOME:        "--win-java-home">     : WIN_PATH_SEP 
+
+| <WIN_LOCAL_VENDOR_JAVADOC_DIR:  "--win-local-vendor-javadoc-dir">  : PATH_SEP
+| <WIN_LOCAL_JAVA_LIB:            "--win-local-java-lib">            : PATH_SEP
 
 | <WIN_USER_PROFILE_DIR:          "--win-user-profile-dir"> : WIN_PATH_SEP  
 | <WIN_USER_PROFILE_NO_USERNAME:  "--win-user-profile-no-username">  
@@ -424,15 +432,18 @@ GlobalOpts()
 {
   (Batch() | Evaluation() | Limited() | Perpetual() | RootDir() | ServerHost() | HostIDs() | 
    Reconfig() | HomeDir() | TempDir() | UnixJavaHome() | 
+   LocalVendorJavadocDir() | LocalJavaLib() |
    MasterHost() | MasterPort() | MasterHeapSize() | NodeDir() | 
    FileHost() | FilePort() | FileHeapSize()  |ProdDir() | 
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | LegacyPlugins() | LocalVendor() | PluginDir() | 
    PipelineUser() | PipelineGroup() |
    MacSupport() | MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
+   MacLocalVendorJavadocDir() | MacLocalJavaLib() |
    WinSupport() | WinRootDir() | WinProdDir() | WinTempDir() | WinJavaHome() |
    WinUserProfileDir() | WinUserProfileNoUsername() |
-   WinAppDataDir() | WinAppDataNoUsername())
+   WinAppDataDir() | WinAppDataNoUsername() |
+   WinLocalVendorJavadocDir() | WinLocalJavaLib())
   {}
 }
 
@@ -690,6 +701,33 @@ UnixJavaHome()
   <UNIX_JAVA_HOME> EQ() t=<PATH_ARG>
   { 
     pApp.setUnixJavaHome(new File(t.image));
+  }
+}
+
+
+void
+LocalVendorJavadocDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <LOCAL_VENDOR_JAVADOC_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setUnixLocalJavadocDirectory(new File(t.image));
+  }
+}
+
+void
+LocalJavaLib()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <LOCAL_JAVA_LIB> EQ() t=<PATH_ARG>
+  { 
+    pApp.addUnixLocalJavaLibrary(new File(t.image));
   }
 }
 
@@ -1020,6 +1058,33 @@ MacTempDir()
 }
 
 
+void
+MacLocalVendorJavadocDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <MAC_LOCAL_VENDOR_JAVADOC_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setMacLocalJavadocDirectory(new File(t.image));
+  }
+}
+
+void
+MacLocalJavaLib()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <MAC_LOCAL_JAVA_LIB> EQ() t=<PATH_ARG>
+  { 
+    pApp.addMacLocalJavaLibrary(new File(t.image));
+  }
+}
+
+
 /*------------------------------------------------------------------------------------------*/
 
 void
@@ -1136,6 +1201,31 @@ WinJavaHome()
   }
 }
 
+void
+WinLocalVendorJavadocDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <WIN_LOCAL_VENDOR_JAVADOC_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setWinLocalJavadocDirectory(t.image);
+  }
+}
+
+void
+WinLocalJavaLib()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <WIN_LOCAL_JAVA_LIB> EQ() t=<PATH_ARG>
+  { 
+    pApp.addWinLocalJavaLibrary(t.image);
+  }
+}
 
 /*------------------------------------------------------------------------------------------*/
 

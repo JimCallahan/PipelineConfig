@@ -831,6 +831,22 @@ class ConfigApp
 
 
   /**
+   * Add a Unix path for an additional local JAR libary.
+   */
+  public void 
+  addUnixLocalJavaLibrary
+  (
+   File jar
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<File> paths = new LinkedList<File>();
+    paths.addAll(getUnixLocalJavaLibraries()); 
+    paths.add(jar);
+    setUnixLocalJavaLibraries(paths); 
+  }
+
+  /**
    * Set the Unix paths for the set of additional local JAR libaries.
    */
   public void 
@@ -842,10 +858,15 @@ class ConfigApp
   {
     LinkedList<String> paths = new LinkedList<String>();
     
-    for(File file : jars) 
-      paths.add(validateAbsolutePath(file, "Unix Local JAR Library").getPath()); 
+    if(jars.isEmpty()) {
+      pProfile.remove("UnixLocalJavaLibraries");
+    }
+    else {
+      for(File file : jars) 
+        paths.add(validateAbsolutePath(file, "Unix Local JAR Library").getPath()); 
 
-    pProfile.put("UnixLocalJavaLibraries", paths); 
+      pProfile.put("UnixLocalJavaLibraries", paths); 
+    }
   }
 
   /** 
@@ -1512,6 +1533,21 @@ class ConfigApp
 
 
   /**
+   * Add a Mac path for an additional local JAR libary.
+   */
+  public void 
+  addMacLocalJavaLibrary
+  (
+   File jar
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<File> paths = new LinkedList<File>();
+    paths.addAll(getMacLocalJavaLibraries()); 
+    paths.add(jar);
+    setMacLocalJavaLibraries(paths); 
+  }
+  /**
    * Set the Mac paths for the set of additional local JAR libaries.
    */
   public void 
@@ -1523,10 +1559,15 @@ class ConfigApp
   {
     LinkedList<String> paths = new LinkedList<String>();
     
-    for(File file : jars) 
-      paths.add(validateAbsolutePath(file, "(Mac OS X) Local JAR Library").getPath()); 
-
-    pProfile.put("MacLocalJavaLibraries", paths); 
+    if(jars.isEmpty()) {
+      pProfile.remove("MacLocalJavaLibraries");
+    }
+    else {
+      for(File file : jars) 
+        paths.add(validateAbsolutePath(file, "(Mac OS X) Local JAR Library").getPath()); 
+      
+      pProfile.put("MacLocalJavaLibraries", paths); 
+    }
   }
 
   /** 
@@ -1788,6 +1829,22 @@ class ConfigApp
 
 
   /**
+   * Add a Win path for an additional local JAR libary.
+   */
+  public void 
+  addWinLocalJavaLibrary
+  (
+   String jar
+  ) 
+    throws IllegalConfigException
+  {
+    LinkedList<String> paths = new LinkedList<String>();
+    paths.addAll(getWinLocalJavaLibraries()); 
+    paths.add(jar);
+    setWinLocalJavaLibraries(paths); 
+  }
+
+  /**
    * Set the Win paths for the set of additional local JAR libaries.
    */
   public void 
@@ -1799,10 +1856,15 @@ class ConfigApp
   {
     LinkedList<String> paths = new LinkedList<String>();
     
-    for(String file : jars) 
-      paths.add(validateWindowsPath(file, "(Windows) Local JAR Library")); 
+    if(jars.isEmpty()) {
+      pProfile.remove("WinLocalJavaLibraries");
+    }
+    else {
+      for(String file : jars) 
+        paths.add(validateWindowsPath(file, "(Windows) Local JAR Library")); 
 
-    pProfile.put("WinLocalJavaLibraries", paths); 
+      pProfile.put("WinLocalJavaLibraries", paths); 
+    }
   }
 
   /** 
@@ -2957,7 +3019,8 @@ class ConfigApp
     catch(Exception ex) {
       throw new IOException
 	("Unable to generate (" + file + ") containing the GLUE format representation " + 
-	 "of the configuration settings!");
+	 "of the configuration settings!\n\n" + 
+         Exceptions.getFullMessage(ex));
     }
   }
 
@@ -2981,7 +3044,8 @@ class ConfigApp
     catch(Exception ex) {
       throw new IllegalConfigException
 	("Unable to read (" + file + ") containing the GLUE format representation " + 
-	 "of previous configuration settings!");
+	 "of previous configuration settings!\n\n" + 
+         Exceptions.getFullMessage(ex));
     }
 
     for(String title : profile.keySet()) {
