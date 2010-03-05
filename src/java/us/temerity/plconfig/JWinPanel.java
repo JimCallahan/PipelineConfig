@@ -131,7 +131,6 @@ class JWinPanel
       pExtraJavaLibsComp = new JWindowsJarsComp("Local Java Libraries", sSize);
       add(pExtraJavaLibsComp);
       
-      add(Box.createRigidArea(new Dimension(0, 20)));
       add(Box.createVerticalGlue());
     }
       

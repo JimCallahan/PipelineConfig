@@ -104,6 +104,9 @@ class ConfigApp
       pProfile.put("PluginPort",      53141);
       pProfile.put("PluginDirectory", "/usr/share/pipeline");
 
+      pProfile.put("ThumbnailPort",      53142);
+      pProfile.put("ThumbnailDirectory", "/usr/share/pipeline");
+
       pProfile.put("MacSupport",            false);
       pProfile.put("MacHomeDirectory",      "/Users");
       pProfile.put("MacTemporaryDirectory", "/var/tmp");
@@ -1365,6 +1368,88 @@ class ConfigApp
   getPluginDirectory() 
   {
     String dir = (String) pProfile.get("PluginDirectory");
+    if(dir != null) 
+      return new File(dir);
+    return null; 
+  }
+
+
+
+  /*----------------------------------------------------------------------------------------*/
+
+  /**
+   * Set the hostname which runs plthumbmgr(1).
+   */
+  public void 
+  setThumbnailHostname
+  (
+   String host
+  ) 
+  {
+    pProfile.put("ThumbnailHostname", host);
+  }
+
+  /** 
+   * Get the hostname which runs plthumbmgr(1).
+   */ 
+  public String
+  getThumbnailHostname()
+  {
+    String host = (String) pProfile.get("ThumbnailHostname");
+    if(host == null) 
+      host = pServerHostname;
+    return host;
+  }
+
+
+  /**
+   * Set the the network port listened to by plthumbmgr(1).
+   */
+  public void 
+  setThumbnailPort
+  (
+   int num
+  ) 
+    throws IllegalConfigException
+  {
+    if(num < 0) 
+      throw new IllegalConfigException
+	("The thumbnail port number (" + num + ") cannot be negative!");
+       
+    pProfile.put("ThumbnailPort", num);
+  }
+
+  /**
+   * Get the network port listened to by plthumbmgr(1).
+   */
+  public int
+  getThumbnailPort() 
+  {
+    return (Integer) pProfile.get("ThumbnailPort");
+  }
+
+
+  /**
+   * Set the root thumbnail directory.
+   */
+  public void 
+  setThumbnailDirectory
+  (
+   File dir
+  ) 
+    throws IllegalConfigException
+  {
+    pProfile.put("ThumbnailDirectory", 
+      validateAbsolutePath(dir, "Thumbnail Directory").getPath());
+  }
+ 
+  /**
+   * Get the root thumbnail directory.
+   */ 
+  public File
+  getThumbnailDirectory() 
+  {
+    String dir = (String) pProfile.get("ThumbnailDirectory");
     if(dir != null) 
       return new File(dir);
     return null; 
@@ -2650,7 +2735,6 @@ class ConfigApp
       Integer port = getPluginPort();
       validatePort(port, "Plugin Port");
       checkPortConflict(port, "Plugin Port", getMasterPort(), "Master Port");
-      checkPortConflict(port, "Plugin Port", getMasterPort(), "Master Port");
       checkPortConflict(port, "Plugin Port", getFilePort(), "File Port");
       checkPortConflict(port, "Plugin Port", getQueuePort(), "Queue Port");
       checkPortConflict(port, "Plugin Port", getJobPort(), "Job Port");
@@ -2662,19 +2746,38 @@ class ConfigApp
       validateAbsolutePath(dir, "Plugin Directory");
     }
 
+    /* thumbnail manager */ 
+    {
+      String host = getThumbnailHostname();
+      validateHostname(host, "Thumbnail Hostname"); 
+
+      Integer port = getThumbnailPort();
+      validatePort(port, "Thumbnail Port");
+      checkPortConflict(port, "Thumbnail Port", getMasterPort(), "Master Port");
+      checkPortConflict(port, "Thumbnail Port", getFilePort(), "File Port");
+      checkPortConflict(port, "Thumbnail Port", getQueuePort(), "Queue Port");
+      checkPortConflict(port, "Thumbnail Port", getJobPort(), "Job Port");
+      checkPortConflict(port, "Thumbnail Port", getPluginPort(), "Plugin Port");
+
+      File dir = getThumbnailDirectory();
+      validateAbsolutePath(dir, "Thumbnail Directory");
+    }
+
     /* check for missing hostnames */ 
     {
-      String masterHost  = (String) pProfile.get("MasterHostname"); 
-      String fileHost    = (String) pProfile.get("FileHostname"); 
-      String queueHost   = (String) pProfile.get("QueueHostname"); 
-      String pluginHost  = (String) pProfile.get("PluginHostname"); 
+      String masterHost = (String) pProfile.get("MasterHostname"); 
+      String fileHost   = (String) pProfile.get("FileHostname"); 
+      String queueHost  = (String) pProfile.get("QueueHostname"); 
+      String pluginHost = (String) pProfile.get("PluginHostname"); 
+      String thumbHost  = (String) pProfile.get("ThumbnailHostname"); 
 
       if((pServerHostname == null) && 
 	 ((masterHost == null) || (fileHost == null) ||
 	  (queueHost == null) || (pluginHost == null)))
 	throw new IllegalConfigException
 	  ("If the --server-host option is not specified, then all of the host options " + 
-	   "(--master-host, --queue-host, --file-host and --plugin-host) must be specified.");
+	   "(--master-host, --queue-host, --file-host, --plugin-host and --thumbnail-host) "+ 
+           "must be specified.");
       
       if(masterHost == null) 
 	pProfile.put("MasterHostname", pServerHostname);
@@ -2687,6 +2790,9 @@ class ConfigApp
 
       if(pluginHost == null) 
 	pProfile.put("PluginHostname", pServerHostname);
+
+      if(thumbHost == null) 
+	pProfile.put("ThumbnailHostname", pServerHostname);
     }
 
     /* host IDs */
@@ -3111,6 +3217,13 @@ class ConfigApp
       else if(title.equals("PluginDirectory"))
         setPluginDirectory(new File((String) value));
       
+      else if(title.equals("ThumbnailHostname"))
+	setThumbnailHostname((String) value);
+      else if(title.equals("ThumbnailPort"))
+	setThumbnailPort((Integer) value);
+      else if(title.equals("ThumbnailDirectory"))
+        setThumbnailDirectory(new File((String) value));
+      
       else if(title.equals("HostIDs")) {
 	TreeMap<String,String> hostStrs = (TreeMap<String,String>) value;
 	TreeMap<String,BigInteger> hostIDs = new TreeMap<String,BigInteger>();
@@ -3275,7 +3388,8 @@ class ConfigApp
        "  [--prod-dir=...] [--short-symlinks]\n" +
        "  [--queue-host=...] [--queue-port=...] [--queue-heap-size=...] [--job-port=...]\n" + 
        "  [--plugin-host=...] [--plugin-port=...]\n" + 
-       "  [--node-dir=...] [--queue-dir=...] [--plugin-dir=...]\n" + 
+       "  [--thumbnail-host=...] [--thumbnail-port=...]\n" + 
+       "  [--node-dir=...] [--queue-dir=...] [--plugin-dir=...] [--thumbnail-dir=...]\n" + 
        "  [--legacy-plugins] [--local-vendor=...]\n" +
        "  [--home-dir=...] [--temp-dir=...] [--unix-java-home=...]\n" + 
        "  [--local-vendor-javadoc-dir=...] [--local-java-lib=...]\n" + 
@@ -3765,6 +3879,14 @@ class ConfigApp
 		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
 
 		{
+		  JLabel label = new JLabel("Thumbnail Manager", pNoneIcon, JLabel.LEFT); 
+		  pPanelLabels.add(label);
+		  vbox.add(label);
+		}
+
+		vbox.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		{
 		  JLabel label = new JLabel("Server Host IDs", pNoneIcon, JLabel.LEFT); 
 		  pPanelLabels.add(label);
 		  vbox.add(label);
@@ -3888,6 +4010,7 @@ class ConfigApp
 	      pPanels.add(new JFileManagerPanel(pApp));
 	      pPanels.add(new JQueueManagerPanel(pApp));
 	      pPanels.add(new JPluginManagerPanel(pApp));
+	      pPanels.add(new JThumbnailManagerPanel(pApp));
 	      pPanels.add(new JServerHostIDsPanel(pApp));
 
 	      pPanels.add(new JUnixPanel(pApp));

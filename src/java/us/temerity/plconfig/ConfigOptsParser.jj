@@ -103,6 +103,10 @@ TOKEN :
 | <PLUGIN_PORT:          "--plugin-port">       : INTEGER_SEP
 | <PLUGIN_DIR:           "--plugin-dir">        : PATH_SEP
 
+| <THUMBNAIL_HOST:       "--thumbnail-host">    : HOSTNAME_SEP
+| <THUMBNAIL_PORT:       "--thumbnail-port">    : INTEGER_SEP
+| <THUMBNAIL_DIR:        "--thumbnail-dir">     : PATH_SEP
+
 | <PIPELINE_USER:        "--pipeline-user">     : USERNAME_SEP
 | <PIPELINE_GROUP:       "--pipeline-group">    : USERNAME_SEP
    
@@ -437,6 +441,7 @@ GlobalOpts()
    FileHost() | FilePort() | FileHeapSize()  |ProdDir() | 
    QueueHost() | QueuePort() | QueueHeapSize() | JobPort() | QueueDir() | 
    PluginHost() | PluginPort() | LegacyPlugins() | LocalVendor() | PluginDir() | 
+   ThumbnailHost() | ThumbnailPort() | ThumbnailDir() | 
    PipelineUser() | PipelineGroup() |
    MacSupport() | MacRootDir() | MacProdDir() | MacHomeDir() | MacTempDir() |
    MacLocalVendorJavadocDir() | MacLocalJavaLib() |
@@ -958,6 +963,47 @@ PluginDir()
   <PLUGIN_DIR> EQ() t=<PATH_ARG>
   { 
     pApp.setPluginDirectory(new File(t.image));
+  }
+}
+
+
+/*------------------------------------------------------------------------------------------*/
+
+void
+ThumbnailHost() :
+{
+  Token t;
+}
+{
+  <THUMBNAIL_HOST> EQ() t=<HOSTNAME>
+  { 
+    pApp.setThumbnailHostname(t.image);
+  }
+}
+
+void
+ThumbnailPort()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <THUMBNAIL_PORT> EQ() t=<INTEGER>
+  { 
+    pApp.setThumbnailPort(new Integer(t.image));
+  }
+}
+
+void
+ThumbnailDir()
+  throws IllegalConfigException :
+{
+  Token t;
+}
+{
+  <THUMBNAIL_DIR> EQ() t=<PATH_ARG>
+  { 
+    pApp.setThumbnailDirectory(new File(t.image));
   }
 }
 
