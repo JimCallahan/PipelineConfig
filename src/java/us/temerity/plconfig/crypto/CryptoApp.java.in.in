@@ -334,14 +334,18 @@ class CryptoApp
       else if(pLookupArg.equals("UnixLocalJavaLibraries") || 
               pLookupArg.equals("MacLocalJavaLibraries")) {
         LinkedList<String> libs = (LinkedList<String>) pParams.get(pLookupArg);
-        for(String lib : libs) 
-          System.out.print(":" + lib); 
+        if(libs != null) {
+          for(String lib : libs) 
+            System.out.print(":" + lib); 
+        }
         System.out.print("\n"); 
       }
       else if(pLookupArg.equals("WinLocalJavaLibraries")) {
-        LinkedList<String> libs = (LinkedList<String>) pParams.get(pLookupArg);
-        for(String lib : libs) 
-          System.out.print(";" + lib); 
+        LinkedList<String> libs = (LinkedList<String>) pParams.get(pLookupArg); 
+        if(libs != null) {
+          for(String lib : libs) 
+            System.out.print(";" + lib); 
+        }
         System.out.print("\n"); 
       }
       else {
